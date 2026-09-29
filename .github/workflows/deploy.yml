@@ -143,9 +143,15 @@ jobs:
         if: steps.target.outputs.app_id != 'none' && steps.meta.outputs.type == 'flutter-web'
         run: |
           cd build_target
-          flutter pub get
-          echo "Building Flutter Web for base path: ${{ steps.meta.outputs.base_href }}"
-          flutter build web --release --base-href "${{ steps.meta.outputs.base_href }}"
+          if [ -f "scripts/build_web_release.sh" ]; then
+            chmod +x scripts/build_web_release.sh
+            echo "Executing repository custom build script..."
+            ./scripts/build_web_release.sh "${{ steps.meta.outputs.base_href }}"
+          else
+            flutter pub get
+            echo "Building Flutter Web for base path: ${{ steps.meta.outputs.base_href }}"
+            flutter build web --release --base-href "${{ steps.meta.outputs.base_href }}"
+          fi
           
           # Verification of build output before copying to _site
           test -f build/web/index.html || { echo "Build failed: index.html not found"; exit 1; }
