@@ -1,0 +1,364 @@
+#!/usr/bin/env python3
+"""
+M3tal-Hub Dynamic Landing Page Generator
+Reads apps/manifest.yml and apps/status.json, generating index.html and 404.html.
+"""
+
+import os
+import sys
+import json
+import yaml
+from datetime import datetime, timezone
+
+def load_manifest(manifest_path):
+    with open(manifest_path, 'r', encoding='utf-8') as f:
+        return yaml.safe_load(f)
+
+def load_status(status_path):
+    if os.path.exists(status_path):
+        try:
+            with open(status_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"Warning: Failed to load status.json: {e}", file=sys.stderr)
+    return {"releases": {}}
+
+def get_badge(app, release_info):
+    status = app.get("status", "planned")
+    enabled = app.get("enabled", False)
+    
+    if release_info and release_info.get("build_status") == "success":
+        return ("Live", "badge-live")
+    
+    if status == "ready":
+        return ("Release Ready", "badge-ready")
+    elif status == "planned":
+        return ("Release Planned", "badge-planned")
+    elif status in ["review", "infrastructure-review"]:
+        label = "In Review" if status == "review" else "Infra Review"
+        return (label, "badge-review")
+    elif status == "placeholder" or not enabled:
+        return ("Placeholder", "badge-placeholder")
+    
+    return (status.title(), "badge-planned")
+
+def generate_hub(manifest_path, status_path, output_dir):
+    data = load_manifest(manifest_path)
+    status_data = load_status(status_path)
+    releases = status_data.get("releases", {})
+
+    apps = data.get("apps", [])
+
+    cards_html = []
+    for app in apps:
+        app_id = app.get("id")
+        name = app.get("name")
+        desc = app.get("description", "")
+        repo = app.get("repo", "")
+        path = app.get("path", "")
+        enabled = app.get("enabled", False)
+        release_info = releases.get(app_id, {})
+        
+        badge_text, badge_class = get_badge(app, release_info)
+
+        meta_info = []
+        if app.get("type"):
+            meta_info.append(f"<span class=\"app-type\">{app['type']}</span>")
+        if release_info.get("version"):
+            meta_info.append(f"<span class=\"app-version\">v{release_info['version']}</span>")
+        if release_info.get("last_released"):
+            meta_info.append(f"<span class=\"app-date\">{release_info['last_released'][:10]}</span>")
+        
+        meta_html = f"<div class=\"meta-row\">{' '.join(meta_info)}</div>" if meta_info else ""
+
+        if enabled:
+            href = f"./{path}/"
+            card_class = "card"
+        else:
+            href = f"https://github.com/jakej985-rgb/{repo}" if repo else "#"
+            card_class = "card placeholder"
+
+        card = f"""        <a class="{card_class}" href="{href}">
+            <div class="card-header">
+                <h2>{name}</h2>
+                <span class="badge {badge_class}">{badge_text}</span>
+            </div>
+            <p>{desc}</p>
+            {meta_html}
+        </a>"""
+        cards_html.append(card)
+
+    rendered_cards = "\n".join(cards_html)
+    generated_time = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+
+    index_html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M3tal Hub | Unified Application Release Front</title>
+    <meta name="description" content="Central GitHub Pages release front for the M3tal software ecosystem.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+    <style>
+        :root {{
+            --bg: #0d1117;
+            --surface: #161b22;
+            --surface-hover: #21262d;
+            --border: #30363d;
+            --border-hover: #58a6ff;
+            --text-main: #e6edf3;
+            --text-sub: #8b949e;
+            --accent: #58a6ff;
+            --ready: #3fb950;
+            --live: #2ea043;
+            --review: #d29922;
+            --placeholder: #6e7681;
+        }}
+        * {{ box-sizing: border-box; }}
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            line-height: 1.5;
+            background: var(--bg);
+            color: var(--text-main);
+        }}
+        header {{
+            margin-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 24px;
+        }}
+        .brand {{
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }}
+        .brand h1 {{
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }}
+        .tagline {{
+            color: var(--text-sub);
+            font-size: 15px;
+            margin: 0;
+        }}
+        .grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 18px;
+        }}
+        .card {{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--surface);
+            color: inherit;
+            text-decoration: none;
+            transition: border-color 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+        }}
+        .card:hover {{
+            border-color: var(--border-hover);
+            background: var(--surface-hover);
+            transform: translateY(-2px);
+        }}
+        .card.placeholder {{
+            opacity: 0.6;
+            border-style: dashed;
+        }}
+        .card.placeholder:hover {{
+            opacity: 0.85;
+            border-color: var(--text-sub);
+        }}
+        .card-header {{
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 8px;
+        }}
+        .card h2 {{
+            font-size: 17px;
+            font-weight: 600;
+            margin: 0;
+            color: var(--text-main);
+        }}
+        .card p {{
+            margin: 0 0 16px 0;
+            color: var(--text-sub);
+            font-size: 13.5px;
+            flex-grow: 1;
+        }}
+        .meta-row {{
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--text-sub);
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }}
+        .app-type {{
+            background: rgba(88, 166, 255, 0.1);
+            color: var(--accent);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }}
+        .app-version {{
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }}
+        .badge {{
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }}
+        .badge-live {{
+            background: rgba(46, 160, 67, 0.2);
+            color: var(--live);
+            border: 1px solid rgba(46, 160, 67, 0.4);
+        }}
+        .badge-ready {{
+            background: rgba(63, 185, 80, 0.15);
+            color: var(--ready);
+            border: 1px solid rgba(63, 185, 80, 0.3);
+        }}
+        .badge-planned {{
+            background: rgba(88, 166, 255, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(88, 166, 255, 0.25);
+        }}
+        .badge-review {{
+            background: rgba(210, 153, 34, 0.15);
+            color: var(--review);
+            border: 1px solid rgba(210, 153, 34, 0.3);
+        }}
+        .badge-placeholder {{
+            background: rgba(110, 118, 129, 0.15);
+            color: var(--placeholder);
+            border: 1px solid rgba(110, 118, 129, 0.25);
+        }}
+        footer {{
+            margin-top: 48px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            color: var(--text-sub);
+            font-size: 12px;
+        }}
+        footer a {{
+            color: var(--accent);
+            text-decoration: none;
+        }}
+        footer a:hover {{
+            text-decoration: underline;
+        }}
+    </style>
+</head>
+<body>
+    <header>
+        <div class="brand">
+            <h1>⚙️ M3tal Hub</h1>
+        </div>
+        <p class="tagline">Unified GitHub Pages release front for M3tal application ecosystem.</p>
+    </header>
+
+    <main class="grid">
+{rendered_cards}
+    </main>
+
+    <footer>
+        <div>Centralized release front. Source repositories maintain independent releases.</div>
+        <div>Generated: {generated_time}</div>
+    </footer>
+</body>
+</html>
+"""
+
+    error_404_html = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found | M3tal Hub</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+            background: #0d1117;
+            color: #e6edf3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 { font-size: 48px; margin: 0 0 16px 0; color: #58a6ff; }
+        p { color: #8b949e; font-size: 16px; margin: 0 0 24px 0; max-width: 480px; }
+        a {
+            display: inline-block;
+            background: #21262d;
+            border: 1px solid #30363d;
+            color: #58a6ff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        a:hover {
+            border-color: #58a6ff;
+            background: #30363d;
+        }
+    </style>
+</head>
+<body>
+    <h1>404</h1>
+    <p>The requested application or path could not be found under M3tal Hub.</p>
+    <a href="./">Return to Hub Home</a>
+</body>
+</html>
+"""
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    index_output_path = os.path.join(output_dir, "index.html")
+    with open(index_output_path, "w", encoding="utf-8") as f:
+        f.write(index_html)
+    print(f"Generated {index_output_path}")
+
+    error_output_path = os.path.join(output_dir, "404.html")
+    with open(error_output_path, "w", encoding="utf-8") as f:
+        f.write(error_404_html)
+    print(f"Generated {error_output_path}")
+
+if __name__ == "__main__":
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    manifest = os.path.join(base_dir, "apps", "manifest.yml")
+    status = os.path.join(base_dir, "apps", "status.json")
+    out = sys.argv[1] if len(sys.argv) > 1 else base_dir
+
+    # If the output directory has an existing status.json (e.g. checked out from gh-pages), use it
+    if os.path.exists(os.path.join(out, "apps", "status.json")):
+        status = os.path.join(out, "apps", "status.json")
+
+    generate_hub(manifest, status, out)

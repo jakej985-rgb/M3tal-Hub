@@ -8,7 +8,9 @@ apps:
     path: Monster-Lab
     type: flutter-web
     enabled: true
-    status: planned
+    status: ready
+    description: Robotics learning application.
+    base_href: /Monster-Lab/
 
   - id: android-card-games
     name: Android Card Games
@@ -16,7 +18,9 @@ apps:
     path: Android-card-games
     type: flutter-web
     enabled: true
-    status: planned
+    status: ready
+    description: Flutter tabletop gaming suite.
+    base_href: /Android-card-games/
 
   - id: idle-animals
     name: Idle Animals
@@ -25,6 +29,8 @@ apps:
     type: flutter-web
     enabled: true
     status: planned
+    description: Extinct-animal idle game.
+    base_href: /Idle-animals/
 
   - id: red-music-locker
     name: Red Music Locker
@@ -33,6 +39,8 @@ apps:
     type: web
     enabled: true
     status: planned
+    description: Self-hosted music locker frontend.
+    base_href: /red-music-locker/
 
   - id: red-music-locker-account-linker
     name: Red Music Locker Account Linker
@@ -41,6 +49,7 @@ apps:
     type: extension
     enabled: false
     status: placeholder
+    description: Browser extension release.
 
   - id: subaru-specs-n-parts
     name: Subaru Specs & Parts
@@ -49,6 +58,8 @@ apps:
     type: flutter-web
     enabled: true
     status: planned
+    description: Offline-first Subaru reference app.
+    base_href: /subaru-specs-n-parts/
 
   - id: specs-n-parts
     name: Spec-s-N-Part-s
@@ -57,6 +68,7 @@ apps:
     type: flutter-web
     enabled: false
     status: review
+    description: Pending duplicate/project review.
 
   - id: infernal-web
     name: Infernal Web
@@ -65,6 +77,8 @@ apps:
     type: web
     enabled: true
     status: planned
+    description: Infernal web application.
+    base_href: /infernal-web/
 
   - id: gps-speedometer
     name: GPS Speedometer
@@ -73,6 +87,8 @@ apps:
     type: flutter-web
     enabled: true
     status: planned
+    description: GPS speed display application.
+    base_href: /gps-speedometer/
 
   - id: jellyfin-ui
     name: Jellyfin UI
@@ -81,6 +97,8 @@ apps:
     type: vite
     enabled: true
     status: planned
+    description: React/Vite Jellyfin interface project.
+    base_href: /jellyfin-ui/
 
   - id: m3tal-godash
     name: M3tal GoDash
@@ -89,6 +107,7 @@ apps:
     type: web
     enabled: false
     status: infrastructure-review
+    description: Go dashboard backend and UI.
 
   - id: m3tal-plugin-page
     name: M3tal Plugin Page
@@ -97,6 +116,8 @@ apps:
     type: static
     enabled: true
     status: planned
+    description: M3tal plugin landing page.
+    base_href: /m3tal-plugin-page/
 
   - id: munchkin-companion-app
     name: Munchkin Companion App
@@ -105,6 +126,8 @@ apps:
     type: flutter-web
     enabled: true
     status: planned
+    description: Flutter rules-aware game companion.
+    base_href: /munchkin-companion-app/
 
   - id: ink-vault
     name: Ink Vault
@@ -113,6 +136,7 @@ apps:
     type: web
     enabled: false
     status: review
+    description: Tattoo and studio asset vault.
 
   - id: shop-manager
     name: Shop Manager
@@ -121,6 +145,7 @@ apps:
     type: web
     enabled: false
     status: review
+    description: Studio operations manager.
 
   - id: tattoo-shop-manager
     name: Tattoo Shop Manager
@@ -129,6 +154,7 @@ apps:
     type: web
     enabled: false
     status: review
+    description: Tattoo shop appointment & inventory tracker.
 
   - id: infernal-ink-steel-suite
     name: Infernal Ink Steel Suite
@@ -137,3 +163,4 @@ apps:
     type: web
     enabled: false
     status: review
+    description: Integrated studio software suite.

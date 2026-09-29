@@ -1,0 +1,228 @@
+name: M3tal-Hub Release & Deploy
+
+on:
+  push:
+    branches: [ main ]
+  repository_dispatch:
+    types: [ app-release ]
+  workflow_dispatch:
+    inputs:
+      app_id:
+        description: 'App ID to build and release from apps/manifest.yml (or "none" to only refresh hub)'
+        required: true
+        default: 'monster-lab'
+        type: choice
+        options:
+          - monster-lab
+          - android-card-games
+          - idle-animals
+          - red-music-locker
+          - subaru-specs-n-parts
+          - infernal-web
+          - gps-speedometer
+          - jellyfin-ui
+          - m3tal-plugin-page
+          - munchkin-companion-app
+          - none
+      ref:
+        description: 'Git ref/branch/tag of the target app to build'
+        required: false
+        default: 'main'
+        type: string
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout M3tal-Hub
+        uses: actions/checkout@v4
+        with:
+          path: hub
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Determine Target Application
+        id: target
+        run: |
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            APP_ID="${{ github.event.client_payload.app_id }}"
+            REF="${{ github.event.client_payload.ref }}"
+            VERSION="${{ github.event.client_payload.version }}"
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            APP_ID="${{ github.event.inputs.app_id }}"
+            REF="${{ github.event.inputs.ref }}"
+            VERSION="${{ github.event.inputs.ref }}"
+          else
+            APP_ID="none"
+            REF=""
+            VERSION=""
+          fi
+          [ -z "$REF" ] && REF="main"
+          [ -z "$VERSION" ] && VERSION="$REF"
+
+          echo "app_id=$APP_ID" >> $GITHUB_OUTPUT
+          echo "ref=$REF" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Target App ID: $APP_ID (ref: $REF, version: $VERSION)"
+
+      - name: Parse Application Metadata from Manifest
+        id: meta
+        if: steps.target.outputs.app_id != 'none'
+        run: |
+          python3 - << 'EOF'
+          import yaml, os, sys
+
+          app_id = "${{ steps.target.outputs.app_id }}"
+          manifest_path = "hub/apps/manifest.yml"
+          with open(manifest_path, 'r', encoding='utf-8') as f:
+              manifest = yaml.safe_load(f)
+
+          target = next((a for a in manifest.get('apps', []) if a.get('id') == app_id), None)
+          if not target:
+              print(f"Error: app_id '{app_id}' not found in manifest.yml", file=sys.stderr)
+              sys.exit(1)
+          if not target.get('enabled', False):
+              print(f"Error: app_id '{app_id}' is marked enabled: false", file=sys.stderr)
+              sys.exit(1)
+
+          repo = target.get('repo', '')
+          path = target.get('path', app_id)
+          app_type = target.get('type', 'web')
+          base_href = target.get('base_href', f"/{path}/")
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              out.write(f"repo={repo}\n")
+              out.write(f"path={path}\n")
+              out.write(f"type={app_type}\n")
+              out.write(f"base_href={base_href}\n")
+          EOF
+
+      - name: Fetch Deployed Site Cache from gh-pages
+        run: |
+          mkdir -p _site
+          cd hub
+          git fetch origin gh-pages 2>/dev/null || true
+          if git rev-parse --verify origin/gh-pages >/dev/null 2>&1; then
+            echo "Existing gh-pages branch found. Preserving previously released applications..."
+            git --work-tree=../_site checkout origin/gh-pages -- . || true
+          else
+            echo "gh-pages branch does not exist yet. Initializing clean site directory..."
+          fi
+          cd ..
+          rm -rf _site/.git
+
+      - name: Checkout Application Repository
+        if: steps.target.outputs.app_id != 'none'
+        uses: actions/checkout@v4
+        with:
+          repository: "${{ github.repository_owner }}/${{ steps.meta.outputs.repo }}"
+          ref: "${{ steps.target.outputs.ref }}"
+          path: build_target
+
+      - name: Set up Flutter (for flutter-web applications)
+        if: steps.target.outputs.app_id != 'none' && steps.meta.outputs.type == 'flutter-web'
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.3'
+          channel: 'stable'
+          cache: true
+
+      - name: Build Flutter Web Release
+        if: steps.target.outputs.app_id != 'none' && steps.meta.outputs.type == 'flutter-web'
+        run: |
+          cd build_target
+          flutter pub get
+          echo "Building Flutter Web for base path: ${{ steps.meta.outputs.base_href }}"
+          flutter build web --release --base-href "${{ steps.meta.outputs.base_href }}"
+          
+          # Verification of build output before copying to _site
+          test -f build/web/index.html || { echo "Build failed: index.html not found"; exit 1; }
+          cd ..
+
+          echo "Publishing application release to _site/${{ steps.meta.outputs.path }}..."
+          rm -rf "_site/${{ steps.meta.outputs.path }}"
+          mkdir -p "_site/${{ steps.meta.outputs.path }}"
+          cp -r build_target/build/web/* "_site/${{ steps.meta.outputs.path }}/"
+          echo "Application release published successfully."
+
+      - name: Update Status & Release Metadata
+        if: steps.target.outputs.app_id != 'none'
+        run: |
+          python3 - << 'EOF'
+          import json, os
+          from datetime import datetime, timezone
+
+          status_path = "hub/apps/status.json"
+          status = {"releases": {}}
+          if os.path.exists(status_path):
+              with open(status_path, 'r', encoding='utf-8') as f:
+                  status = json.load(f)
+
+          app_id = "${{ steps.target.outputs.app_id }}"
+          version = "${{ steps.target.outputs.version }}"
+          ref = "${{ steps.target.outputs.ref }}"
+
+          status.setdefault("releases", {})[app_id] = {
+              "status": "ready",
+              "build_status": "success",
+              "version": version,
+              "ref": ref,
+              "last_released": datetime.now(timezone.utc).isoformat()
+          }
+          status["last_updated"] = datetime.now(timezone.utc).isoformat()
+
+          with open(status_path, 'w', encoding='utf-8') as f:
+              json.dump(status, f, indent=2)
+          EOF
+
+      - name: Generate Hub Landing Page & 404
+        run: |
+          python3 hub/scripts/build_hub.py _site
+          mkdir -p _site/apps
+          cp hub/apps/manifest.yml _site/apps/
+          cp hub/apps/status.json _site/apps/
+
+      - name: Commit Updated Site to gh-pages Branch
+        run: |
+          cd hub
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin gh-pages 2>/dev/null || true
+          git checkout -B gh-pages origin/gh-pages 2>/dev/null || git checkout --orphan gh-pages
+          git rm -rf . >/dev/null 2>&1 || true
+
+          cp -r ../_site/* .
+          touch .nojekyll
+
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No changes to commit to gh-pages."
+          else
+            git commit -m "Deploy: release update [${{ steps.target.outputs.app_id }}] (${{ github.sha }})"
+            git push origin gh-pages
+          fi
+          cd ..
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
