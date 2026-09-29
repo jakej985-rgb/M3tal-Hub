@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-29T14:35:00Z",
+  "last_updated": "2026-09-29T14:43:00Z",
   "releases": {
     "monster-lab": {
       "status": "ready",
@@ -10,6 +10,12 @@
     "android-card-games": {
       "status": "ready",
       "version": "0.1.27",
+      "last_released": null,
+      "build_status": "configured"
+    },
+    "idle-animals": {
+      "status": "ready",
+      "version": "1.0.0",
       "last_released": null,
       "build_status": "configured"
     }
