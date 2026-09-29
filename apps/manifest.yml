@@ -1,0 +1,166 @@
+# M3tal-Hub application registry
+# enabled=false means the project is a placeholder until its integration plan is complete.
+
+apps:
+  - id: monster-lab
+    name: Monster Lab
+    repo: Monster-Lab
+    path: Monster-Lab
+    type: flutter-web
+    enabled: true
+    status: ready
+    description: Robotics learning application.
+    base_href: /Monster-Lab/
+
+  - id: android-card-games
+    name: Android Card Games
+    repo: Android-card-games
+    path: Android-card-games
+    type: flutter-web
+    enabled: true
+    status: ready
+    description: Flutter tabletop gaming suite.
+    base_href: /Android-card-games/
+
+  - id: idle-animals
+    name: Idle Animals
+    repo: Idle-animals
+    path: Idle-animals
+    type: flutter-web
+    enabled: true
+    status: planned
+    description: Extinct-animal idle game.
+    base_href: /Idle-animals/
+
+  - id: red-music-locker
+    name: Red Music Locker
+    repo: red-music-locker
+    path: red-music-locker
+    type: web
+    enabled: true
+    status: planned
+    description: Self-hosted music locker frontend.
+    base_href: /red-music-locker/
+
+  - id: red-music-locker-account-linker
+    name: Red Music Locker Account Linker
+    repo: red-music-locker-account-linker
+    path: red-music-locker-account-linker
+    type: extension
+    enabled: false
+    status: placeholder
+    description: Browser extension release.
+
+  - id: subaru-specs-n-parts
+    name: Subaru Specs & Parts
+    repo: Subaru.specs.n.parts
+    path: subaru-specs-n-parts
+    type: flutter-web
+    enabled: true
+    status: planned
+    description: Offline-first Subaru reference app.
+    base_href: /subaru-specs-n-parts/
+
+  - id: specs-n-parts
+    name: Spec-s-N-Part-s
+    repo: Spec-s-N-Part-s
+    path: specs-n-parts
+    type: flutter-web
+    enabled: false
+    status: review
+    description: Pending duplicate/project review.
+
+  - id: infernal-web
+    name: Infernal Web
+    repo: infernal-web
+    path: infernal-web
+    type: web
+    enabled: true
+    status: planned
+    description: Infernal web application.
+    base_href: /infernal-web/
+
+  - id: gps-speedometer
+    name: GPS Speedometer
+    repo: GPS-speedometer
+    path: gps-speedometer
+    type: flutter-web
+    enabled: true
+    status: planned
+    description: GPS speed display application.
+    base_href: /gps-speedometer/
+
+  - id: jellyfin-ui
+    name: Jellyfin UI
+    repo: Jellyfin-ui
+    path: jellyfin-ui
+    type: vite
+    enabled: true
+    status: planned
+    description: React/Vite Jellyfin interface project.
+    base_href: /jellyfin-ui/
+
+  - id: m3tal-godash
+    name: M3tal GoDash
+    repo: m3tal-godash
+    path: m3tal-godash
+    type: web
+    enabled: false
+    status: infrastructure-review
+    description: Go dashboard backend and UI.
+
+  - id: m3tal-plugin-page
+    name: M3tal Plugin Page
+    repo: m3tal-plugin-page
+    path: m3tal-plugin-page
+    type: static
+    enabled: true
+    status: planned
+    description: M3tal plugin landing page.
+    base_href: /m3tal-plugin-page/
+
+  - id: munchkin-companion-app
+    name: Munchkin Companion App
+    repo: Munchkin-Companion-App
+    path: munchkin-companion-app
+    type: flutter-web
+    enabled: true
+    status: planned
+    description: Flutter rules-aware game companion.
+    base_href: /munchkin-companion-app/
+
+  - id: ink-vault
+    name: Ink Vault
+    repo: Ink-vault
+    path: ink-vault
+    type: web
+    enabled: false
+    status: review
+    description: Tattoo and studio asset vault.
+
+  - id: shop-manager
+    name: Shop Manager
+    repo: Shop-manager
+    path: shop-manager
+    type: web
+    enabled: false
+    status: review
+    description: Studio operations manager.
+
+  - id: tattoo-shop-manager
+    name: Tattoo Shop Manager
+    repo: Tattoo-Shop-manager
+    path: tattoo-shop-manager
+    type: web
+    enabled: false
+    status: review
+    description: Tattoo shop appointment & inventory tracker.
+
+  - id: infernal-ink-steel-suite
+    name: Infernal Ink Steel Suite
+    repo: Infernal-Ink-Steel-Suite
+    path: infernal-ink-steel-suite
+    type: web
+    enabled: false
+    status: review
+    description: Integrated studio software suite.
