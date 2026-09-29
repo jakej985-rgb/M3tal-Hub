@@ -28,7 +28,7 @@ apps:
     path: Idle-animals
     type: flutter-web
     enabled: true
-    status: planned
+    status: ready
     description: Extinct-animal idle game.
     base_href: /Idle-animals/
 
