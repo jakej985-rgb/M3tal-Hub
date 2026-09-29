@@ -57,7 +57,7 @@ apps:
     path: subaru-specs-n-parts
     type: flutter-web
     enabled: true
-    status: planned
+    status: ready
     description: Offline-first Subaru reference app.
     base_href: /subaru-specs-n-parts/
 
