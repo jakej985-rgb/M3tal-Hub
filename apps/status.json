@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-29T15:30:00Z",
+  "last_updated": "2026-09-30T17:51:44.559370+00:00",
   "releases": {
     "monster-lab": {
       "status": "ready",
@@ -45,9 +45,10 @@
     },
     "m3tal-plugin-page": {
       "status": "ready",
-      "version": "1.0.0",
-      "last_released": null,
-      "build_status": "configured"
+      "build_status": "success",
+      "version": "main",
+      "ref": "main",
+      "last_released": "2026-09-30T17:51:44.559354+00:00"
     },
     "gps-speedometer": {
       "status": "placeholder",
