@@ -74,9 +74,9 @@ apps:
     name: Infernal Web
     repo: infernal-web
     path: infernal-web
-    type: web
+    type: flutter-web
     enabled: true
-    status: planned
+    status: ready
     description: Infernal web application.
     base_href: /infernal-web/
 
