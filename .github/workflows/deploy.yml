@@ -130,6 +130,7 @@ jobs:
           repository: "${{ github.repository_owner }}/${{ steps.meta.outputs.repo }}"
           ref: "${{ steps.meta.outputs.ref }}"
           path: build_target
+          token: ${{ secrets.HUB_DISPATCH_TOKEN || secrets.GITHUB_TOKEN }}
 
       - name: Set up Flutter (for flutter-web applications)
         if: steps.target.outputs.app_id != 'none' && steps.meta.outputs.type == 'flutter-web'
