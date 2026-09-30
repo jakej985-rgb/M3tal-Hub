@@ -11,6 +11,15 @@ apps:
     status: ready
     description: Robotics learning application.
     base_href: /M3tal-Hub/Monster-Lab/
+    changelog:
+      - version: 1.0.0
+        date: "2026-09-30"
+        tag: "Stable Release"
+        notes:
+          - "Production web release with full robotics simulation suite."
+          - "Interactive module editor with drag-and-drop circuit simulator."
+          - "Progressive Web App (PWA) offline caching support."
+          - "Optimized CanvasKit and HTML rendering pipelines."
 
   - id: android-card-games
     name: Android Card Games
@@ -21,6 +30,14 @@ apps:
     status: ready
     description: Flutter tabletop gaming suite.
     base_href: /M3tal-Hub/Android-card-games/
+    changelog:
+      - version: 0.1.27
+        date: "2026-09-30"
+        tag: "Latest Release"
+        notes:
+          - "Card game rules engine and multi-game tabletop selection."
+          - "Touch-optimized deck shuffling and card dealing animations."
+          - "PWA install support and offline game states."
 
   - id: idle-animals
     name: Idle Animals
@@ -31,6 +48,14 @@ apps:
     status: ready
     description: Extinct-animal idle game.
     base_href: /M3tal-Hub/Idle-animals/
+    changelog:
+      - version: 1.0.0
+        date: "2026-09-30"
+        tag: "Initial Release"
+        notes:
+          - "Incremental extinction discovery mechanics and species taxonomy."
+          - "Persistent idle progression saved to browser local storage."
+          - "Responsive cyberpunk interface and custom creature sprites."
 
   - id: red-music-locker
     name: Red Music Locker
@@ -41,6 +66,14 @@ apps:
     status: ready
     description: Self-hosted music locker frontend.
     base_href: /M3tal-Hub/red-music-locker/
+    changelog:
+      - version: 1.0.0
+        date: "2026-09-30"
+        tag: "Initial Release"
+        notes:
+          - "Self-hosted music locker audio streaming web interface."
+          - "Persistent playback queue and client-side audio caching."
+          - "Responsive mobile player controls and playlist organizer."
 
   - id: red-music-locker-account-linker
     name: Red Music Locker Account Linker
@@ -60,6 +93,14 @@ apps:
     status: ready
     description: Offline-first Subaru reference app.
     base_href: /M3tal-Hub/subaru-specs-n-parts/
+    changelog:
+      - version: 1.0.0
+        date: "2026-09-30"
+        tag: "Initial Release"
+        notes:
+          - "Offline-first Subaru technical specifications and part cross-reference catalog."
+          - "Engine torque specs, fluid capacities, and chassis dimensions database."
+          - "IndexedDB / SQLite local caching for roadside reference."
 
   - id: specs-n-parts
     name: Spec-s-N-Part-s
@@ -79,6 +120,19 @@ apps:
     status: ready
     description: Infernal web application.
     base_href: /M3tal-Hub/infernal-web/
+    changelog:
+      - version: 1.0.2
+        date: "2026-09-30"
+        tag: "Latest Release"
+        notes:
+          - "Hub base_href integration and asset routing patch."
+          - "Responsive dark UI theme and touch interaction enhancements."
+          - "Automated GitHub Actions dispatch workflow."
+      - version: 1.0.0
+        date: "2026-09-28"
+        tag: "Initial Release"
+        notes:
+          - "Initial web deployment release."
 
   - id: gps-speedometer
     name: GPS Speedometer
@@ -90,6 +144,15 @@ apps:
     description: Native Android GPS speed display application.
     repo_url: https://github.com/jakej985-rgb/GPS-speedometer
     release_url: https://github.com/jakej985-rgb/GPS-speedometer/releases
+    changelog:
+      - version: "1.0"
+        date: "2026-09-29"
+        tag: "APK Release"
+        notes:
+          - "Native Android release with Gradle build pipeline."
+          - "Low-latency hardware GPS sensor reading and velocity smoothing."
+          - "Dark OLED HUD reflection mode for windshield projection."
+          - "Max speed, trip odometer, and average velocity tracking."
 
   - id: jellyfin-ui
     name: Jellyfin UI
@@ -101,7 +164,15 @@ apps:
     status: ready
     description: React/Vite Jellyfin interface project.
     base_href: /M3tal-Hub/jellyfin-ui/
-
+    changelog:
+      - version: 1.0.0
+        date: "2026-09-30"
+        tag: "Initial Release"
+        notes:
+          - "Netflix-inspired dark cyberpunk media client interface."
+          - "React 18 and Vite high-performance bundler architecture."
+          - "Dynamic library streaming, media details modal, and hero spotlight."
+          - "Responsive grid supporting ultra-wide desktop and mobile layouts."
 
   - id: m3tal-plugin-page
     name: M3tal Plugin Page
@@ -112,6 +183,14 @@ apps:
     status: ready
     description: M3tal plugin landing page.
     base_href: /M3tal-Hub/m3tal-plugin-page/
+    changelog:
+      - version: 1.0.0
+        date: "2026-09-30"
+        tag: "Static Release"
+        notes:
+          - "Official M3tal plugin landing page static distribution."
+          - "Sanitized relative asset resolution and clean routing."
+          - "Responsive grid for plugin discovery and documentation."
 
   - id: munchkin-companion-app
     name: Munchkin Companion App

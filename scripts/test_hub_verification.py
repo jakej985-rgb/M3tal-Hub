@@ -618,6 +618,63 @@ def test_plan_14_infrastructure_and_libraries():
 
     print("Plan 14 Infrastructure and Libraries checks passed!")
 
+def test_app_detail_pages():
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    manifest_path = os.path.join(base_dir, "apps", "manifest.yml")
+    index_path = os.path.join(base_dir, "index.html")
+    apps_dir = os.path.join(base_dir, "apps")
+
+    with open(manifest_path, 'r', encoding='utf-8') as f:
+        manifest = yaml.safe_load(f)
+    apps = manifest["apps"]
+
+    index_content = open(index_path, 'r', encoding='utf-8').read()
+
+    valid_web_types = {'flutter-web', 'vite', 'web', 'static'}
+
+    for app in apps:
+        app_id = app["id"]
+        name = app["name"]
+        app_type = app.get("type", "web")
+        enabled = app.get("enabled", False)
+        path = app.get("path", app_id)
+        repo = app.get("repo", "")
+        repo_url = app.get("repo_url") or (f"https://github.com/jakej985-rgb/{repo}" if repo else "")
+        release_url = app.get("release_url") or (f"{repo_url}/releases" if repo_url else "")
+
+        # 1. Main hub index links to app detail page
+        assert f'href="./apps/{app_id}.html"' in index_content, f"index.html missing link to ./apps/{app_id}.html"
+
+        # 2. Detail page exists
+        page_path = os.path.join(apps_dir, f"{app_id}.html")
+        assert os.path.exists(page_path), f"Detail page missing: {page_path}"
+
+        content = open(page_path, 'r', encoding='utf-8').read()
+
+        # 3. Page has title, header, and back navigation link
+        assert f"<title>{name} | Release & Documentation | M3tal Hub</title>" in content, f"{app_id}.html title mismatch"
+        assert 'href="../"' in content, f"{app_id}.html missing return link to hub '../'"
+        assert "M3tal Hub" in content, f"{app_id}.html missing M3tal Hub brand"
+
+        # 4. Sections exist
+        assert "Installation & Setup Documentation" in content, f"{app_id}.html missing Installation & Setup section"
+        assert "Version History & Changelog" in content, f"{app_id}.html missing Changelog section"
+        assert "System Specifications" in content, f"{app_id}.html missing System Specifications section"
+
+        # 5. Type-specific assertions
+        if enabled and app_type in valid_web_types:
+            assert f'href="../{path}/"' in content, f"{app_id}.html missing launch link to ../{path}/"
+        elif app_type == "android-native":
+            assert "Download Release / APK" in content, f"{app_id}.html missing APK download action"
+            assert "Installation via Pre-built APK" in content, f"{app_id}.html missing APK installation steps"
+
+        if repo_url:
+            assert repo_url in content, f"{app_id}.html missing repo link {repo_url}"
+
+        print(f"  [OK Detail Page] {app_id}.html verified with release, changelog, and install docs")
+
+    print("App detail pages verification passed!")
+
 if __name__ == "__main__":
     print("=== Running M3tal-Hub Verification Suite ===")
     test_manifest_and_status()
@@ -635,6 +692,9 @@ if __name__ == "__main__":
     test_plan_13_other_app_repositories()
     print("\n=== Testing Plan 14 Infrastructure & Libraries ===")
     test_plan_14_infrastructure_and_libraries()
+    print("\n=== Testing App Detail & Release Pages ===")
+    test_app_detail_pages()
     print("\n=== All Tests Passed Successfully ===")
+
 
 
