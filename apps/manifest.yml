@@ -84,11 +84,10 @@ apps:
     name: GPS Speedometer
     repo: GPS-speedometer
     path: gps-speedometer
-    type: flutter-web
-    enabled: true
-    status: planned
-    description: GPS speed display application.
-    base_href: /gps-speedometer/
+    type: android-native
+    enabled: false
+    status: placeholder
+    description: Native Android GPS speed display application.
 
   - id: jellyfin-ui
     name: Jellyfin UI
@@ -101,14 +100,6 @@ apps:
     description: React/Vite Jellyfin interface project.
     base_href: /jellyfin-ui/
 
-  - id: m3tal-godash
-    name: M3tal GoDash
-    repo: m3tal-godash
-    path: m3tal-godash
-    type: web
-    enabled: false
-    status: infrastructure-review
-    description: Go dashboard backend and UI.
 
   - id: m3tal-plugin-page
     name: M3tal Plugin Page
@@ -125,7 +116,7 @@ apps:
     repo: Munchkin-Companion-App
     path: munchkin-companion-app
     type: flutter-web
-    enabled: true
+    enabled: false
     status: planned
     description: Flutter rules-aware game companion.
     base_href: /munchkin-companion-app/
@@ -134,34 +125,157 @@ apps:
     name: Ink Vault
     repo: Ink-vault
     path: ink-vault
-    type: web
+    type: backend
     enabled: false
     status: review
-    description: Tattoo and studio asset vault.
+    description: Tattoo and studio digital asset vault service.
 
   - id: shop-manager
     name: Shop Manager
     repo: Shop-manager
     path: shop-manager
-    type: web
+    type: desktop
     enabled: false
     status: review
-    description: Studio operations manager.
+    description: Studio operations and inventory management system.
 
   - id: tattoo-shop-manager
     name: Tattoo Shop Manager
     repo: Tattoo-Shop-manager
     path: tattoo-shop-manager
-    type: web
+    type: backend
     enabled: false
     status: review
-    description: Tattoo shop appointment & inventory tracker.
+    description: Tattoo shop appointment and inventory backend service.
 
   - id: infernal-ink-steel-suite
     name: Infernal Ink Steel Suite
     repo: Infernal-Ink-Steel-Suite
     path: infernal-ink-steel-suite
-    type: web
+    type: suite
     enabled: false
     status: review
-    description: Integrated studio software suite.
+    description: Integrated studio software suite (desktop/backend orchestration).
+
+  # Infrastructure and Backend Services
+  - id: m3tal-godash
+    name: M3tal GoDash
+    repo: m3tal-godash
+    type: service
+    category: infrastructure
+    enabled: false
+    status: active
+    description: Go dashboard backend service and operational system metrics.
+    repo_url: https://github.com/jakej985-rgb/m3tal-godash
+
+  - id: m3tal-core
+    name: M3tal Core
+    repo: m3tal-core
+    type: library
+    category: infrastructure
+    enabled: false
+    status: active
+    description: Foundation backend libraries, utilities, and common service primitives.
+    repo_url: https://github.com/jakej985-rgb/m3tal-core
+
+  - id: m3tal-api
+    name: M3tal API
+    repo: m3tal-api
+    type: service
+    category: infrastructure
+    enabled: false
+    status: active
+    description: Central backend routing API and service gateway.
+    repo_url: https://github.com/jakej985-rgb/m3tal-api
+
+  - id: m3tal-stack
+    name: M3tal Stack
+    repo: m3tal-stack
+    type: infrastructure
+    category: infrastructure
+    enabled: false
+    status: active
+    description: Docker Compose infrastructure orchestration and stack topologies.
+    repo_url: https://github.com/jakej985-rgb/m3tal-stack
+
+  - id: antigravity-remote-docker
+    name: Antigravity Remote Docker
+    repo: antigravity-remote-docker
+    type: container
+    category: infrastructure
+    enabled: false
+    status: active
+    description: Containerized remote development environment and Docker workspace.
+    repo_url: https://github.com/jakej985-rgb/antigravity-remote-docker
+
+  - id: m3tal-apt-key
+    name: M3tal APT Keyring
+    repo: m3tal-apt-key
+    type: package
+    category: infrastructure
+    enabled: false
+    status: active
+    description: Package signing key and Debian/Ubuntu distribution repository configuration.
+    repo_url: https://github.com/jakej985-rgb/m3tal-apt-key
+
+  # Shared Libraries, SDKs, and Templates
+  - id: m3tal-ui-kit
+    name: M3tal UI Kit
+    repo: m3tal-ui-kit
+    type: library
+    category: libraries
+    enabled: false
+    status: active
+    description: Shared Flutter and web design system, theme tokens, and component kit.
+    repo_url: https://github.com/jakej985-rgb/m3tal-ui-kit
+
+  - id: m3tal-hub-template
+    name: M3tal Hub Template
+    repo: m3tal-hub-template
+    type: template
+    category: libraries
+    enabled: false
+    status: active
+    description: Scaffolding and template repository for creating M3tal-Hub compatible web modules.
+    repo_url: https://github.com/jakej985-rgb/m3tal-hub-template
+
+  - id: ytmusicapi
+    name: YTMusicAPI Bridge
+    repo: ytmusicapi
+    type: library
+    category: libraries
+    enabled: false
+    status: active
+    description: Python YouTube Music API bridge and streaming metadata library.
+    repo_url: https://github.com/jakej985-rgb/ytmusicapi
+
+  # Developer Tooling and Documentation
+  - id: m3tal-docs
+    name: M3tal Docs
+    repo: m3tal-docs
+    type: docs
+    category: tooling
+    enabled: false
+    status: active
+    description: Architecture specifications, engineering guides, and ecosystem documentation.
+    repo_url: https://github.com/jakej985-rgb/m3tal-docs
+
+  - id: comicinfo-generator
+    name: ComicInfo Generator
+    repo: comicinfo-generator
+    type: tooling
+    category: tooling
+    enabled: false
+    status: active
+    description: Comic metadata enrichment engine and ComicInfo.xml batch generator.
+    repo_url: https://github.com/jakej985-rgb/comicinfo-generator
+
+  - id: vscode
+    name: M3tal VS Code Config
+    repo: vscode
+    type: tooling
+    category: tooling
+    enabled: false
+    status: active
+    description: Workspace configurations, recommended extensions, and development profiles.
+    repo_url: https://github.com/jakej985-rgb/vscode
