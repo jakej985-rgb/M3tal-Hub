@@ -38,21 +38,47 @@ def load_manifest(manifest_path):
     with open(manifest_path, 'r', encoding='utf-8') as f:
         return yaml.safe_load(f)
 
-def load_status(status_path):
-    if os.path.exists(status_path):
+def load_status(manifest_status_path, site_status_path=None):
+    merged = {"releases": {}}
+    if manifest_status_path and os.path.exists(manifest_status_path):
         try:
-            with open(status_path, 'r', encoding='utf-8') as f:
-                return json.load(f)
+            with open(manifest_status_path, 'r', encoding='utf-8') as f:
+                merged = json.load(f)
         except Exception as e:
-            print(f"Warning: Failed to load status.json: {e}", file=sys.stderr)
-    return {"releases": {}}
+            print(f"Warning: Failed to load manifest status ({manifest_status_path}): {e}", file=sys.stderr)
+
+    if site_status_path and os.path.exists(site_status_path) and os.path.abspath(site_status_path) != os.path.abspath(manifest_status_path):
+        try:
+            with open(site_status_path, 'r', encoding='utf-8') as f:
+                site_status = json.load(f)
+            
+            site_releases = site_status.get("releases", {})
+            base_releases = merged.setdefault("releases", {})
+            for app_id, s_rel in site_releases.items():
+                if app_id not in base_releases:
+                    base_releases[app_id] = s_rel
+                else:
+                    if s_rel.get("build_status") == "success":
+                        base_releases[app_id]["build_status"] = "success"
+                        if s_rel.get("status"):
+                            base_releases[app_id]["status"] = s_rel.get("status")
+                        if s_rel.get("last_released"):
+                            base_releases[app_id]["last_released"] = s_rel.get("last_released")
+                        if s_rel.get("version"):
+                            base_releases[app_id]["version"] = s_rel.get("version")
+                        if s_rel.get("ref"):
+                            base_releases[app_id]["ref"] = s_rel.get("ref")
+        except Exception as e:
+            print(f"Warning: Failed to load site status cache ({site_status_path}): {e}", file=sys.stderr)
+
+    return merged
 
 def get_badge(app, release_info):
     status = app.get("status", "planned")
     enabled = app.get("enabled", False)
     category = app.get("category", "apps")
     
-    if release_info and release_info.get("build_status") == "success":
+    if enabled and category == "apps" and release_info and release_info.get("build_status") == "success":
         return ("Live", "badge-live")
     
     if status == "ready":
@@ -102,12 +128,15 @@ def render_card(app, release_info):
     
     meta_html = f'<div class="meta-row">{" ".join(meta_info)}</div>' if meta_info else ""
 
-    if enabled:
+    valid_web_types = {'flutter-web', 'vite', 'web', 'static'}
+    is_web_deployable = app.get("type") in valid_web_types
+
+    if enabled and is_web_deployable:
         href = f"./{path}/"
         card_class = "card"
         is_external = False
     else:
-        href = app.get("docs_url") or app.get("repo_url") or app.get("url") or (f"https://github.com/jakej985-rgb/{repo}" if repo else "#")
+        href = app.get("url") or app.get("release_url") or app.get("repo_url") or app.get("docs_url") or (f"https://github.com/jakej985-rgb/{repo}" if repo else "#")
         is_external = href.startswith("http://") or href.startswith("https://")
         if category == "apps" and app.get("status") in ["placeholder", "review", None]:
             card_class = "card placeholder"
@@ -115,20 +144,20 @@ def render_card(app, release_info):
             card_class = "card info-card"
 
     target_attr = ' target="_blank" rel="noopener noreferrer"' if is_external else ''
-    icon_html = '<span class="ext-icon" aria-hidden="true">↗</span>' if is_external else ''
+    icon_html = ' <span class="ext-icon" aria-hidden="true">↗</span>' if is_external else ''
 
     return f"""        <a class="{card_class}" href="{href}"{target_attr}>
             <div class="card-header">
-                <h2>{name} {icon_html}</h2>
+                <h2>{name}{icon_html}</h2>
                 <span class="badge {badge_class}">{badge_text}</span>
             </div>
             <p>{desc}</p>
             {meta_html}
         </a>"""
 
-def generate_hub(manifest_path, status_path, output_dir):
+def generate_hub(manifest_path, status_path, output_dir, site_status_path=None):
     data = load_manifest(manifest_path)
-    status_data = load_status(status_path)
+    status_data = load_status(status_path, site_status_path)
     releases = status_data.get("releases", {})
 
     apps = data.get("apps", [])
@@ -527,14 +556,24 @@ def generate_hub(manifest_path, status_path, output_dir):
         f.write(error_404_html)
     print(f"Generated {error_output_path}")
 
+    # Synchronize merged status to output directory
+    apps_out_dir = os.path.join(output_dir, "apps")
+    os.makedirs(apps_out_dir, exist_ok=True)
+    out_status_path = os.path.join(apps_out_dir, "status.json")
+    with open(out_status_path, "w", encoding="utf-8") as f:
+        json.dump(status_data, f, indent=2)
+    print(f"Synchronized {out_status_path}")
+
 if __name__ == "__main__":
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     manifest = os.path.join(base_dir, "apps", "manifest.yml")
     status = os.path.join(base_dir, "apps", "status.json")
     out = sys.argv[1] if len(sys.argv) > 1 else base_dir
 
-    # If the output directory has an existing status.json (e.g. checked out from gh-pages), use it
-    if os.path.exists(os.path.join(out, "apps", "status.json")):
-        status = os.path.join(out, "apps", "status.json")
+    site_status = None
+    if os.path.abspath(out) != os.path.abspath(base_dir):
+        candidate_site_status = os.path.join(out, "apps", "status.json")
+        if os.path.exists(candidate_site_status):
+            site_status = candidate_site_status
 
-    generate_hub(manifest, status, out)
+    generate_hub(manifest, status, out, site_status_path=site_status)

@@ -1,18 +1,23 @@
 # 09 GPS Speedometer
 
 ## Goal
-Release GPS Speedometer through M3tal-Hub at `/gps-speedometer/`.
+Release GPS Speedometer through M3tal-Hub at `/gps-speedometer/` or establish appropriate release and repository routing.
 
-## Steps
-1. Identify the current application framework.
-2. Confirm whether browser geolocation is supported.
-3. Create a reproducible web build.
-4. Configure subdirectory paths.
-5. Add dispatch workflow.
-6. Add HUB_DISPATCH_TOKEN.
-7. Verify browser permission behavior.
-8. Dispatch and validate deployment.
-9. Enable automatic releases.
+## Architectural Assessment & Framework Investigation
+1. **Framework & Architecture**:
+   - Repository inspected at `/home/m3tal/apps/GPS-speedometer`.
+   - Identified as a native Android application using Kotlin, Jetpack Compose, and Gradle (`build.gradle.kts`, `app/` module).
+   - Target SDK: 34, Min SDK: 29.
+   - Build outputs: Android APKs (`.apk`) via `./gradlew :app:assembleRelease` and `.github/workflows/build-release-apk.yml`.
+2. **Web / Browser Compatibility**:
+   - Geolocation in this codebase is implemented using Android platform `com.google.android.gms:play-services-location`.
+   - No Flutter or web frontend exists.
+3. **Consolidation with Plan 13 (Other Application Repositories)**:
+   - Per Plan 13 evaluation, native mobile applications are intentionally excluded from GitHub Pages deployment.
+   - Removed `gps-speedometer` from GitHub Pages workflow dispatch (`.github/workflows/deploy.yml`) to prevent invalid deployment jobs.
+   - Registered in `apps/manifest.yml` as `type: android-native`, `enabled: false`, `status: placeholder` with direct repository link (`https://github.com/jakej985-rgb/GPS-speedometer`) and release link (`https://github.com/jakej985-rgb/GPS-speedometer/releases`).
+   - Tracked in `apps/status.json` with native APK versioning (`v1.0`).
 
 ## Definition of Done
-GPS Speedometer builds for web and functions correctly when hosted beneath M3tal-Hub.
+Architectural framework identified; native Android deployment route established; broken GitHub Pages deployment paths eliminated; consolidated under [Plan 13: Other App Repositories](13-Other-App-Repositories.md).
+

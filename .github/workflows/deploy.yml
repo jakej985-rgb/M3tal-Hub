@@ -21,7 +21,6 @@ on:
           - infernal-web
           - jellyfin-ui
           - m3tal-plugin-page
-          - munchkin-companion-app
           - none
       ref:
         description: 'Git ref/branch/tag of the target app to build'
@@ -95,8 +94,9 @@ jobs:
 
           category = target.get('category', 'apps')
           app_type = target.get('type', 'web')
-          if category in ['infrastructure', 'libraries', 'tooling'] or app_type in ['service', 'library', 'infrastructure', 'tooling', 'docs', 'container', 'package', 'template']:
-              print(f"Error: app_id '{app_id}' is an infrastructure/library component ({category}/{app_type}) and cannot be deployed to GitHub Pages.", file=sys.stderr)
+          valid_web_types = {'flutter-web', 'vite', 'web', 'static'}
+          if category in ['infrastructure', 'libraries', 'tooling'] or app_type not in valid_web_types:
+              print(f"Error: app_id '{app_id}' has non-deployable category '{category}' or non-web type '{app_type}' and cannot be deployed to GitHub Pages.", file=sys.stderr)
               sys.exit(1)
 
           repo = target.get('repo', '')
@@ -204,6 +204,31 @@ jobs:
           cp -r build_target/"$OUT_DIR"/* "_site/${{ steps.meta.outputs.path }}/"
           echo "Application release published successfully."
 
+      - name: Build Static Web Release
+        if: steps.target.outputs.app_id != 'none' && steps.meta.outputs.type == 'static'
+        run: |
+          cd build_target
+          if [ -f "scripts/build_web_release.sh" ]; then
+            chmod +x scripts/build_web_release.sh
+            echo "Executing repository custom build script..."
+            ./scripts/build_web_release.sh "${{ steps.meta.outputs.base_href }}"
+          fi
+
+          OUT_DIR="dist"
+          if [ ! -d "$OUT_DIR" ] && [ -d "build/web" ]; then
+            OUT_DIR="build/web"
+          elif [ ! -d "$OUT_DIR" ]; then
+            OUT_DIR="."
+          fi
+          test -f "$OUT_DIR/index.html" || { echo "Build failed: $OUT_DIR/index.html not found"; exit 1; }
+          cd ..
+
+          echo "Publishing application release to _site/${{ steps.meta.outputs.path }}..."
+          rm -rf "_site/${{ steps.meta.outputs.path }}"
+          mkdir -p "_site/${{ steps.meta.outputs.path }}"
+          cp -r build_target/"$OUT_DIR"/* "_site/${{ steps.meta.outputs.path }}/"
+          echo "Application release published successfully."
+
       - name: Update Status & Release Metadata
         if: steps.target.outputs.app_id != 'none'
         run: |
@@ -211,11 +236,27 @@ jobs:
           import json, os
           from datetime import datetime, timezone
 
-          status_path = "hub/apps/status.json"
+          repo_status_path = "hub/apps/status.json"
+          site_status_path = "_site/apps/status.json"
           status = {"releases": {}}
-          if os.path.exists(status_path):
-              with open(status_path, 'r', encoding='utf-8') as f:
+          if os.path.exists(repo_status_path):
+              with open(repo_status_path, 'r', encoding='utf-8') as f:
                   status = json.load(f)
+
+          if os.path.exists(site_status_path):
+              try:
+                  with open(site_status_path, 'r', encoding='utf-8') as f:
+                      site_status = json.load(f)
+                  for k, v in site_status.get("releases", {}).items():
+                      if k in status.setdefault("releases", {}):
+                          if v.get("build_status") == "success":
+                              status["releases"][k]["build_status"] = "success"
+                              if v.get("last_released"):
+                                  status["releases"][k]["last_released"] = v.get("last_released")
+                      else:
+                          status["releases"][k] = v
+              except Exception:
+                  pass
 
           app_id = "${{ steps.target.outputs.app_id }}"
           version = "${{ steps.target.outputs.version }}"
@@ -230,7 +271,7 @@ jobs:
           }
           status["last_updated"] = datetime.now(timezone.utc).isoformat()
 
-          with open(status_path, 'w', encoding='utf-8') as f:
+          with open(repo_status_path, 'w', encoding='utf-8') as f:
               json.dump(status, f, indent=2)
           EOF
 
