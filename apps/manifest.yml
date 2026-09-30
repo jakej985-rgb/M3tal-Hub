@@ -88,6 +88,8 @@ apps:
     enabled: false
     status: placeholder
     description: Native Android GPS speed display application.
+    repo_url: https://github.com/jakej985-rgb/GPS-speedometer
+    release_url: https://github.com/jakej985-rgb/GPS-speedometer/releases
 
   - id: jellyfin-ui
     name: Jellyfin UI
@@ -107,7 +109,7 @@ apps:
     path: m3tal-plugin-page
     type: static
     enabled: true
-    status: planned
+    status: ready
     description: M3tal plugin landing page.
     base_href: /m3tal-plugin-page/
 
@@ -120,6 +122,7 @@ apps:
     status: planned
     description: Flutter rules-aware game companion.
     base_href: /munchkin-companion-app/
+    repo_url: https://github.com/jakej985-rgb/Munchkin-Companion-App
 
   - id: ink-vault
     name: Ink Vault
@@ -129,6 +132,7 @@ apps:
     enabled: false
     status: review
     description: Tattoo and studio digital asset vault service.
+    repo_url: https://github.com/jakej985-rgb/Ink-vault
 
   - id: shop-manager
     name: Shop Manager
@@ -138,6 +142,7 @@ apps:
     enabled: false
     status: review
     description: Studio operations and inventory management system.
+    repo_url: https://github.com/jakej985-rgb/Shop-manager
 
   - id: tattoo-shop-manager
     name: Tattoo Shop Manager
@@ -147,6 +152,7 @@ apps:
     enabled: false
     status: review
     description: Tattoo shop appointment and inventory backend service.
+    repo_url: https://github.com/jakej985-rgb/Tattoo-Shop-manager
 
   - id: infernal-ink-steel-suite
     name: Infernal Ink Steel Suite
@@ -156,6 +162,7 @@ apps:
     enabled: false
     status: review
     description: Integrated studio software suite (desktop/backend orchestration).
+    repo_url: https://github.com/jakej985-rgb/Infernal-Ink-Steel-Suite
 
   # Infrastructure and Backend Services
   - id: m3tal-godash
@@ -165,6 +172,8 @@ apps:
     category: infrastructure
     enabled: false
     status: active
+    version: 0.2.0
+    package: service
     description: Go dashboard backend service and operational system metrics.
     repo_url: https://github.com/jakej985-rgb/m3tal-godash
 
@@ -175,6 +184,8 @@ apps:
     category: infrastructure
     enabled: false
     status: active
+    version: 0.1.0
+    package: library
     description: Foundation backend libraries, utilities, and common service primitives.
     repo_url: https://github.com/jakej985-rgb/m3tal-core
 
@@ -185,6 +196,8 @@ apps:
     category: infrastructure
     enabled: false
     status: active
+    version: 0.1.0
+    package: service
     description: Central backend routing API and service gateway.
     repo_url: https://github.com/jakej985-rgb/m3tal-api
 
@@ -195,6 +208,8 @@ apps:
     category: infrastructure
     enabled: false
     status: active
+    version: 1.0.0
+    package: docker-compose
     description: Docker Compose infrastructure orchestration and stack topologies.
     repo_url: https://github.com/jakej985-rgb/m3tal-stack
 
@@ -205,6 +220,8 @@ apps:
     category: infrastructure
     enabled: false
     status: active
+    version: 1.0.0
+    package: container
     description: Containerized remote development environment and Docker workspace.
     repo_url: https://github.com/jakej985-rgb/antigravity-remote-docker
 
@@ -215,6 +232,8 @@ apps:
     category: infrastructure
     enabled: false
     status: active
+    version: 1.0.0
+    package: gpg-keyring
     description: Package signing key and Debian/Ubuntu distribution repository configuration.
     repo_url: https://github.com/jakej985-rgb/m3tal-apt-key
 
@@ -226,6 +245,8 @@ apps:
     category: libraries
     enabled: false
     status: active
+    version: 0.1.0
+    package: dart-pkg
     description: Shared Flutter and web design system, theme tokens, and component kit.
     repo_url: https://github.com/jakej985-rgb/m3tal-ui-kit
 
@@ -236,6 +257,8 @@ apps:
     category: libraries
     enabled: false
     status: active
+    version: 1.0.0
+    package: template
     description: Scaffolding and template repository for creating M3tal-Hub compatible web modules.
     repo_url: https://github.com/jakej985-rgb/m3tal-hub-template
 
@@ -246,6 +269,8 @@ apps:
     category: libraries
     enabled: false
     status: active
+    version: 0.25.0
+    package: pypi
     description: Python YouTube Music API bridge and streaming metadata library.
     repo_url: https://github.com/jakej985-rgb/ytmusicapi
 
@@ -257,6 +282,8 @@ apps:
     category: tooling
     enabled: false
     status: active
+    version: 1.0.0
+    package: docs
     description: Architecture specifications, engineering guides, and ecosystem documentation.
     repo_url: https://github.com/jakej985-rgb/m3tal-docs
 
@@ -267,6 +294,8 @@ apps:
     category: tooling
     enabled: false
     status: active
+    version: 1.1.0
+    package: cli-tool
     description: Comic metadata enrichment engine and ComicInfo.xml batch generator.
     repo_url: https://github.com/jakej985-rgb/comicinfo-generator
 
@@ -277,5 +306,7 @@ apps:
     category: tooling
     enabled: false
     status: active
+    version: 1.0.0
+    package: dev-config
     description: Workspace configurations, recommended extensions, and development profiles.
     repo_url: https://github.com/jakej985-rgb/vscode

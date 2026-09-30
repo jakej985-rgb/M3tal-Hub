@@ -43,6 +43,47 @@
       "last_released": null,
       "build_status": "configured"
     },
+    "m3tal-plugin-page": {
+      "status": "ready",
+      "version": "1.0.0",
+      "last_released": null,
+      "build_status": "configured"
+    },
+    "gps-speedometer": {
+      "status": "placeholder",
+      "version": "1.0",
+      "last_released": null,
+      "build_status": "native-apk",
+      "package_status": "apk"
+    },
+    "ink-vault": {
+      "status": "review",
+      "version": "0.1.0",
+      "last_released": null,
+      "build_status": "backend",
+      "package_status": "service"
+    },
+    "shop-manager": {
+      "status": "review",
+      "version": "0.1.0",
+      "last_released": null,
+      "build_status": "desktop",
+      "package_status": "binary"
+    },
+    "tattoo-shop-manager": {
+      "status": "review",
+      "version": "0.1.0",
+      "last_released": null,
+      "build_status": "backend",
+      "package_status": "service"
+    },
+    "infernal-ink-steel-suite": {
+      "status": "review",
+      "version": "0.1.0",
+      "last_released": null,
+      "build_status": "suite",
+      "package_status": "suite"
+    },
     "m3tal-godash": {
       "status": "active",
       "version": "0.2.0",
