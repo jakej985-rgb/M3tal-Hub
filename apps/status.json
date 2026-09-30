@@ -36,6 +36,12 @@
       "version": "1.0.0",
       "last_released": null,
       "build_status": "configured"
+    },
+    "red-music-locker": {
+      "status": "ready",
+      "version": "1.0.0",
+      "last_released": null,
+      "build_status": "configured"
     }
   }
 }
