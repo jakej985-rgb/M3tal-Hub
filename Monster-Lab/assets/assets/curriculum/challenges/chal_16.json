@@ -1,0 +1,26 @@
+{
+  "id": "chal_16",
+  "title": "Radio Packet Struct Alignment",
+  "type": "changeCode",
+  "difficulty": "monsterMaster",
+  "prompt": "Two Arduinos communicate via NRF24L01. The transmitter sends a data struct, but the receiver prints corrupted telemetry data. What code modification fixes packet serialization?",
+  "codeSnippet": "struct Telemetry {\n  byte monsterId;\n  float batteryVoltage;\n  int rpm;\n};\nradio.write(&data, sizeof(data));",
+  "challengeData": {
+    "options": [
+      "Convert all numbers into 64-bit doubles",
+      "Ensure transmitter and receiver share the identical struct layout and memory packing",
+      "Transmit each byte 10 times in a for loop",
+      "Change the radio channel on every transmission"
+    ]
+  },
+  "hint": "Both transmitter and receiver must share the identical struct byte definition.",
+  "hints": [
+    "Both transmitter and receiver must share the identical struct byte definition.",
+    "Different struct padding or data types will misalign incoming bytes."
+  ],
+  "explanation": "Binary radio transmissions send raw memory bytes. Both transmitter and receiver sketches must define the exact same struct layout (matching types, field order, and byte sizes) for deserialization to work.",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 60
+}

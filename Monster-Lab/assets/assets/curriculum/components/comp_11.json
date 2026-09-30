@@ -1,0 +1,55 @@
+{
+  "id": "comp_11",
+  "peripheralNumber": 11,
+  "name": "Infrared Flame Detector",
+  "partNumber": "YG1006",
+  "category": "sensor",
+  "description": "Like fire eyes! Detects the invisible 760nm to 1100nm infrared spectrum radiating from flames.",
+  "realWorldAnalogy": "Like fire eyes! Detects the invisible 760nm to 1100nm infrared spectrum radiating from flames.",
+  "voltage": "dual",
+  "pinout": [
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "Power rail"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "D0",
+      "type": "digitalIn",
+      "description": "Digital fire threshold"
+    },
+    {
+      "pinName": "A0",
+      "type": "analogIn",
+      "description": "Analog flame intensity"
+    }
+  ],
+  "safety": {
+    "level": "caution",
+    "hazards": [
+      "Sensitive to heat and fire sources"
+    ],
+    "childSafeAlternative": "Simulate with an infrared LED or flashlight",
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_11"
+  ],
+  "datasheetRef": "IR-Receiver-AX-1838HS .pdf",
+  "wiringGuidance": "Connect VCC (Red) to 5V, GND (Dark Slate) to GND, D0 (Green) to digital pin 4, and A0 (Yellow) to analog pin A0.",
+  "commonMistakes": [
+    "Bringing an open flame too close to the sensor and melting the epoxy casing.",
+    "Testing under direct sunlight, which floods the sensor with ambient infrared light."
+  ],
+  "miniExperiment": {
+    "title": "Infrared Flame Detector",
+    "circuit": "VCC to 5V, GND to GND, A0 to Analog Pin A0.",
+    "code": "void setup() {\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  int flameVal = analogRead(A0);\n  Serial.print(\"IR Intensity: \");\n  Serial.println(flameVal);\n  delay(100);\n}",
+    "expectedOutput": "Reads high numbers (~900-1023) in normal room light, and drops below 200 when exposed to an infrared source."
+  }
+}

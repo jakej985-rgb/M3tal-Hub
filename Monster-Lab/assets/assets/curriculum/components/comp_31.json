@@ -1,0 +1,75 @@
+{
+  "id": "comp_31",
+  "peripheralNumber": 31,
+  "name": "2.4GHz Wireless Radio Transceiver",
+  "partNumber": "NRF24L01+",
+  "category": "communication",
+  "description": "Like walkie-talkies for microcontrollers! Sends packet data wirelessly over 2.4GHz ISM band.",
+  "realWorldAnalogy": "Like walkie-talkies for microcontrollers! Sends packet data wirelessly over 2.4GHz ISM band.",
+  "voltage": "v3_3",
+  "pinout": [
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "3.3V Power ONLY"
+    },
+    {
+      "pinName": "CE",
+      "type": "digitalOut",
+      "description": "Chip Enable"
+    },
+    {
+      "pinName": "CSN",
+      "type": "spi",
+      "description": "SPI Chip Select"
+    },
+    {
+      "pinName": "SCK",
+      "type": "spi",
+      "description": "SPI Clock"
+    },
+    {
+      "pinName": "MOSI",
+      "type": "spi",
+      "description": "SPI Master Out"
+    },
+    {
+      "pinName": "MISO",
+      "type": "spi",
+      "description": "SPI Master In"
+    },
+    {
+      "pinName": "IRQ",
+      "type": "digitalIn",
+      "description": "Interrupt request"
+    }
+  ],
+  "safety": {
+    "level": "caution",
+    "hazards": [
+      "Requires strictly regulated 3.3V; 5V will permanently destroy module"
+    ],
+    "childSafeAlternative": "Always connect VCC to 3.3V pin with 10uF filter capacitor",
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_14"
+  ],
+  "datasheetRef": "RM-MPU-6050A.pdf",
+  "wiringGuidance": "Connect GND (Dark Slate) to GND, VCC (Red) to 3.3V ONLY, CE (Orange) to Pin 9, CSN (Orange) to Pin 10, SCK (Orange) to Pin 13, MOSI (Orange) to Pin 11, MISO (Orange) to Pin 12.",
+  "commonMistakes": [
+    "Powering VCC with 5V permanently destroys the RF chip!",
+    "Noisy 3.3V power rails causing packet drops (add a 10uF capacitor across VCC and GND)."
+  ],
+  "miniExperiment": {
+    "title": "RF Transmitter Beacon",
+    "circuit": "VCC to 3.3V, GND to GND, CE to 9, CSN to 10, SCK to 13, MOSI to 11, MISO to 12.",
+    "code": "#include <SPI.h>\n#include <nRF24L01.h>\n#include <RF24.h>\n\nRF24 radio(9, 10);\nconst byte address[6] = \"00001\";\n\nvoid setup() {\n  radio.begin();\n  radio.openWritingPipe(address);\n  radio.setPALevel(RF24_PA_MIN);\n  radio.stopListening();\n}\n\nvoid loop() {\n  const char text[] = \"Monster Lab Ping!\";\n  radio.write(&text, sizeof(text));\n  delay(1000);\n}",
+    "expectedOutput": "Transmits 2.4GHz wireless telemetry packets once per second."
+  }
+}

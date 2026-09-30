@@ -1,0 +1,47 @@
+{
+  "id": "lesson_07",
+  "title": "RGB LED: Mixing Colors with PWM",
+  "summary": "Harness Pulse Width Modulation (PWM) and additive color physics to generate millions of custom hues.",
+  "tier": "rookie",
+  "estimatedMinutes": 30,
+  "prerequisites": [
+    "lesson_05"
+  ],
+  "componentIds": [],
+  "steps": [
+    {
+      "stepId": "l07_s01",
+      "title": "Light Physics: Red, Green, Blue",
+      "type": "story",
+      "markdownContent": "An RGB LED combines three tiny LED dies inside a single lens. By mixing different amounts of Red, Green, and Blue light, you can make any color in the rainbow!"
+    },
+    {
+      "stepId": "l07_s02",
+      "title": "What is Pulse Width Modulation (PWM)?",
+      "type": "visualExplanation",
+      "markdownContent": "Digital pins can only output 5V or 0V. To dim an LED, the Arduino turns the pin ON and OFF hundreds of times per second. Look for the tilde `~` symbol next to pins 3, 5, 6, 9, 10, 11!"
+    },
+    {
+      "stepId": "l07_s03",
+      "title": "analogWrite() Duty Cycle",
+      "type": "codeExperiment",
+      "markdownContent": "`analogWrite(pin, value)` accepts 0 (always OFF) to 255 (always ON). To make Purple, send Red=255, Green=0, Blue=255!"
+    },
+    {
+      "stepId": "l07_s04",
+      "title": "Color Mixing Quiz",
+      "type": "quizCheckpoint",
+      "markdownContent": "What color do you get if you mix Red at 255 and Green at 255 (with Blue at 0)?",
+      "interactiveConfig": {
+        "question": "Red + Green light makes what color?",
+        "options": [
+          "Yellow",
+          "Cyan",
+          "Magenta"
+        ],
+        "correctIndex": 0
+      }
+    }
+  ],
+  "xpReward": 90
+}

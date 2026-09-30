@@ -1,0 +1,25 @@
+{
+  "id": "chal_10",
+  "title": "28BYJ-48 Stepper Gear Steps",
+  "type": "predictOutput",
+  "difficulty": "engineer",
+  "prompt": "The 28BYJ-48 stepper motor has 64 electrical half-steps per rotor cycle and a 1:64 gear reduction gearbox. How many total half-steps are required to turn the output shaft one full 360\u00b0 turn?",
+  "challengeData": {
+    "options": [
+      "512 steps",
+      "1,024 steps",
+      "2,048 steps",
+      "4,096 steps"
+    ]
+  },
+  "hint": "Multiply internal motor steps per rotation by gear ratio.",
+  "hints": [
+    "Multiply internal motor steps per rotation by gear ratio.",
+    "64 * 64 = ?"
+  ],
+  "explanation": "64 internal steps * 64 gearbox reduction = 4,096 half-steps per 360\u00b0 full output rotation (or 2048 full-steps).",
+  "solutionValidation": {
+    "correctIndex": 3
+  },
+  "xpAward": 50
+}

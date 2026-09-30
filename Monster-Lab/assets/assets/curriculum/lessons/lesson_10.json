@@ -1,0 +1,51 @@
+{
+  "id": "lesson_10",
+  "title": "The High-Speed SPI Protocol",
+  "summary": "Transmit megabits per second to displays and radios with 4-wire SPI (MOSI, MISO, SCK, CS).",
+  "tier": "engineer",
+  "estimatedMinutes": 30,
+  "prerequisites": [
+    "lesson_09"
+  ],
+  "componentIds": [
+    "comp_15",
+    "comp_23",
+    "comp_31"
+  ],
+  "steps": [
+    {
+      "stepId": "l10_s01",
+      "title": "When Speed Matters",
+      "type": "story",
+      "markdownContent": "While I2C is great for simple sensors, high-speed graphics displays and 2.4GHz wireless transceivers need blazing data rates. **SPI** (Serial Peripheral Interface) operates at up to 8 MHz!"
+    },
+    {
+      "stepId": "l10_s02",
+      "title": "The 4 SPI Lines",
+      "type": "visualExplanation",
+      "markdownContent": "- `MOSI` (Pin 11): Master Out, Slave In (Arduino to device)\n- `MISO` (Pin 12): Master In, Slave Out (Device to Arduino)\n- `SCK` (Pin 13): Clock rhythm ticks\n- `CS / SS` (Pin 10): Chip Select to choose which chip talks!"
+    },
+    {
+      "stepId": "l10_s03",
+      "title": "Chip Select (CS) Control",
+      "type": "codeExperiment",
+      "markdownContent": "To talk to an SPI chip, pull its CS pin `LOW`. Send your data packets, then set CS back to `HIGH` to end the conversation."
+    },
+    {
+      "stepId": "l10_s04",
+      "title": "SPI Line Checkpoint",
+      "type": "quizCheckpoint",
+      "markdownContent": "Which SPI line carries data FROM the peripheral BACK to the Arduino?",
+      "interactiveConfig": {
+        "question": "Which line sends data to Arduino?",
+        "options": [
+          "MISO (Master In Slave Out)",
+          "MOSI (Master Out Slave In)",
+          "SCK (Serial Clock)"
+        ],
+        "correctIndex": 0
+      }
+    }
+  ],
+  "xpReward": 90
+}

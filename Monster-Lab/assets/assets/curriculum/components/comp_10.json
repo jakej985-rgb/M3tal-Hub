@@ -1,0 +1,63 @@
+{
+  "id": "comp_10",
+  "peripheralNumber": 10,
+  "name": "High-Precision Real Time Clock",
+  "partNumber": "DS3231",
+  "category": "sensor",
+  "description": "Like a battery-powered wristwatch for your Arduino! Never forgets the second, minute, or year even when unplugged.",
+  "realWorldAnalogy": "Like a battery-powered wristwatch for your Arduino! Never forgets the second, minute, or year even when unplugged.",
+  "voltage": "dual",
+  "pinout": [
+    {
+      "pinName": "32K",
+      "type": "digitalOut",
+      "description": "32kHz clock out"
+    },
+    {
+      "pinName": "SQW",
+      "type": "digitalOut",
+      "description": "Square wave / Interrupt"
+    },
+    {
+      "pinName": "SCL",
+      "type": "i2c",
+      "description": "I2C Clock"
+    },
+    {
+      "pinName": "SDA",
+      "type": "i2c",
+      "description": "I2C Data"
+    },
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "Power"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_05"
+  ],
+  "datasheetRef": "DS3231.pdf",
+  "wiringGuidance": "Connect VCC (Red) to 5V, GND (Dark Slate) to GND, SDA (Blue) to A4, and SCL (Blue) to A5.",
+  "commonMistakes": [
+    "Forgetting to install the CR2032 backup battery, losing time when power is disconnected.",
+    "Using rechargeable batteries in RTC modules designed for non-rechargeable CR2032."
+  ],
+  "miniExperiment": {
+    "title": "Real-Time Clock Ticker",
+    "circuit": "VCC to 5V, GND to GND, SDA to A4, SCL to A5.",
+    "code": "#include <Wire.h>\n#include <RTClib.h>\n\nRTC_DS3231 rtc;\n\nvoid setup() {\n  Serial.begin(9600);\n  if (!rtc.begin()) {\n    Serial.println(\"RTC not found\");\n    while (1);\n  }\n}\n\nvoid loop() {\n  DateTime now = rtc.now();\n  Serial.print(now.hour());\n  Serial.print(':');\n  Serial.print(now.minute());\n  Serial.print(':');\n  Serial.println(now.second());\n  delay(1000);\n}",
+    "expectedOutput": "Serial Monitor displays live real-time hours, minutes, and seconds advancing every second."
+  }
+}

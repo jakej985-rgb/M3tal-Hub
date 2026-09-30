@@ -1,0 +1,153 @@
+{
+  "id": "proj_09",
+  "title": "RFID Smart Door MONSTER",
+  "tagline": "Swipe your badge to enter! Read 13.56MHz crypto tags with SPI and unlock physical servo deadbolts.",
+  "tier": "engineer",
+  "estimatedMinutes": 60,
+  "requiredComponents": [
+    "comp_23",
+    "comp_25",
+    "comp_34"
+  ],
+  "prerequisiteLessons": [
+    "lesson_03",
+    "lesson_05"
+  ],
+  "phases": [
+    {
+      "phaseNumber": 1,
+      "phaseTitle": "Gather RFID Hardware",
+      "type": "gatherParts",
+      "instructions": "Collect the RC522 13.56MHz RFID Reader/Writer module, RFID white card, blue RFID keyfob, SG90 servo, and buzzer.",
+      "verificationCheckpoints": [
+        "RC522 module with 8 header pins ready",
+        "RFID white card and blue keyfob ready",
+        "SG90 servo motor ready"
+      ]
+    },
+    {
+      "phaseNumber": 2,
+      "phaseTitle": "3.3V SPI Bus Wiring",
+      "type": "breadboardWiring",
+      "instructions": "CRITICAL: Connect RC522 VCC to 3.3V ONLY (NEVER 5V or you will fry the chip!). Connect SPI pins: MOSI to 11, MISO to 12, SCK to 13, SDA/SS to 10, RST to 9.",
+      "wiringConnections": [
+        {
+          "from": "RC522 VCC",
+          "to": "Arduino 3.3V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "RC522 GND",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        },
+        {
+          "from": "RC522 RST",
+          "to": "Arduino Pin 9",
+          "wire": "Orange",
+          "type": "spi"
+        },
+        {
+          "from": "RC522 SDA(SS)",
+          "to": "Arduino Pin 10",
+          "wire": "Orange",
+          "type": "spi"
+        },
+        {
+          "from": "RC522 MOSI",
+          "to": "Arduino Pin 11",
+          "wire": "Orange",
+          "type": "spi"
+        },
+        {
+          "from": "RC522 MISO",
+          "to": "Arduino Pin 12",
+          "wire": "Orange",
+          "type": "spi"
+        },
+        {
+          "from": "RC522 SCK",
+          "to": "Arduino Pin 13",
+          "wire": "Orange",
+          "type": "spi"
+        },
+        {
+          "from": "Servo Signal",
+          "to": "Arduino Pin 6",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "Buzzer (+)",
+          "to": "Arduino Pin 7",
+          "wire": "Green",
+          "type": "digitalOut"
+        }
+      ],
+      "verificationCheckpoints": [
+        "VCC connected strictly to 3.3V pin",
+        "SPI bus pins 11, 12, 13 firmly seated"
+      ]
+    },
+    {
+      "phaseNumber": 3,
+      "phaseTitle": "Pre-Flight 3.3V Voltage Verification",
+      "type": "wiringCheck",
+      "instructions": "STOP AND DOUBLE CHECK: Verify with your eyes that the RC522 red wire goes into the Arduino '3.3V' socket, NOT '5V'.",
+      "verificationCheckpoints": [
+        "Power lead strictly in 3.3V header",
+        "No bridged solder connections on RC522 header"
+      ]
+    },
+    {
+      "phaseNumber": 4,
+      "phaseTitle": "Code Walkthrough & UID Authentication",
+      "type": "codeReview",
+      "instructions": "Review how the MFRC522 library queries tag UIDs and checks against authorized master card credentials.",
+      "codeSnippet": "#include <SPI.h>\n#include <MFRC522.h>\n#include <Servo.h>\n\n#define RST_PIN 9\n#define SS_PIN 10\nMFRC522 mfrc522(SS_PIN, RST_PIN);\nServo lockServo;\n\nbyte masterUID[4] = {0xDE, 0xAD, 0xBE, 0xEF}; // Replace with your card UID\n\nvoid setup() {\n  Serial.begin(9600);\n  SPI.begin();\n  mfrc522.PCD_Init();\n  lockServo.attach(6);\n  lockServo.write(0); // Locked\n}\n\nvoid loop() {\n  if (!mfrc522.PICC_IsNewCardPresent() || !mfrc522.PICC_ReadCardSerial()) return;\n\n  bool match = true;\n  for (byte i = 0; i < 4; i++) {\n    if (mfrc522.uid.uidByte[i] != masterUID[i]) match = false;\n  }\n\n  if (match) {\n    lockServo.write(90); // Unlock\n    delay(3000);\n    lockServo.write(0);  // Re-lock\n  }\n  mfrc522.PICC_HaltA();\n}",
+      "codeExplanation": "- SPI.begin() initializes high-speed hardware SPI clock and data lines.\n- mfrc522.PICC_ReadCardSerial() reads the 4-byte or 7-byte unique identifier (UID) from the tag.\n- The loop compares the scanned UID byte-by-byte with masterUID.\n- If matched, the deadbolt rotates 90 degrees for 3 seconds.",
+      "verificationCheckpoints": [
+        "Understand how 13.56 MHz electromagnetic coupling powers passive tag chip",
+        "Understand UID byte comparison array"
+      ]
+    },
+    {
+      "phaseNumber": 5,
+      "phaseTitle": "Upload & Tag Enrollment Test",
+      "type": "uploadSketch",
+      "instructions": "Upload sketch and tap your card to serial monitor to view its unique UID. Update the masterUID array with your card's numbers and re-upload to unlock your door!",
+      "verificationCheckpoints": [
+        "Serial monitor prints card UID hex values",
+        "Authorized card unlocks servo deadbolt"
+      ]
+    },
+    {
+      "phaseNumber": 6,
+      "phaseTitle": "Mission Complete",
+      "type": "missionComplete",
+      "instructions": "Access Granted! You built a commercial-grade contactless RFID security gate.",
+      "verificationCheckpoints": [
+        "Ready to claim RFID Guardian badge"
+      ]
+    }
+  ],
+  "xpReward": 220,
+  "badgeRewardId": "badge_rfid_guardian",
+  "story": "Build a high-security Contactless RFID monster lock! Read 13.56 MHz Mifare RFID cards and keyfobs over the SPI bus, authorize authorized serial badges, and actuate a micro-servo deadbolt.",
+  "troubleshooting": [
+    {
+      "symptom": "RFID reader does not detect cards at all",
+      "cause": "VCC wire plugged into 5V (which can damage chip) or poor SPI connection on Pin 13",
+      "solution": "Ensure VCC is plugged into 3.3V and check that SCK pin is securely connected to Pin 13.",
+      "category": "wiring",
+      "diagnosticSteps": [
+        "Check RC522 VCC wire: strictly 3.3V (5V will damage it).",
+        "Inspect SPI jumper connections: MOSI 11, MISO 12, SCK 13."
+      ]
+    }
+  ],
+  "variants": [],
+  "extensionMissions": []
+}

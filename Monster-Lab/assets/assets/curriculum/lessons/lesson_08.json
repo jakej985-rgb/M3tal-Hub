@@ -1,0 +1,47 @@
+{
+  "id": "lesson_08",
+  "title": "Digital Inputs: Pushbuttons & Internal Pullups",
+  "summary": "Sense physical button presses without phantom triggers! Learn the secret of INPUT_PULLUP and debouncing.",
+  "tier": "rookie",
+  "estimatedMinutes": 20,
+  "prerequisites": [
+    "lesson_05"
+  ],
+  "componentIds": [],
+  "steps": [
+    {
+      "stepId": "l08_s01",
+      "title": "Buttons and Open Circuits",
+      "type": "story",
+      "markdownContent": "A tactile pushbutton is an electrical drawbridge. When pressed, it connects two contacts and lets current cross!"
+    },
+    {
+      "stepId": "l08_s02",
+      "title": "The Floating Pin Trap",
+      "type": "visualExplanation",
+      "markdownContent": "If an input pin isn't connected to either 5V or GND, it **floats** like an antenna, picking up radio waves and triggering randomly! We must tether it with a resistor."
+    },
+    {
+      "stepId": "l08_s03",
+      "title": "INPUT_PULLUP to the Rescue",
+      "type": "codeExperiment",
+      "markdownContent": "Arduino has built-in 20k\u03a9 pullup resistors! When you configure `pinMode(2, INPUT_PULLUP);`, the pin defaults to `HIGH`. When you press the button to GND, it reads `LOW`!"
+    },
+    {
+      "stepId": "l08_s04",
+      "title": "Pullup Logic Checkpoint",
+      "type": "quizCheckpoint",
+      "markdownContent": "When using INPUT_PULLUP, what value does digitalRead() return when the button is NOT pressed?",
+      "interactiveConfig": {
+        "question": "What is the unpressed state with INPUT_PULLUP?",
+        "options": [
+          "HIGH (5V)",
+          "LOW (0V)",
+          "Random values"
+        ],
+        "correctIndex": 0
+      }
+    }
+  ],
+  "xpReward": 70
+}

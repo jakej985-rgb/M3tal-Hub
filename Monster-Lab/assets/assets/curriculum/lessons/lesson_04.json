@@ -1,0 +1,47 @@
+{
+  "id": "lesson_04",
+  "title": "Basics of the Arduino IDE: Setup and Loop",
+  "summary": "Explore sketch anatomy: the one-time setup() routine and the infinite loop(). Learn Verify and Upload.",
+  "tier": "rookie",
+  "estimatedMinutes": 20,
+  "prerequisites": [
+    "lesson_02"
+  ],
+  "componentIds": [],
+  "steps": [
+    {
+      "stepId": "l04_s01",
+      "title": "The Two Heartbeats: setup() and loop()",
+      "type": "story",
+      "markdownContent": "Every Arduino sketch has two main functions:\n- `setup()` runs once when the board turns on.\n- `loop()` runs continuously over and over forever!"
+    },
+    {
+      "stepId": "l04_s02",
+      "title": "The Verify and Upload Buttons",
+      "type": "visualExplanation",
+      "markdownContent": "- **Verify (Checkmark)**: Checks your code for typos and syntax errors.\n- **Upload (Arrow)**: Compiles and flashes the program onto the board's flash memory."
+    },
+    {
+      "stepId": "l04_s03",
+      "title": "Serial Monitor",
+      "type": "codeExperiment",
+      "markdownContent": "`Serial.begin(9600);` starts a telephone line between Arduino and your computer. `Serial.println(\"Hello Monster!\");` sends messages to the screen!"
+    },
+    {
+      "stepId": "l04_s04",
+      "title": "Sketch Anatomy Checkpoint",
+      "type": "quizCheckpoint",
+      "markdownContent": "How many times does code inside void setup() run?",
+      "interactiveConfig": {
+        "question": "How often does setup() execute?",
+        "options": [
+          "Exactly once on startup or reset",
+          "Every millisecond",
+          "Only when you press a button"
+        ],
+        "correctIndex": 0
+      }
+    }
+  ],
+  "xpReward": 60
+}

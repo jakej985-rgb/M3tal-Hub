@@ -1,0 +1,156 @@
+{
+  "id": "proj_11",
+  "title": "Sentry Guard MONSTER",
+  "tagline": "Autonomous pan-tilt turret! Scans the perimeter with ultrasonic radar and targets invaders with a red laser!",
+  "tier": "engineer",
+  "estimatedMinutes": 80,
+  "requiredComponents": [
+    "comp_01",
+    "comp_07",
+    "comp_25",
+    "comp_34",
+    "comp_37"
+  ],
+  "prerequisiteLessons": [
+    "lesson_05",
+    "lesson_07"
+  ],
+  "phases": [
+    {
+      "phaseNumber": 1,
+      "phaseTitle": "Gather Turret Mechanics",
+      "type": "gatherParts",
+      "instructions": "Collect 2x SG90 servo motors, HC-SR04 ultrasonic sensor, KY-008 Laser diode module, piezo buzzer, and cardboard turret brackets.",
+      "verificationCheckpoints": [
+        "2x SG90 servo motors with dual horns ready",
+        "HC-SR04 ultrasonic sensor ready",
+        "KY-008 650nm Red Laser diode ready",
+        "Piezo buzzer ready"
+      ]
+    },
+    {
+      "phaseNumber": 2,
+      "phaseTitle": "Pan-Tilt Turret Wiring",
+      "type": "breadboardWiring",
+      "instructions": "Wire Pan Servo to Pin 9, Tilt Servo to Pin 10, Laser to Pin 6, Buzzer to Pin 7, and Ultrasonic TRIG/ECHO to pins 11/12.",
+      "wiringConnections": [
+        {
+          "from": "Pan Servo Signal",
+          "to": "Arduino Pin 9",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "Tilt Servo Signal",
+          "to": "Arduino Pin 10",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "Laser (+) Pin",
+          "to": "Arduino Pin 6",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "Laser (-) Pin",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        },
+        {
+          "from": "Buzzer (+)",
+          "to": "Arduino Pin 7",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "HC-SR04 TRIG",
+          "to": "Arduino Pin 11",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "HC-SR04 ECHO",
+          "to": "Arduino Pin 12",
+          "wire": "Green",
+          "type": "digitalIn"
+        },
+        {
+          "from": "HC-SR04 VCC",
+          "to": "Arduino 5V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "HC-SR04 GND",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        }
+      ],
+      "verificationCheckpoints": [
+        "Servos connected to PWM pins 9 and 10",
+        "Laser (+) connected to Pin 6 with ground to Dark Slate rail"
+      ]
+    },
+    {
+      "phaseNumber": 3,
+      "phaseTitle": "Pre-Flight Laser Safety Briefing",
+      "type": "wiringCheck",
+      "instructions": "CRITICAL LASER SAFETY: Never point the laser into anyone's eyes or look directly into the beam aperture. Test only against a non-reflective wall or paper target.",
+      "verificationCheckpoints": [
+        "Turret pointed toward empty wall target area",
+        "Mechanical brackets tightly screwed"
+      ]
+    },
+    {
+      "phaseNumber": 4,
+      "phaseTitle": "Code Walkthrough & Radar Sweep Algorithm",
+      "type": "codeReview",
+      "instructions": "Review how the pan servo sweeps 30 to 150 degrees while sonar calculates obstacle coordinates and activates target tracking lock.",
+      "codeSnippet": "#include <Servo.h>\n\nServo panServo;\nServo tiltServo;\nconst int LASER_PIN = 6;\nconst int BUZZER_PIN = 7;\nconst int TRIG_PIN = 11;\nconst int ECHO_PIN = 12;\n\nvoid setup() {\n  panServo.attach(9);\n  tiltServo.attach(10);\n  pinMode(LASER_PIN, OUTPUT);\n  pinMode(BUZZER_PIN, OUTPUT);\n  pinMode(TRIG_PIN, OUTPUT);\n  pinMode(ECHO_PIN, INPUT);\n  tiltServo.write(90); // Level horizon\n}\n\nfloat pingDistance() {\n  digitalWrite(TRIG_PIN, LOW); delayMicroseconds(2);\n  digitalWrite(TRIG_PIN, HIGH); delayMicroseconds(10);\n  digitalWrite(TRIG_PIN, LOW);\n  return pulseIn(ECHO_PIN, HIGH) * 0.0343 / 2.0;\n}\n\nvoid loop() {\n  for (int angle = 30; angle <= 150; angle += 5) {\n    panServo.write(angle);\n    delay(40);\n    float d = pingDistance();\n    if (d > 0 && d < 25.0) { // Target lock!\n      digitalWrite(LASER_PIN, HIGH);\n      tone(BUZZER_PIN, 3000, 100);\n      delay(500);\n      digitalWrite(LASER_PIN, LOW);\n    }\n  }\n}",
+      "codeExplanation": "- The pan servo sweeps continuously in 5-degree increments across 120 degrees of field of view.\n- At each angle, pingDistance() samples obstacle range.\n- If an obstacle appears within 25cm, turret halts, illuminates laser target dot, and sounds audio lock chirp.",
+      "verificationCheckpoints": [
+        "Understand radar scanning sweep loop",
+        "Understand target lock condition and actuator sequence"
+      ]
+    },
+    {
+      "phaseNumber": 5,
+      "phaseTitle": "Upload & Turret Engagement Test",
+      "type": "uploadSketch",
+      "instructions": "Upload sketch, place target box 20cm away within sweep sector, and observe autonomous radar tracking lock-on!",
+      "verificationCheckpoints": [
+        "Turret sweeps back and forth smoothly",
+        "Targets trigger laser pulse and alert tone"
+      ]
+    },
+    {
+      "phaseNumber": 6,
+      "phaseTitle": "Mission Complete",
+      "type": "missionComplete",
+      "instructions": "Turret defense active! You mastered pan-tilt robotic kinematics and sensor-guided target acquisition.",
+      "verificationCheckpoints": [
+        "Ready to claim Turret Commander badge"
+      ]
+    }
+  ],
+  "xpReward": 250,
+  "badgeRewardId": "badge_turret_commander",
+  "story": "Build an Autonomous Sentry Turret! Construct a dual-axis pan/tilt motorized gimbal armed with an ultrasonic sonar radar and a visible red targeting laser that automatically sweeps the perimeter and locks onto approaching targets.",
+  "troubleshooting": [
+    {
+      "symptom": "Servos violently jitter during radar sweep",
+      "cause": "Both servos drawing peak current simultaneously from Arduino 5V rail",
+      "solution": "Add a separate 5V power supply for the servos with shared ground, or add a large 470uF decoupling capacitor across power rails.",
+      "category": "power",
+      "diagnosticSteps": [
+        "Two servos exceed 500mA USB limit simultaneously.",
+        "Power servo rail with external 5V/6V supply and bridge GNDs."
+      ]
+    }
+  ],
+  "variants": [],
+  "extensionMissions": []
+}

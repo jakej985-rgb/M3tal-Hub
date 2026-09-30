@@ -1,0 +1,33 @@
+{
+  "version": "1.0.0",
+  "archive": "Monster.zip",
+  "total_files": 407,
+  "foundational_lessons": 7,
+  "peripherals_count": 38,
+  "projects_count": 14,
+  "datasheets_count": 49,
+  "projects": [
+    "Beat Detector MONSTER",
+    "Electric Motor Control MONSTER",
+    "Gas Leak Detection and Warning MONSTER",
+    "Intruder Alarm MONSTER",
+    "MONSTER ATM and Food Dispenser",
+    "MONSTER Alarm Clock",
+    "MONSTER Autopilot",
+    "NRF24L01 Wireless MONSTER",
+    "Oil Drill Rig MONSTER",
+    "RFID Smart Door MONSTER",
+    "Remote Control Funny Faces",
+    "Sentry Guard MONSTER",
+    "Smart MONSTER Door",
+    "Weather and Water Reservoir Station"
+  ],
+  "audit_files": [
+    "00_audit_summary.md",
+    "01_curriculum_inventory.md",
+    "02_component_inventory.md",
+    "03_project_inventory.md",
+    "04_lesson_dependency_map.md",
+    "05_safety_notes.md"
+  ]
+}

@@ -1,0 +1,158 @@
+{
+  "id": "proj_18",
+  "title": "Bluetooth Wireless Telemetry Hub",
+  "tagline": "Cut the umbilical cable! Stream live analog instrumentation telemetry to any smartphone or PC over Bluetooth RF.",
+  "tier": "engineer",
+  "estimatedMinutes": 70,
+  "requiredComponents": [
+    "comp_29",
+    "comp_07",
+    "comp_20"
+  ],
+  "prerequisiteLessons": [
+    "lesson_11"
+  ],
+  "phases": [
+    {
+      "phaseNumber": 1,
+      "phaseTitle": "Gather Wireless Terminal Parts",
+      "type": "gatherParts",
+      "instructions": "Locate from your kit: Arduino Uno, HC-05 Bluetooth Module (comp_29), 1602 I2C LCD (comp_07), 10k Potentiometer (comp_20), RGB LED, 1k and 2k resistors (for 3.3V divider), breadboard, and wires.",
+      "verificationCheckpoints": [
+        "HC-05 Bluetooth module ready",
+        "1k and 2k resistors for 3.3V logic level shifting",
+        "1602 I2C LCD address confirmed"
+      ]
+    },
+    {
+      "phaseNumber": 2,
+      "phaseTitle": "Breadboard Wiring & Logic Divider",
+      "type": "breadboardWiring",
+      "instructions": "Connect HC-05 TX to Arduino Pin 10 (SoftwareSerial RX). Connect Arduino Pin 11 (TX) through 1k/2k voltage divider to HC-05 RX (3.3V level). Connect LCD to A4/A5.",
+      "wiringConnections": [
+        {
+          "from": "HC-05 VCC",
+          "to": "Arduino 5V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "HC-05 GND",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        },
+        {
+          "from": "HC-05 TXD",
+          "to": "Arduino Pin 10",
+          "wire": "Green",
+          "type": "uart"
+        },
+        {
+          "from": "Arduino Pin 11",
+          "to": "1k Resistor -> HC-05 RXD",
+          "wire": "Blue",
+          "type": "uart"
+        },
+        {
+          "from": "LCD SDA",
+          "to": "Arduino A4",
+          "wire": "Orange",
+          "type": "i2c"
+        },
+        {
+          "from": "LCD SCL",
+          "to": "Arduino A5",
+          "wire": "Yellow",
+          "type": "i2c"
+        }
+      ],
+      "verificationCheckpoints": [
+        "Voltage divider steps Arduino 5V TX down to 3.3V for HC-05 RX",
+        "LCD backpack wired to hardware I2C pins"
+      ]
+    },
+    {
+      "phaseNumber": 3,
+      "phaseTitle": "Wiring Verification",
+      "type": "wiringCheck",
+      "instructions": "Double check the voltage divider on the HC-05 RX pin. Applying direct 5V to HC-05 RX can damage its radio processor.",
+      "verificationCheckpoints": [
+        "1k resistor in series with Arduino TX, 2k resistor to GND",
+        "HC-05 red LED blinks rapidly in discovery mode"
+      ]
+    },
+    {
+      "phaseNumber": 4,
+      "phaseTitle": "Code Walkthrough & SoftwareSerial",
+      "type": "codeReview",
+      "instructions": "Review SoftwareSerial bridge: forward characters from smartphone terminal to LCD, and transmit potentiometer telemetry back to the phone!",
+      "codeSnippet": "#include <SoftwareSerial.h>\n#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n\nSoftwareSerial bt(10, 11); // RX, TX\nLiquidCrystal_I2C lcd(0x27, 16, 2);\n\nvoid setup() {\n  Serial.begin(9600);\n  bt.begin(9600);\n  lcd.init();\n  lcd.backlight();\n  lcd.print(\"Bluetooth Ready!\");\n}\n\nvoid loop() {\n  if (bt.available()) {\n    char c = bt.read();\n    lcd.clear();\n    lcd.setCursor(0, 0);\n    lcd.print(\"Cmd Received:\");\n    lcd.setCursor(0, 1);\n    lcd.print(c);\n    bt.print(\"ACK: \"); bt.println(c);\n  }\n  int pot = analogRead(A0);\n  static unsigned long lastSend = 0;\n  if (millis() - lastSend > 1000) {\n    bt.print(\"Telemetry Pot=\"); bt.println(pot);\n    lastSend = millis();\n  }\n}",
+      "codeExplanation": "- SoftwareSerial(10, 11) creates a secondary serial channel without blocking USB programming pins 0 and 1.\n- Inbound characters from smartphone are parsed and rendered onto the LCD.\n- Non-blocking millis() timer pushes live analog sensor readings to the phone every second.",
+      "verificationCheckpoints": [
+        "Understand software serial emulation",
+        "Understand non-blocking telemetry broadcast loops"
+      ]
+    },
+    {
+      "phaseNumber": 5,
+      "phaseTitle": "Upload & Wireless Terminal Pairing",
+      "type": "uploadSketch",
+      "instructions": "Upload sketch. Pair your phone to 'HC-05' (passcode 1234). Open any Bluetooth Serial Terminal app, connect, and type 'A' to see it display on the LCD!",
+      "verificationCheckpoints": [
+        "Phone terminal displays 'Telemetry Pot=' stream",
+        "Typed messages appear immediately on the physical LCD"
+      ]
+    },
+    {
+      "phaseNumber": 6,
+      "phaseTitle": "Mission Complete",
+      "type": "missionComplete",
+      "instructions": "Wireless Telemetry Pioneer! You freed your Arduino from USB cables with bidirectional Bluetooth communication.",
+      "verificationCheckpoints": [
+        "Ready to claim Bluetooth Pioneer badge"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "proj_18_var_1",
+      "title": "Dual Joystick Remote Telemetry",
+      "description": "Receive XY joystick coordinates from mobile gamepad app to steer pan/tilt servo cameras.",
+      "alternativeComponents": [
+        "comp_10",
+        "comp_11"
+      ],
+      "wiringDifferences": "Connect dual servos to Pins 5 and 6",
+      "codeAdaptation": "Parse incoming serial commands like 'X120Y45' and map to servo positions"
+    }
+  ],
+  "extensionMissions": [
+    {
+      "id": "proj_18_mis_1",
+      "title": "Encrypted Challenge-Response Link",
+      "objective": "Require Bluetooth terminal user to enter a 4-digit PIN before telemetry data is unlocked.",
+      "difficulty": "engineer",
+      "hints": [
+        "Buffer incoming characters until newline",
+        "Compare to stored PIN hash before streaming sensor values"
+      ],
+      "xpReward": 80
+    }
+  ],
+  "xpReward": 260,
+  "badgeRewardId": "badge_bluetooth_pioneer",
+  "story": "Tired of tethering your robot to your laptop? Connect an HC-05 Bluetooth UART module to control robot servos and stream analog sensor graphs wirelessly to any smartphone or tablet terminal app!",
+  "troubleshooting": [
+    {
+      "symptom": "Garbled question marks or weird symbols on terminal app",
+      "cause": "Baud rate mismatch between Arduino sketch and HC-05 module",
+      "solution": "Verify bt.begin(9600) matches the module default. If module was configured for 38400, adjust bt.begin(38400).",
+      "category": "upload",
+      "diagnosticSteps": [
+        "Test at 9600 baud first",
+        "Check terminal app line ending is set to CR+LF"
+      ]
+    }
+  ]
+}

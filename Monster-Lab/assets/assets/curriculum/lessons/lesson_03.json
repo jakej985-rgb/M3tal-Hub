@@ -1,0 +1,41 @@
+{
+  "id": "lesson_03",
+  "title": "Installing Libraries: Supercharging Code",
+  "summary": "Understand open-source modular libraries and how to install them with the Library Manager.",
+  "tier": "builder",
+  "estimatedMinutes": 15,
+  "prerequisites": [
+    "lesson_02"
+  ],
+  "componentIds": [],
+  "steps": [
+    {
+      "stepId": "l03_s01",
+      "title": "What is a Library?",
+      "type": "story",
+      "markdownContent": "A library is a pre-written bundle of code created by engineers so you don't have to reinvent the wheel. Just `#include <LibraryName.h>`!"
+    },
+    {
+      "stepId": "l03_s02",
+      "title": "Using the Library Manager",
+      "type": "visualExplanation",
+      "markdownContent": "Open **Tools > Manage Libraries...** in the Arduino IDE. Search for libraries like `LiquidCrystal_I2C` and click Install."
+    },
+    {
+      "stepId": "l03_s03",
+      "title": "Library Quiz",
+      "type": "quizCheckpoint",
+      "markdownContent": "Why do roboticists use libraries?",
+      "interactiveConfig": {
+        "question": "What is the primary benefit of libraries?",
+        "options": [
+          "They speed up code by writing complex hardware protocols for you",
+          "They replace the need for physical wires",
+          "They make the Arduino heavier"
+        ],
+        "correctIndex": 0
+      }
+    }
+  ],
+  "xpReward": 60
+}

@@ -1,0 +1,53 @@
+{
+  "id": "comp_14",
+  "peripheralNumber": 14,
+  "name": "Infrared Line Tracking Sensor",
+  "partNumber": "TCRT5000",
+  "category": "sensor",
+  "description": "Like robot road navigation! Bounces infrared light off the ground to distinguish white roads from black tape.",
+  "realWorldAnalogy": "Like robot road navigation! Bounces infrared light off the ground to distinguish white roads from black tape.",
+  "voltage": "dual",
+  "pinout": [
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "Power rail"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "D0",
+      "type": "digitalIn",
+      "description": "Digital line threshold"
+    },
+    {
+      "pinName": "A0",
+      "type": "analogIn",
+      "description": "Analog reflection value"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_17"
+  ],
+  "datasheetRef": "IR-Receiver-AX-1838HS .pdf",
+  "wiringGuidance": "Connect VCC (Red) to 5V, GND (Dark Slate) to GND, and D0 (Green) to digital pin 7.",
+  "commonMistakes": [
+    "Placing sensor too far from ground (optimal focal distance is 3mm to 10mm).",
+    "Using shiny reflective tape instead of matte electrical tape."
+  ],
+  "miniExperiment": {
+    "title": "Dark Line Detector",
+    "circuit": "VCC to 5V, GND to GND, D0 to Pin 7.",
+    "code": "const int trackerPin = 7;\n\nvoid setup() {\n  pinMode(trackerPin, INPUT);\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  int state = digitalRead(trackerPin);\n  if (state == HIGH) {\n    Serial.println(\"BLACK LINE DETECTED\");\n  } else {\n    Serial.println(\"White Surface\");\n  }\n  delay(100);\n}",
+    "expectedOutput": "Serial Monitor prints 'BLACK LINE DETECTED' when placed over dark tape, and 'White Surface' otherwise."
+  }
+}

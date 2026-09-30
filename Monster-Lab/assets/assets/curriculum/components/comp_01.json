@@ -1,0 +1,54 @@
+{
+  "id": "comp_01",
+  "peripheralNumber": 1,
+  "name": "Ultrasonic Distance Sensor",
+  "partNumber": "HC-SR04",
+  "category": "sensor",
+  "description": "Like a bat's echolocation ears! Emits high-frequency ultrasonic chirps and measures the echo return time.",
+  "realWorldAnalogy": "Like a bat's echolocation ears! Emits high-frequency ultrasonic chirps and measures the echo return time.",
+  "voltage": "v5",
+  "pinout": [
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "5V Power"
+    },
+    {
+      "pinName": "TRIG",
+      "type": "digitalOut",
+      "description": "Trigger pulse send"
+    },
+    {
+      "pinName": "ECHO",
+      "type": "digitalIn",
+      "description": "Echo pulse receive"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_01",
+    "proj_11"
+  ],
+  "datasheetRef": "hc-sr04_ultrasonic_module_user_guidejohn .pdf",
+  "wiringGuidance": "Connect VCC (Red wire) to 5V power rail, GND (Dark Slate wire) to GND. Connect TRIG (Green wire) to digital pin 9 and ECHO (Green wire) to digital pin 10.",
+  "commonMistakes": [
+    "Swapping TRIG and ECHO pins will result in continuous 0cm readings.",
+    "Powering HC-SR04 with 3.3V causes erratic or missing distance pings\u2014it requires a full 5V supply."
+  ],
+  "miniExperiment": {
+    "title": "Ultrasonic Ping Ruler",
+    "circuit": "VCC to 5V (Red), GND to GND (Dark Slate), TRIG to Pin 9 (Green), ECHO to Pin 10 (Green).",
+    "code": "const int trigPin = 9;\nconst int echoPin = 10;\n\nvoid setup() {\n  Serial.begin(9600);\n  pinMode(trigPin, OUTPUT);\n  pinMode(echoPin, INPUT);\n}\n\nvoid loop() {\n  digitalWrite(trigPin, LOW);\n  delayMicroseconds(2);\n  digitalWrite(trigPin, HIGH);\n  delayMicroseconds(10);\n  digitalWrite(trigPin, LOW);\n  long duration = pulseIn(echoPin, HIGH);\n  int distanceCm = duration * 0.034 / 2;\n  Serial.print(\"Distance: \");\n  Serial.print(distanceCm);\n  Serial.println(\" cm\");\n  delay(200);\n}",
+    "expectedOutput": "Distance in centimeters printed in Serial Monitor (e.g. 'Distance: 18 cm'). Move your hand closer to see the number decrease."
+  }
+}

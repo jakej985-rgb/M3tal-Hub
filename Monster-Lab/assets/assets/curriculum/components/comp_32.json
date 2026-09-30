@@ -1,0 +1,78 @@
+{
+  "id": "comp_32",
+  "peripheralNumber": 32,
+  "name": "Digital 7-Segment LED Display",
+  "partNumber": "5161AS",
+  "category": "display",
+  "description": "Like a digital alarm clock number! 8 LEDs arranged to illuminate any digit from 0 to 9 plus a decimal point.",
+  "realWorldAnalogy": "Like a digital alarm clock number! 8 LEDs arranged to illuminate any digit from 0 to 9 plus a decimal point.",
+  "voltage": "v5",
+  "pinout": [
+    {
+      "pinName": "A",
+      "type": "passive",
+      "description": "Segment A"
+    },
+    {
+      "pinName": "B",
+      "type": "passive",
+      "description": "Segment B"
+    },
+    {
+      "pinName": "C",
+      "type": "passive",
+      "description": "Segment C"
+    },
+    {
+      "pinName": "D",
+      "type": "passive",
+      "description": "Segment D"
+    },
+    {
+      "pinName": "E",
+      "type": "passive",
+      "description": "Segment E"
+    },
+    {
+      "pinName": "F",
+      "type": "passive",
+      "description": "Segment F"
+    },
+    {
+      "pinName": "G",
+      "type": "passive",
+      "description": "Segment G"
+    },
+    {
+      "pinName": "DP",
+      "type": "passive",
+      "description": "Decimal point"
+    },
+    {
+      "pinName": "COM",
+      "type": "ground",
+      "description": "Common Cathode"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_19"
+  ],
+  "datasheetRef": "1 digit 7-segment Display .pdf",
+  "wiringGuidance": "Connect COM (Dark Slate) to GND through a 220-ohm resistor. Connect segment pins A-G (Green wires) to digital pins 2-8.",
+  "commonMistakes": [
+    "Omitting series current-limiting resistors, damaging the LED segments.",
+    "Confusing Common Anode (requires VCC) with Common Cathode (requires GND)."
+  ],
+  "miniExperiment": {
+    "title": "Digital Countdown 0-9",
+    "circuit": "COM through 220 ohm to GND, Segments A-G to Pins 2-8.",
+    "code": "const int segPins[7] = {2, 3, 4, 5, 6, 7, 8};\nbyte digits[10] = {\n  B0111111, B0000110, B1011011, B1001111, B1100110,\n  B1101101, B1111101, B0000111, B1111111, B1101111\n};\n\nvoid setup() {\n  for (int i = 0; i < 7; i++) pinMode(segPins[i], OUTPUT);\n}\n\nvoid loop() {\n  for (int d = 0; d < 10; d++) {\n    for (int s = 0; s < 7; s++) {\n      digitalWrite(segPins[s], bitRead(digits[d], s));\n    }\n    delay(1000);\n  }\n}",
+    "expectedOutput": "The single-digit display clearly counts from 0 through 9 once per second."
+  }
+}

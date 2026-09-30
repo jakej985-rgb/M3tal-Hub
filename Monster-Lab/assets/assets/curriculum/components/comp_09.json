@@ -1,0 +1,55 @@
+{
+  "id": "comp_09",
+  "peripheralNumber": 9,
+  "name": "Temperature & Humidity Sensor",
+  "partNumber": "DHT11",
+  "category": "sensor",
+  "description": "Like an electronic weather forecaster! Measures air moisture and temperature digitally.",
+  "realWorldAnalogy": "Like an electronic weather forecaster! Measures air moisture and temperature digitally.",
+  "voltage": "dual",
+  "pinout": [
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "Power rail"
+    },
+    {
+      "pinName": "DATA",
+      "type": "digitalIn",
+      "description": "Single-wire digital data"
+    },
+    {
+      "pinName": "NC",
+      "type": "passive",
+      "description": "No connection"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_12",
+    "proj_15",
+    "proj_20"
+  ],
+  "datasheetRef": "DHT11 .pdf",
+  "wiringGuidance": "Connect VCC (Red) to 5V, GND (Dark Slate) to GND, and DATA (Green) to digital pin 2 with a 10k pull-up resistor to 5V.",
+  "commonMistakes": [
+    "Querying the sensor faster than once every 2 seconds, which leads to timeout errors.",
+    "Confusing 3-pin breakout modules with bare 4-pin components."
+  ],
+  "miniExperiment": {
+    "title": "Room Climate Check",
+    "circuit": "VCC to 5V, GND to GND, DATA to Pin 2.",
+    "code": "#include <dht.h>\ndht DHT;\n#define DHT11_PIN 2\n\nvoid setup() {\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  int chk = DHT.read11(DHT11_PIN);\n  Serial.print(\"Temp: \");\n  Serial.print(DHT.temperature);\n  Serial.print(\"C | Humidity: \");\n  Serial.print(DHT.humidity);\n  Serial.println(\"%\");\n  delay(2000);\n}",
+    "expectedOutput": "Serial Monitor prints temperature and relative humidity every 2 seconds. Exhaling on the sensor spikes humidity to 90%+."
+  }
+}

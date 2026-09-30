@@ -1,0 +1,49 @@
+{
+  "id": "comp_34",
+  "peripheralNumber": 34,
+  "name": "Active & Passive Piezo Buzzer",
+  "partNumber": "B-1205",
+  "category": "actuator",
+  "description": "Like a monster voice! Vibrates a piezo ceramic disc to emit beeps, songs, and alarm sounds.",
+  "realWorldAnalogy": "Like a monster voice! Vibrates a piezo ceramic disc to emit beeps, songs, and alarm sounds.",
+  "voltage": "v5",
+  "pinout": [
+    {
+      "pinName": "+",
+      "type": "power",
+      "description": "Positive terminal"
+    },
+    {
+      "pinName": "-",
+      "type": "ground",
+      "description": "Negative terminal"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_01",
+    "proj_04",
+    "proj_05",
+    "proj_06",
+    "proj_11",
+    "proj_15",
+    "proj_16"
+  ],
+  "datasheetRef": "Active buzzer.pdf",
+  "wiringGuidance": "Connect positive (+) terminal (Red/Green wire) to digital pin 8 and negative (-) terminal (Dark Slate wire) to GND.",
+  "commonMistakes": [
+    "Confusing active buzzers (constant tone on DC) with passive buzzers (require tone() PWM frequency).",
+    "Reversing polarity on active buzzer modules."
+  ],
+  "miniExperiment": {
+    "title": "Chirp & Melody Player",
+    "circuit": "(+) to Pin 8, (-) to GND.",
+    "code": "const int buzzerPin = 8;\n\nvoid setup() {}\n\nvoid loop() {\n  tone(buzzerPin, 440, 200);\n  delay(300);\n  tone(buzzerPin, 880, 200);\n  delay(700);\n}",
+    "expectedOutput": "Buzzer plays two cheerful alternating tones every second."
+  }
+}

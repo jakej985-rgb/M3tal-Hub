@@ -1,0 +1,38 @@
+{
+  "id": "comp_30",
+  "peripheralNumber": 30,
+  "name": "SPI Ethernet Controller Shield",
+  "partNumber": "W5100",
+  "category": "communication",
+  "description": "Like a robot internet jack! Plugs directly onto Arduino to connect to LAN networks and the web.",
+  "realWorldAnalogy": "Like a robot internet jack! Plugs directly onto Arduino to connect to LAN networks and the web.",
+  "voltage": "v5",
+  "pinout": [
+    {
+      "pinName": "STACKABLE",
+      "type": "spi",
+      "description": "Standard Arduino SPI shield headers"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_20"
+  ],
+  "datasheetRef": "UNO Proto Shield Expansion Board.pdf",
+  "wiringGuidance": "Mount shield directly onto the Arduino Uno headers. Connect an RJ45 Ethernet cable to the shield jack and a router.",
+  "commonMistakes": [
+    "Pin conflicts on digital pins 10, 11, 12, 13 (reserved for Ethernet SPI).",
+    "Forgetting to initialize with a valid local MAC address."
+  ],
+  "miniExperiment": {
+    "title": "Local Network Web Ping",
+    "circuit": "Mount shield onto Arduino Uno, plug in RJ45 network cable.",
+    "code": "#include <SPI.h>\n#include <Ethernet.h>\n\nbyte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };\n\nvoid setup() {\n  Serial.begin(9600);\n  if (Ethernet.begin(mac) == 0) {\n    Serial.println(\"DHCP failed\");\n  } else {\n    Serial.print(\"Assigned IP: \");\n    Serial.println(Ethernet.localIP());\n  }\n}\n\nvoid loop() {}",
+    "expectedOutput": "Shield obtains an IP address from your local router and prints it in the Serial Monitor."
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "chal_01",
+  "title": "Missing Ground Wire",
+  "type": "fixWiring",
+  "difficulty": "rookie",
+  "prompt": "The LED circuit is connected to Pin 13 and a 220-ohm resistor, but it won't light up. What connection is missing to complete the circuit?",
+  "circuitSnippet": "Arduino Pin 13 -> Resistor (220\u03a9) -> LED Anode (+) -> LED Cathode (-) -> ???",
+  "challengeData": {
+    "options": [
+      "A connection to Arduino 5V",
+      "A connection to Arduino GND",
+      "A second 220\u03a9 resistor",
+      "A 9V battery input"
+    ]
+  },
+  "hint": "Electric circuits must form a complete closed loop back to ground.",
+  "hints": [
+    "Electricity must flow in a complete loop from power back to ground.",
+    "Look for the common negative rail or GND pin on the Arduino board."
+  ],
+  "explanation": "A circuit requires a closed loop. The LED cathode must be connected to GND so current can return to the power supply.",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 30
+}

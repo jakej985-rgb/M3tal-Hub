@@ -1,0 +1,160 @@
+{
+  "id": "proj_15",
+  "title": "Automated Greenhouse Monitor",
+  "tagline": "Keep your monster botanical garden thriving with soil moisture telemetry and automated relay irrigation!",
+  "tier": "builder",
+  "estimatedMinutes": 50,
+  "requiredComponents": [
+    "comp_26",
+    "comp_36",
+    "comp_09",
+    "comp_07",
+    "comp_34"
+  ],
+  "prerequisiteLessons": [
+    "lesson_09",
+    "lesson_12"
+  ],
+  "phases": [
+    {
+      "phaseNumber": 1,
+      "phaseTitle": "Gather Components",
+      "type": "gatherParts",
+      "instructions": "Locate from your kit: Arduino Uno, Soil Moisture Sensor (comp_26), 5V Relay Module (comp_36), DHT11 Temp/Humidity (comp_09), 1602 I2C LCD (comp_07), Piezo Buzzer (comp_34), Breadboard, and jumper wires.",
+      "verificationCheckpoints": [
+        "Soil moisture dual-probe clean and dry",
+        "5V relay optocoupler jumper in place",
+        "LCD backpack address verified (0x27 or 0x3F)"
+      ]
+    },
+    {
+      "phaseNumber": 2,
+      "phaseTitle": "Breadboard Wiring",
+      "type": "breadboardWiring",
+      "instructions": "Connect Soil Probe A0 to Arduino A0. Connect DHT11 DATA to Pin 2. Connect 5V Relay IN to Pin 7. Connect LCD SDA/SCL to A4/A5. Connect Buzzer to Pin 8.",
+      "wiringConnections": [
+        {
+          "from": "Soil Sensor A0",
+          "to": "Arduino A0",
+          "wire": "Yellow",
+          "type": "analogIn"
+        },
+        {
+          "from": "DHT11 DATA",
+          "to": "Arduino Pin 2",
+          "wire": "Green",
+          "type": "digitalIn"
+        },
+        {
+          "from": "Relay IN",
+          "to": "Arduino Pin 7",
+          "wire": "Blue",
+          "type": "digitalOut"
+        },
+        {
+          "from": "LCD SDA",
+          "to": "Arduino A4",
+          "wire": "Orange",
+          "type": "i2c"
+        },
+        {
+          "from": "LCD SCL",
+          "to": "Arduino A5",
+          "wire": "Yellow",
+          "type": "i2c"
+        },
+        {
+          "from": "Buzzer (+)",
+          "to": "Arduino Pin 8",
+          "wire": "Red",
+          "type": "digitalOut"
+        }
+      ],
+      "verificationCheckpoints": [
+        "Common ground shared across all modules",
+        "Relay VCC wired to 5V power rail"
+      ]
+    },
+    {
+      "phaseNumber": 3,
+      "phaseTitle": "Wiring Verification & Safety",
+      "type": "wiringCheck",
+      "instructions": "Verify relay coil isolation. Ensure test pump is powered by a low-voltage battery pack (never wall AC).",
+      "verificationCheckpoints": [
+        "DC power supply strictly under 12V",
+        "No short circuits on sensor power headers"
+      ]
+    },
+    {
+      "phaseNumber": 4,
+      "phaseTitle": "Code Walkthrough & Hysteresis Logic",
+      "type": "codeReview",
+      "instructions": "Review closed-loop control: when soil moisture falls below DRY_THRESHOLD, the relay triggers the pump. When moisture exceeds MOIST_THRESHOLD, the pump turns off.",
+      "codeSnippet": "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n#include <DHT.h>\n\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nDHT dht(2, DHT11);\nconst int RELAY_PIN = 7;\nconst int SOIL_PIN = A0;\n\nvoid setup() {\n  pinMode(RELAY_PIN, OUTPUT);\n  digitalWrite(RELAY_PIN, HIGH); // Active LOW off\n  lcd.init();\n  lcd.backlight();\n  dht.begin();\n}\n\nvoid loop() {\n  int soilVal = analogRead(SOIL_PIN);\n  float temp = dht.readTemperature();\n  lcd.setCursor(0, 0);\n  lcd.print(\"Soil: \"); lcd.print(soilVal);\n  lcd.setCursor(0, 1);\n  lcd.print(\"Temp: \"); lcd.print(temp); lcd.print(\"C\");\n  if (soilVal > 700) {\n    digitalWrite(RELAY_PIN, LOW); // Pump ON\n  } else if (soilVal < 400) {\n    digitalWrite(RELAY_PIN, HIGH); // Pump OFF\n  }\n  delay(1000);\n}",
+      "codeExplanation": "- Hysteresis thresholding (700 on, 400 off) prevents rapid, damaging relay chatter.\n- DHT11 reads ambient room air temperature every second.\n- LCD renders real-time soil resistance and atmospheric climate telemetry.",
+      "verificationCheckpoints": [
+        "Understand hysteresis deadband buffer",
+        "Verify relay active-LOW trigger behavior"
+      ]
+    },
+    {
+      "phaseNumber": 5,
+      "phaseTitle": "Upload & Irrigation Bench Test",
+      "type": "uploadSketch",
+      "instructions": "Upload the sketch. Keep probe in air to watch the relay click ON. Dip probe in a cup of water and observe the relay click OFF automatically!",
+      "verificationCheckpoints": [
+        "Relay indicator LED illuminates when soil is dry",
+        "LCD updates temperature and soil values live"
+      ]
+    },
+    {
+      "phaseNumber": 6,
+      "phaseTitle": "Mission Complete",
+      "type": "missionComplete",
+      "instructions": "Botany Master! Your automated greenhouse controller protects sensitive plants with precision watering.",
+      "verificationCheckpoints": [
+        "Ready to claim Botanist badge"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "proj_15_var_1",
+      "title": "Solar Radiance Irrigation",
+      "description": "Incorporate a photoresistor (comp_19) so plants are only irrigated after sunset to reduce water evaporation.",
+      "alternativeComponents": [
+        "comp_19"
+      ],
+      "wiringDifferences": "Wire photoresistor voltage divider to A1",
+      "codeAdaptation": "Add condition: if (moisture < THRESHOLD && lightLevel < SUNSET_LEVEL) activatePump();"
+    }
+  ],
+  "extensionMissions": [
+    {
+      "id": "proj_15_mis_1",
+      "title": "Vapor Pressure Deficit (VPD) Calculator",
+      "objective": "Calculate and display air VPD in kiloPascals (kPa) on the LCD using DHT11 temp and humidity curves.",
+      "difficulty": "engineer",
+      "hints": [
+        "Look up the Tetens formula for saturation vapor pressure",
+        "VPD = VP_sat * (1 - humidity / 100.0)"
+      ],
+      "xpReward": 80
+    }
+  ],
+  "xpReward": 200,
+  "badgeRewardId": "badge_botanist",
+  "story": "Your greenhouse plants need constant moisture and temperature management while you're away! Build an autonomous environmental controller that reads soil conductivity and turns on a 5V relay water pump with LCD telemetry.",
+  "troubleshooting": [
+    {
+      "symptom": "Relay chatters on and off rapidly",
+      "cause": "Threshold values are too close together without a hysteresis deadband",
+      "solution": "Widen the gap between the turn-on (700) and turn-off (400) threshold constants.",
+      "category": "logic",
+      "diagnosticSteps": [
+        "Print raw analogRead(A0) to Serial Monitor",
+        "Ensure at least 200 units of separation between ON and OFF thresholds"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "id": "comp_27",
+  "peripheralNumber": 27,
+  "name": "4-Phase Geared Stepper & Driver",
+  "partNumber": "28BYJ-48",
+  "category": "actuator",
+  "description": "Like clockwork gears! Steps precisely 2048 steps per full revolution with high torque.",
+  "realWorldAnalogy": "Like clockwork gears! Steps precisely 2048 steps per full revolution with high torque.",
+  "voltage": "v5",
+  "pinout": [
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "5V External Power"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "IN1",
+      "type": "digitalOut",
+      "description": "Phase 1"
+    },
+    {
+      "pinName": "IN2",
+      "type": "digitalOut",
+      "description": "Phase 2"
+    },
+    {
+      "pinName": "IN3",
+      "type": "digitalOut",
+      "description": "Phase 3"
+    },
+    {
+      "pinName": "IN4",
+      "type": "digitalOut",
+      "description": "Phase 4"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_08",
+    "proj_10",
+    "proj_13"
+  ],
+  "datasheetRef": "28BYJ-48 Stepper Motor.pdf",
+  "wiringGuidance": "Connect ULN2003 + (Red) to 5V, - (Dark Slate) to GND, and IN1-IN4 (Green wires) to digital pins 8, 9, 10, 11.",
+  "commonMistakes": [
+    "Trying to drive stepper coils directly from micro pins without the ULN2003 driver.",
+    "Incorrect phase stepping sequence making the motor vibrate in place without turning."
+  ],
+  "miniExperiment": {
+    "title": "Precision Stepper Revolution",
+    "circuit": "IN1-IN4 to Pins 8-11, Power to 5V & GND.",
+    "code": "#include <Stepper.h>\nconst int stepsPerRev = 2048;\nStepper myStepper(stepsPerRev, 8, 10, 9, 11);\n\nvoid setup() {\n  myStepper.setSpeed(10);\n}\n\nvoid loop() {\n  myStepper.step(stepsPerRev);\n  delay(1000);\n  myStepper.step(-stepsPerRev);\n  delay(1000);\n}",
+    "expectedOutput": "The stepper shaft completes a full 360-degree rotation clockwise, pauses, and reverses."
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "chal_15",
+  "title": "MPU-6050 Sleep Mode Trap",
+  "type": "debugLogic",
+  "difficulty": "monsterMaster",
+  "prompt": "You initialize an MPU-6050 accelerometer/gyroscope over I2C, but reading register 0x3B always returns all zeros for X, Y, and Z acceleration. What essential startup step was missed?",
+  "codeSnippet": "Wire.begin();\nWire.beginTransmission(0x68);\nWire.write(0x3B); // Accel X High\nWire.endTransmission();\nWire.requestFrom(0x68, 6);",
+  "challengeData": {
+    "options": [
+      "The I2C clock speed must be set to 10 MHz",
+      "Writing 0x00 to Power Management register 0x6B to wake the device from default Sleep Mode",
+      "Connecting a 12V boost converter to the AD0 pin",
+      "Inverting the SDA and SCL pull-down resistors"
+    ]
+  },
+  "hint": "The MPU-6050 powers up in Sleep Mode by default.",
+  "hints": [
+    "The MPU-6050 powers up in Sleep Mode by default.",
+    "You must write 0 to register 0x6B (PWR_MGMT_1) to wake the sensor."
+  ],
+  "explanation": "The MPU-6050 powers on in low-power SLEEP mode (bit 6 of register 0x6B is set to 1). You must clear PWR_MGMT_1 by writing 0x00 to wake the internal oscillator and sensor circuitry.",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 60
+}

@@ -1,0 +1,25 @@
+{
+  "id": "chal_20",
+  "title": "UART Voltage Level Danger",
+  "type": "fixWiring",
+  "difficulty": "builder",
+  "prompt": "The Arduino Uno TX pin outputs 5V TTL logic. When sending serial commands to the HC-05 Bluetooth module RX pin (rated for 3.3V logic), what is the safest way to connect them?",
+  "challengeData": {
+    "options": [
+      "Connect Uno TX directly to HC-05 RX because signals are low current",
+      "Use a 2-resistor voltage divider (e.g., 1k\u03a9 and 2k\u03a9) to drop 5V to 3.3V",
+      "Connect a 10uF capacitor in series with the TX line",
+      "Connect Uno 5V directly to HC-05 RX"
+    ]
+  },
+  "hint": "A simple voltage divider safely scales 5V down to ~3.3V.",
+  "hints": [
+    "A simple voltage divider safely scales 5V down to ~3.3V.",
+    "R2 / (R1 + R2) * 5V: with R1=1k and R2=2k, Vout = 2/3 * 5V = 3.33V."
+  ],
+  "explanation": "Applying 5V signals to 3.3V UART RX inputs will damage the Bluetooth silicon over time. A voltage divider (1k\u03a9 series, 2k\u03a9 to GND) steps the 5V logic signal down to safe 3.3V levels.",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 55
+}

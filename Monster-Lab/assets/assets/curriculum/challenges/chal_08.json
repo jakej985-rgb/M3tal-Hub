@@ -1,0 +1,25 @@
+{
+  "id": "chal_08",
+  "title": "Ultrasonic Echo Time Math",
+  "type": "predictOutput",
+  "difficulty": "builder",
+  "prompt": "An HC-SR04 ultrasonic sensor sends a ping and measures an echo pulse duration of 580 microseconds. Using the formula (distance = duration / 58), what is the target obstacle distance in centimeters?",
+  "challengeData": {
+    "options": [
+      "5 cm",
+      "10 cm",
+      "20 cm",
+      "58 cm"
+    ]
+  },
+  "hint": "Divide 580 by 58.",
+  "hints": [
+    "Divide 580 by 58.",
+    "The speed of sound in air is ~340 m/s or 29 microseconds per cm round trip (58 \u00b5s round trip)."
+  ],
+  "explanation": "Sound travels 1 cm in ~29 microseconds. Round trip is 58 microseconds per cm. 580 / 58 = 10 cm.",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 40
+}

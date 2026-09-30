@@ -1,0 +1,153 @@
+{
+  "id": "proj_07",
+  "title": "MONSTER ATM and Food Dispenser",
+  "tagline": "Build an automated banking and snack dispenser with PIN authentication and servo dispensing!",
+  "tier": "builder",
+  "estimatedMinutes": 60,
+  "requiredComponents": [
+    "comp_06",
+    "comp_07",
+    "comp_25"
+  ],
+  "prerequisiteLessons": [
+    "lesson_03",
+    "lesson_07"
+  ],
+  "phases": [
+    {
+      "phaseNumber": 1,
+      "phaseTitle": "Gather Dispenser Hardware",
+      "type": "gatherParts",
+      "instructions": "Gather the 4x4 membrane keypad, 1602 I2C LCD, SG90 micro-servo motor, and cardboard chute or cup.",
+      "verificationCheckpoints": [
+        "4x4 Matrix keypad ready",
+        "1602 LCD with I2C backpack ready",
+        "SG90 micro servo with arm attached"
+      ]
+    },
+    {
+      "phaseNumber": 2,
+      "phaseTitle": "ATM Circuit Wiring",
+      "type": "breadboardWiring",
+      "instructions": "Connect LCD to A4/A5 I2C lines. Connect keypad rows to pins 9-6 and columns to pins 5-2. Connect Servo PWM signal to Pin 10.",
+      "wiringConnections": [
+        {
+          "from": "LCD SDA",
+          "to": "Arduino Pin A4",
+          "wire": "Blue",
+          "type": "i2c"
+        },
+        {
+          "from": "LCD SCL",
+          "to": "Arduino Pin A5",
+          "wire": "Blue",
+          "type": "i2c"
+        },
+        {
+          "from": "LCD VCC",
+          "to": "Arduino 5V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "LCD GND",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        },
+        {
+          "from": "Keypad Rows",
+          "to": "Pins 9, 8, 7, 6",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "Keypad Cols",
+          "to": "Pins 5, 4, 3, 2",
+          "wire": "Green",
+          "type": "digitalIn"
+        },
+        {
+          "from": "Servo Signal",
+          "to": "Arduino Pin 10",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "Servo 5V",
+          "to": "Arduino 5V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "Servo GND",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        }
+      ],
+      "verificationCheckpoints": [
+        "Keypad pins matched sequentially 9 through 2",
+        "Servo signal on Pin 10"
+      ]
+    },
+    {
+      "phaseNumber": 3,
+      "phaseTitle": "Pre-Flight Mechanical Sweep Check",
+      "type": "wiringCheck",
+      "instructions": "Ensure the servo dispenser door flap can rotate freely 90 degrees without binding against the dispenser wall.",
+      "verificationCheckpoints": [
+        "Flap moves smoothly through 90 degree arc",
+        "Verify power lines have solid breadboard connections"
+      ]
+    },
+    {
+      "phaseNumber": 4,
+      "phaseTitle": "Code Walkthrough & Banking State Machine",
+      "type": "codeReview",
+      "instructions": "Review how the Arduino manages banking states: AWAIT_PIN -> VALIDATING -> DISPENSING -> LOCKED.",
+      "codeSnippet": "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n#include <Servo.h>\n\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nServo dispenserServo;\nconst String MASTER_PIN = \"7788\";\nString inputPin = \"\";\n\nvoid setup() {\n  lcd.init();\n  lcd.backlight();\n  dispenserServo.attach(10);\n  dispenserServo.write(0); // Chute closed\n  lcd.setCursor(0, 0);\n  lcd.print(\"MONSTER ATM: PIN\");\n}\n\nvoid dispenseReward() {\n  lcd.clear();\n  lcd.print(\"ACCESS GRANTED!\");\n  dispenserServo.write(90); // Open chute\n  delay(2000);\n  dispenserServo.write(0);  // Close chute\n  lcd.clear();\n  lcd.print(\"MONSTER ATM: PIN\");\n}",
+      "codeExplanation": "- State machine prompts user for 4-digit PIN on the LCD.\n- Keys typed are accumulated into inputPin string.\n- When inputPin == MASTER_PIN, dispenseReward() triggers servo to swing 90 degrees for 2 seconds.\n- After dispensing, door closes and system re-locks automatically.",
+      "verificationCheckpoints": [
+        "Understand string accumulation for keypad digits",
+        "Understand timed servo actuation for mechanical dispensing"
+      ]
+    },
+    {
+      "phaseNumber": 5,
+      "phaseTitle": "Upload & Dispense Verification Test",
+      "type": "uploadSketch",
+      "instructions": "Upload sketch, load a candy or bead into the chute, type PIN '7788' and press '#' to watch your ATM dispense!",
+      "verificationCheckpoints": [
+        "Key presses appear as asterisks on LCD",
+        "Correct PIN opens servo chute and drops treat"
+      ]
+    },
+    {
+      "phaseNumber": 6,
+      "phaseTitle": "Mission Complete",
+      "type": "missionComplete",
+      "instructions": "Bravo! You integrated user interaction, display feedback, and mechanical actuation into a complete product.",
+      "verificationCheckpoints": [
+        "Ready to claim Inventor badge"
+      ]
+    }
+  ],
+  "xpReward": 180,
+  "badgeRewardId": "badge_inventor",
+  "story": "Build an automated Monster ATM and snack treat dispenser! Your monster customers enter their secret 4-digit PIN on the matrix keypad; if approved, the LCD welcomes them and a servo arm sweeps open the vault chute to dispense a treat.",
+  "troubleshooting": [
+    {
+      "symptom": "Servo twitches and resets Arduino when activating",
+      "cause": "Servo inrush current causes 5V rail voltage drop (brownout)",
+      "solution": "Add a 100uF electrolytic capacitor across 5V and GND near the servo power pins.",
+      "category": "power",
+      "diagnosticSteps": [
+        "Servo draws high inrush current causing brownout reset.",
+        "Add external 4xAA battery pack with shared ground to Arduino GND."
+      ]
+    }
+  ],
+  "variants": [],
+  "extensionMissions": []
+}

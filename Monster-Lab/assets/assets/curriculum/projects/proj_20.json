@@ -1,0 +1,152 @@
+{
+  "id": "proj_20",
+  "title": "IoT Weather Web Server Beacon",
+  "tagline": "Deploy a standalone internet HTTP server on an Arduino with W5100 SPI shield to serve live barometric weather data.",
+  "tier": "monsterMaster",
+  "estimatedMinutes": 110,
+  "requiredComponents": [
+    "comp_30",
+    "comp_08",
+    "comp_09"
+  ],
+  "prerequisiteLessons": [
+    "lesson_10",
+    "lesson_11"
+  ],
+  "phases": [
+    {
+      "phaseNumber": 1,
+      "phaseTitle": "Gather IoT Server Hardware",
+      "type": "gatherParts",
+      "instructions": "Locate from your kit: Arduino Uno, W5100 Ethernet Shield (comp_30), BMP180 Barometric Pressure Sensor (comp_08), DHT11 Temp/Humidity Sensor (comp_09), RJ-45 LAN Ethernet cable, breadboard, and wires.",
+      "verificationCheckpoints": [
+        "W5100 Ethernet shield pins straight",
+        "BMP180 I2C sensor ready",
+        "LAN cable connected to home router/switch"
+      ]
+    },
+    {
+      "phaseNumber": 2,
+      "phaseTitle": "Shield Mounting & Sensor Header Wiring",
+      "type": "breadboardWiring",
+      "instructions": "Carefully press the W5100 Ethernet Shield onto the Arduino Uno headers. Connect BMP180 SDA/SCL to the shield's A4/A5 header pins. Connect DHT11 DATA to Pin 2.",
+      "wiringConnections": [
+        {
+          "from": "BMP180 VCC",
+          "to": "Shield 3.3V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "BMP180 GND",
+          "to": "Shield GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        },
+        {
+          "from": "BMP180 SDA",
+          "to": "Shield A4",
+          "wire": "Orange",
+          "type": "i2c"
+        },
+        {
+          "from": "BMP180 SCL",
+          "to": "Shield A5",
+          "wire": "Yellow",
+          "type": "i2c"
+        },
+        {
+          "from": "DHT11 DATA",
+          "to": "Shield Pin 2",
+          "wire": "Green",
+          "type": "digitalIn"
+        }
+      ],
+      "verificationCheckpoints": [
+        "Ethernet shield ICSP header fully seated",
+        "Sensors wired to pass-through headers on top of shield"
+      ]
+    },
+    {
+      "phaseNumber": 3,
+      "phaseTitle": "Network Hardware Verification",
+      "type": "wiringCheck",
+      "instructions": "Plug in LAN cable: verify the green LINK LED and amber ACT LED illuminate on the shield's RJ-45 jack.",
+      "verificationCheckpoints": [
+        "RJ-45 link light active",
+        "No bent pins on the shield stacking headers"
+      ]
+    },
+    {
+      "phaseNumber": 4,
+      "phaseTitle": "Code Walkthrough & Embedded HTTP Web Server",
+      "type": "codeReview",
+      "instructions": "Review embedded HTTP server architecture: negotiates local IP via DHCP, listens on port 80, parses client GET requests, and streams an HTML5 live telemetry dashboard.",
+      "codeSnippet": "#include <SPI.h>\n#include <Ethernet.h>\n#include <Wire.h>\n#include <Adafruit_BMP085.h>\n\nbyte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };\nEthernetServer server(80);\nAdafruit_BMP085 bmp;\n\nvoid setup() {\n  Serial.begin(9600);\n  if (Ethernet.begin(mac) == 0) {\n    Serial.println(\"DHCP Failed!\");\n  }\n  server.begin();\n  bmp.begin();\n  Serial.print(\"Server online at: \");\n  Serial.println(Ethernet.localIP());\n}\n\nvoid loop() {\n  EthernetClient client = server.available();\n  if (client) {\n    boolean currentLineIsBlank = true;\n    while (client.connected()) {\n      if (client.available()) {\n        char c = client.read();\n        if (c == '\\n' && currentLineIsBlank) {\n          client.println(\"HTTP/1.1 200 OK\");\n          client.println(\"Content-Type: text/html\");\n          client.println(\"Connection: close\");\n          client.println(\"Refresh: 5\"); // Auto-refresh\n          client.println();\n          client.println(\"<!DOCTYPE HTML>\");\n          client.println(\"<html><h1>Monster Lab Weather Beacon</h1>\");\n          client.print(\"<p>Temperature: \"); client.print(bmp.readTemperature()); client.println(\" C</p>\");\n          client.print(\"<p>Pressure: \"); client.print(bmp.readPressure() / 100.0); client.println(\" hPa</p>\");\n          client.print(\"<p>Altitude: \"); client.print(bmp.readAltitude()); client.println(\" m</p></html>\");\n          break;\n        }\n        if (c == '\\n') currentLineIsBlank = true;\n        else if (c != '\\r') currentLineIsBlank = false;\n      }\n    }\n    delay(1);\n    client.stop();\n  }\n}",
+      "codeExplanation": "- Ethernet.begin(mac) automatically acquires IP address from local home router via DHCP.\n- server.available() intercepts web browser TCP connections on port 80.\n- Sends standard HTTP 200 OK headers followed by semantic HTML markup.\n- Browser displays live updating weather dashboard from any computer, tablet, or phone on the LAN.",
+      "verificationCheckpoints": [
+        "Understand HTTP client/server request/response cycle",
+        "Understand DHCP local IP address leasing"
+      ]
+    },
+    {
+      "phaseNumber": 5,
+      "phaseTitle": "Upload & Web Browser Live Dashboard Test",
+      "type": "uploadSketch",
+      "instructions": "Upload sketch. Open Serial Monitor to see the assigned IP address. Open Chrome or Safari on your phone or laptop, type the IP into the URL bar, and watch your Arduino serve live weather telemetry!",
+      "verificationCheckpoints": [
+        "Serial Monitor reports valid local IP (e.g. 192.168.1.xxx)",
+        "Web browser displays live HTML5 weather page with 5-second auto-refresh"
+      ]
+    },
+    {
+      "phaseNumber": 6,
+      "phaseTitle": "Mission Complete",
+      "type": "missionComplete",
+      "instructions": "IoT Architect Master! You deployed a fully standalone HTTP internet server on an embedded microcontroller.",
+      "verificationCheckpoints": [
+        "Ready to claim IoT Architect badge"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "proj_20_var_1",
+      "title": "RESTful JSON Telemetry Endpoint",
+      "description": "Serve structured JSON payloads (/api/telemetry) instead of HTML for mobile app consumption.",
+      "alternativeComponents": [
+        "comp_30"
+      ],
+      "wiringDifferences": "No wiring changes required",
+      "codeAdaptation": "Inspect HTTP request line for '/api/telemetry'; output Content-Type: application/json and raw JSON"
+    }
+  ],
+  "extensionMissions": [
+    {
+      "id": "proj_20_mis_1",
+      "title": "Remote Relay Actuation via Web",
+      "objective": "Parse HTTP POST or GET /relay/on and /relay/off requests to remotely trigger physical lab equipment.",
+      "difficulty": "monsterMaster",
+      "hints": [
+        "Parse URL query parameters",
+        "If matched, digitalWrite(RELAY_PIN, HIGH) and output status page"
+      ],
+      "xpReward": 100
+    }
+  ],
+  "xpReward": 380,
+  "badgeRewardId": "badge_iot_architect",
+  "story": "Bring your Monster Lab online to the global internet! Mount the W5100 SPI Ethernet shield, connect a LAN cable, and host an interactive micro-web server that serves live atmospheric temperature, barometric pressure, and altitude to any browser on your network.",
+  "troubleshooting": [
+    {
+      "symptom": "DHCP Failed error in Serial Monitor",
+      "cause": "LAN cable disconnected or router blocked DHCP lease",
+      "solution": "Check RJ-45 cable connection to router, or specify a static IP address using Ethernet.begin(mac, ip).",
+      "category": "upload",
+      "diagnosticSteps": [
+        "Verify green link LED on Ethernet shield jack",
+        "Test LAN cable with a laptop to verify active internet"
+      ]
+    }
+  ]
+}

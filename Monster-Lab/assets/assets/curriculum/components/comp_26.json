@@ -1,0 +1,53 @@
+{
+  "id": "comp_26",
+  "peripheralNumber": 26,
+  "name": "Soil Moisture Dual-Probe Sensor",
+  "partNumber": "FC-28",
+  "category": "sensor",
+  "description": "Like a thirsty plant alarm! Measures electrical conductivity between two soil probes.",
+  "realWorldAnalogy": "Like a thirsty plant alarm! Measures electrical conductivity between two soil probes.",
+  "voltage": "dual",
+  "pinout": [
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "Power rail"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "D0",
+      "type": "digitalIn",
+      "description": "Digital moisture threshold"
+    },
+    {
+      "pinName": "A0",
+      "type": "analogIn",
+      "description": "Analog resistance"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_15"
+  ],
+  "datasheetRef": "Water Level Sensor.pdf",
+  "wiringGuidance": "Connect probes to amplifier board. Connect amplifier VCC (Red) to 5V, GND (Dark Slate) to GND, and A0 (Yellow) to analog pin A0.",
+  "commonMistakes": [
+    "Keeping power on 24/7 in moist soil, corroding copper probes rapidly through electrolysis.",
+    "Touching both prongs with sweaty skin during dry calibration."
+  ],
+  "miniExperiment": {
+    "title": "Soil Moisture Plant Monitor",
+    "circuit": "VCC to 5V, GND to GND, A0 to Analog Pin A0.",
+    "code": "void setup() {\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  int val = analogRead(A0);\n  Serial.print(\"Moisture Level: \");\n  Serial.println(1023 - val);\n  delay(1000);\n}",
+    "expectedOutput": "Outputs 0 in air, increasing to 600-800 when inserted into damp potting soil."
+  }
+}

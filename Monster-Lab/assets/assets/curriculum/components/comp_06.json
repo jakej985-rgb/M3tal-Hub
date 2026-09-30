@@ -1,0 +1,74 @@
+{
+  "id": "comp_06",
+  "peripheralNumber": 6,
+  "name": "16-Button Membrane Keypad",
+  "partNumber": "MEM-4X4",
+  "category": "switch",
+  "description": "Like a bank vault keypad! 16 tactile keys multiplexed into 8 pins using row-column matrix scanning.",
+  "realWorldAnalogy": "Like a bank vault keypad! 16 tactile keys multiplexed into 8 pins using row-column matrix scanning.",
+  "voltage": "dual",
+  "pinout": [
+    {
+      "pinName": "R1",
+      "type": "digitalOut",
+      "description": "Row 1"
+    },
+    {
+      "pinName": "R2",
+      "type": "digitalOut",
+      "description": "Row 2"
+    },
+    {
+      "pinName": "R3",
+      "type": "digitalOut",
+      "description": "Row 3"
+    },
+    {
+      "pinName": "R4",
+      "type": "digitalOut",
+      "description": "Row 4"
+    },
+    {
+      "pinName": "C1",
+      "type": "digitalIn",
+      "description": "Col 1"
+    },
+    {
+      "pinName": "C2",
+      "type": "digitalIn",
+      "description": "Col 2"
+    },
+    {
+      "pinName": "C3",
+      "type": "digitalIn",
+      "description": "Col 3"
+    },
+    {
+      "pinName": "C4",
+      "type": "digitalIn",
+      "description": "Col 4"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_04",
+    "proj_07"
+  ],
+  "datasheetRef": "4x4-Matrix-Membrane-Keypad.pdf",
+  "wiringGuidance": "Connect Row pins R1-R4 (Green wires) to digital pins 9, 8, 7, 6. Connect Column pins C1-C4 (Green wires) to digital pins 5, 4, 3, 2.",
+  "commonMistakes": [
+    "Reversing row and column ribbon connector pin order.",
+    "Attempting to read keys without enabling internal pull-ups or scanning row by row."
+  ],
+  "miniExperiment": {
+    "title": "Keypad Matrix Scanner",
+    "circuit": "Rows to pins 9-6, Cols to pins 5-2.",
+    "code": "const byte ROWS = 4;\nconst byte COLS = 4;\nbyte rowPins[ROWS] = {9, 8, 7, 6};\nbyte colPins[COLS] = {5, 4, 3, 2};\n\nvoid setup() {\n  Serial.begin(9600);\n  for (int r = 0; r < ROWS; r++) pinMode(rowPins[r], OUTPUT);\n  for (int c = 0; c < COLS; c++) pinMode(colPins[c], INPUT_PULLUP);\n}\n\nvoid loop() {\n  for (int r = 0; r < ROWS; r++) {\n    digitalWrite(rowPins[r], LOW);\n    for (int c = 0; c < COLS; c++) {\n      if (digitalRead(colPins[c]) == LOW) {\n        Serial.print(\"Pressed Row: \");\n        Serial.print(r);\n        Serial.print(\" Col: \");\n        Serial.println(c);\n        delay(200);\n      }\n    }\n    digitalWrite(rowPins[r], HIGH);\n  }\n}",
+    "expectedOutput": "Serial Monitor logs exact row and column numbers as you tap keys on the membrane keypad."
+  }
+}

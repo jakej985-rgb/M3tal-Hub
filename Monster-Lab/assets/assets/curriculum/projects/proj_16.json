@@ -1,0 +1,158 @@
+{
+  "id": "proj_16",
+  "title": "Laser Tripwire Sentry",
+  "tagline": "Guard the laboratory perimeter with a 650nm concentrated optical beam and responsive photoresistor alarm!",
+  "tier": "builder",
+  "estimatedMinutes": 45,
+  "requiredComponents": [
+    "comp_37",
+    "comp_19",
+    "comp_34"
+  ],
+  "prerequisiteLessons": [
+    "lesson_08"
+  ],
+  "phases": [
+    {
+      "phaseNumber": 1,
+      "phaseTitle": "Gather Optical Hardware",
+      "type": "gatherParts",
+      "instructions": "Locate from your kit: Arduino Uno, KY-008 Laser Diode (comp_37), LDR Photoresistor (comp_19), 10k resistor, Active Buzzer (comp_34), Red LED, 220-ohm resistor, breadboard, and jumper wires.",
+      "verificationCheckpoints": [
+        "KY-008 laser module ready",
+        "LDR leads intact and clean",
+        "10k pulldown resistor (Brown-Black-Orange-Gold)"
+      ]
+    },
+    {
+      "phaseNumber": 2,
+      "phaseTitle": "Optical Bench Breadboard Wiring",
+      "type": "breadboardWiring",
+      "instructions": "Wire KY-008 Laser Signal to Pin 7, Ground to GND. Wire LDR in voltage divider to A0 with 10k resistor to GND. Connect Buzzer to Pin 8 and Red LED to Pin 9.",
+      "wiringConnections": [
+        {
+          "from": "Laser Signal",
+          "to": "Arduino Pin 7",
+          "wire": "Red",
+          "type": "digitalOut"
+        },
+        {
+          "from": "Laser GND",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        },
+        {
+          "from": "LDR Pin 1",
+          "to": "Arduino 5V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "LDR Pin 2",
+          "to": "Arduino A0",
+          "wire": "Yellow",
+          "type": "analogIn"
+        },
+        {
+          "from": "Buzzer (+)",
+          "to": "Arduino Pin 8",
+          "wire": "Blue",
+          "type": "digitalOut"
+        },
+        {
+          "from": "LED Anode",
+          "to": "Arduino Pin 9",
+          "wire": "Green",
+          "type": "digitalOut"
+        }
+      ],
+      "verificationCheckpoints": [
+        "Laser aimed safely toward LDR sensor face",
+        "10k resistor links A0 to GND"
+      ]
+    },
+    {
+      "phaseNumber": 3,
+      "phaseTitle": "Laser Safety Verification",
+      "type": "wiringCheck",
+      "instructions": "Position the breadboards so the laser beam projects horizontally onto the LDR. Never look directly into the laser aperture!",
+      "verificationCheckpoints": [
+        "Laser beam points strictly at target paper / LDR",
+        "No reflective mirrors pointed at eye level"
+      ]
+    },
+    {
+      "phaseNumber": 4,
+      "phaseTitle": "Code Walkthrough & Photometric Sampling",
+      "type": "codeReview",
+      "instructions": "Review the tripwire sketch: turns on the laser emitter, samples analog voltage from the LDR, and trips the alarm when light falls below calibrated threshold.",
+      "codeSnippet": "const int LASER_PIN = 7;\nconst int LDR_PIN = A0;\nconst int BUZZER_PIN = 8;\nconst int LED_PIN = 9;\nint baselineLight = 0;\n\nvoid setup() {\n  pinMode(LASER_PIN, OUTPUT);\n  pinMode(BUZZER_PIN, OUTPUT);\n  pinMode(LED_PIN, OUTPUT);\n  digitalWrite(LASER_PIN, HIGH); // Fire laser beam\n  delay(500);\n  baselineLight = analogRead(LDR_PIN);\n}\n\nvoid loop() {\n  int currentLight = analogRead(LDR_PIN);\n  if (currentLight < (baselineLight - 150)) {\n    // Beam broken!\n    digitalWrite(LED_PIN, HIGH);\n    digitalWrite(BUZZER_PIN, HIGH);\n    delay(100);\n    digitalWrite(BUZZER_PIN, LOW);\n    delay(100);\n  } else {\n    digitalWrite(LED_PIN, LOW);\n    digitalWrite(BUZZER_PIN, LOW);\n  }\n}",
+      "codeExplanation": "- Setup turns on the laser and records initial ambient light baseline.\n- Loop samples LDR light levels at 100Hz.\n- A drop in light exceeding 150 ADC units triggers pulsing audio-visual alarm sirens.",
+      "verificationCheckpoints": [
+        "Understand differential baseline light thresholding",
+        "Verify alarm siren frequency timing"
+      ]
+    },
+    {
+      "phaseNumber": 5,
+      "phaseTitle": "Upload & Perimeter Intrusion Test",
+      "type": "uploadSketch",
+      "instructions": "Upload sketch. Observe red laser dot on LDR. Pass your hand through the beam: buzzer sounds immediately and red strobe triggers!",
+      "verificationCheckpoints": [
+        "Alarm fires within 10ms of breaking the laser beam",
+        "Alarm clears when beam path is restored"
+      ]
+    },
+    {
+      "phaseNumber": 6,
+      "phaseTitle": "Mission Complete",
+      "type": "missionComplete",
+      "instructions": "Laser Security Specialist! You engineered a concentrated photonic tripwire perimeter grid.",
+      "verificationCheckpoints": [
+        "Ready to claim Laser Master badge"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "proj_16_var_1",
+      "title": "Modulated IR Carrier Beam",
+      "description": "Replace visible red laser with 38kHz pulsed IR transmitter and IR receiver for ambient-light immune tripwire.",
+      "alternativeComponents": [
+        "comp_12",
+        "comp_13"
+      ],
+      "wiringDifferences": "Connect IR receiver output to Pin 2",
+      "codeAdaptation": "Use tone(pin, 38000) to pulse emitter and test digitalRead() on receiver"
+    }
+  ],
+  "extensionMissions": [
+    {
+      "id": "proj_16_mis_1",
+      "title": "Grid Alignment Meter",
+      "objective": "Display real-time photonic signal strength on an I2C LCD to assist field technicians in aligning the beam optics.",
+      "difficulty": "builder",
+      "hints": [
+        "Map analogRead(A0) to 0-100%",
+        "Render a custom bar graph on LCD 1602"
+      ],
+      "xpReward": 70
+    }
+  ],
+  "xpReward": 200,
+  "badgeRewardId": "badge_laser_master",
+  "story": "Secure the Monster Lab vault! Rig a 650nm red optical laser diode across the doorway to reflect into a light-dependent resistor (LDR). If any shadow or intruder breaks the beam, sound the alert sirens!",
+  "troubleshooting": [
+    {
+      "symptom": "Alarm sounds continuously even when laser is hitting LDR",
+      "cause": "Baseline light reading was taken before laser fully illuminated",
+      "solution": "Increase delay(500) in setup() before sampling baselineLight.",
+      "category": "logic",
+      "diagnosticSteps": [
+        "Print baselineLight and currentLight to Serial Monitor",
+        "Ensure laser dot is centered directly over the LDR serpentine track"
+      ]
+    }
+  ]
+}

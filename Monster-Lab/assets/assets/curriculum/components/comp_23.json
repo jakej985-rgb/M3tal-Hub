@@ -1,0 +1,73 @@
+{
+  "id": "comp_23",
+  "peripheralNumber": 23,
+  "name": "13.56MHz RFID Reader & Card",
+  "partNumber": "RC522",
+  "category": "communication",
+  "description": "Like a contactless hotel keycard! Transmits electromagnetic radio waves to read smart tags.",
+  "realWorldAnalogy": "Like a contactless hotel keycard! Transmits electromagnetic radio waves to read smart tags.",
+  "voltage": "v3_3",
+  "pinout": [
+    {
+      "pinName": "3.3V",
+      "type": "power",
+      "description": "3.3V Power ONLY"
+    },
+    {
+      "pinName": "RST",
+      "type": "digitalOut",
+      "description": "Reset pin"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "IRQ",
+      "type": "digitalIn",
+      "description": "Interrupt request"
+    },
+    {
+      "pinName": "MISO",
+      "type": "spi",
+      "description": "SPI Master In Slave Out"
+    },
+    {
+      "pinName": "MOSI",
+      "type": "spi",
+      "description": "SPI Master Out Slave In"
+    },
+    {
+      "pinName": "SCK",
+      "type": "spi",
+      "description": "SPI Clock"
+    },
+    {
+      "pinName": "SDA/NSS",
+      "type": "spi",
+      "description": "Chip Select"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_09"
+  ],
+  "datasheetRef": "MFRC522 Datasheet.pdf",
+  "wiringGuidance": "Connect 3.3V (Red) to 3.3V ONLY! Connect GND (Dark Slate) to GND, RST to Pin 9, SDA to Pin 10, MOSI to Pin 11, MISO to Pin 12, SCK to Pin 13 (Orange wires).",
+  "commonMistakes": [
+    "Connecting VCC to 5V (permanently fries the RC522 RFID silicon!).",
+    "Loose jumper wire connections on the 8-pin header."
+  ],
+  "miniExperiment": {
+    "title": "Smart Card UID Reader",
+    "circuit": "VCC to 3.3V, GND to GND, RST to 9, SDA to 10, MOSI to 11, MISO to 12, SCK to 13.",
+    "code": "#include <SPI.h>\n#include <MFRC522.h>\n\n#define SS_PIN 10\n#define RST_PIN 9\nMFRC522 rfid(SS_PIN, RST_PIN);\n\nvoid setup() {\n  Serial.begin(9600);\n  SPI.begin();\n  rfid.PCD_Init();\n  Serial.println(\"Tap an RFID card or fob...\");\n}\n\nvoid loop() {\n  if (!rfid.PICC_IsNewCardPresent() || !rfid.PICC_ReadCardSerial()) return;\n  Serial.print(\"Card UID: \");\n  for (byte i = 0; i < rfid.uid.size; i++) {\n    Serial.print(rfid.uid.uidByte[i] < 0x10 ? \" 0\" : \" \");\n    Serial.print(rfid.uid.uidByte[i], HEX);\n  }\n  Serial.println();\n  rfid.PICC_HaltA();\n}",
+    "expectedOutput": "Serial Monitor displays the hex UID whenever an RFID card or keychain is tapped against the coil."
+  }
+}

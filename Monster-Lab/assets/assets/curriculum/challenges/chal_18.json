@@ -1,0 +1,25 @@
+{
+  "id": "chal_18",
+  "title": "I2C Bus Address Collision",
+  "type": "fixWiring",
+  "difficulty": "builder",
+  "prompt": "Two I2C devices both use default address 0x68 (e.g. RTC DS1307 and MPU-6050 accelerometer). How can both communicate with the same Arduino without bus collision?",
+  "challengeData": {
+    "options": [
+      "Increase the I2C pullup resistors to 100k ohms",
+      "Toggle the MPU-6050 AD0 address pin HIGH to shift its address to 0x69",
+      "Connect the second device to the Arduino SPI pins instead",
+      "Run the I2C clock backwards"
+    ]
+  },
+  "hint": "Check the MPU-6050 AD0 pin function in the datasheet.",
+  "hints": [
+    "Check the MPU-6050 AD0 pin function in the datasheet.",
+    "Connecting AD0 to VCC changes its 7-bit slave address from 0x68 to 0x69."
+  ],
+  "explanation": "Many I2C chips have an address select pin (like AD0 on MPU-6050). Tying AD0 to 3.3V/5V shifts its I2C address to 0x69, eliminating the collision with the RTC at 0x68.",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 50
+}

@@ -1,0 +1,153 @@
+{
+  "id": "proj_19",
+  "title": "Digital Tachometer & Speed Trap",
+  "tagline": "Precision lab instrumentation: measure motor RPM using optical photogates and magnetic Hall effect sensors with hardware interrupts!",
+  "tier": "engineer",
+  "estimatedMinutes": 65,
+  "requiredComponents": [
+    "comp_05",
+    "comp_38",
+    "comp_32",
+    "comp_33"
+  ],
+  "prerequisiteLessons": [
+    "lesson_08",
+    "lesson_10"
+  ],
+  "phases": [
+    {
+      "phaseNumber": 1,
+      "phaseTitle": "Gather Instrumentation Parts",
+      "type": "gatherParts",
+      "instructions": "Locate from your kit: Arduino Uno, Photo Interrupter Photogate (comp_05), 3144 Hall Effect Sensor (comp_38), 7-Segment Display (comp_32), 74HC595 Shift Register, 130 DC Motor (comp_33), Neodymium magnet, Breadboard, and wires.",
+      "verificationCheckpoints": [
+        "ITR9608 photogate slotted optical switch ready",
+        "3144 Hall effect magnetic switch ready",
+        "74HC595 shift register IC ready"
+      ]
+    },
+    {
+      "phaseNumber": 2,
+      "phaseTitle": "Interrupt & Display Breadboard Wiring",
+      "type": "breadboardWiring",
+      "instructions": "Connect Photogate OUT to Pin 2 (Hardware Interrupt 0). Connect Hall Sensor OUT to Pin 3 (Hardware Interrupt 1). Connect 74HC595 Latch/Clock/Data to Pins 4, 5, 6. Connect Shift Register outputs to 7-Segment segments A-G.",
+      "wiringConnections": [
+        {
+          "from": "Photogate OUT",
+          "to": "Arduino Pin 2",
+          "wire": "Yellow",
+          "type": "digitalIn"
+        },
+        {
+          "from": "Hall Sensor OUT",
+          "to": "Arduino Pin 3",
+          "wire": "Green",
+          "type": "digitalIn"
+        },
+        {
+          "from": "74HC595 Latch",
+          "to": "Arduino Pin 4",
+          "wire": "Blue",
+          "type": "digitalOut"
+        },
+        {
+          "from": "74HC595 Clock",
+          "to": "Arduino Pin 5",
+          "wire": "Purple",
+          "type": "digitalOut"
+        },
+        {
+          "from": "74HC595 Data",
+          "to": "Arduino Pin 6",
+          "wire": "Orange",
+          "type": "digitalOut"
+        }
+      ],
+      "verificationCheckpoints": [
+        "Photogate and Hall sensors wired to hardware interrupt pins (Pins 2 and 3)",
+        "Current-limiting resistors protect display segments"
+      ]
+    },
+    {
+      "phaseNumber": 3,
+      "phaseTitle": "Sensor Trigger Verification",
+      "type": "wiringCheck",
+      "instructions": "Pass a piece of cardboard through the photogate slot: observe digital signal drop on Pin 2. Wave magnet near Hall sensor: observe digital signal drop on Pin 3.",
+      "verificationCheckpoints": [
+        "Optical beam break triggers clean falling edge",
+        "Magnetic field triggers clean falling edge"
+      ]
+    },
+    {
+      "phaseNumber": 4,
+      "phaseTitle": "Code Walkthrough & Interrupt Math",
+      "type": "codeReview",
+      "instructions": "Review hardware interrupt velocity math: ISR increments a pulse counter. Every 500ms, the main loop computes RPM = (pulses * 60000) / (timeDelta * slots) and shifts digits out to the 7-segment display.",
+      "codeSnippet": "volatile unsigned long pulseCount = 0;\nunsigned long lastCalcTime = 0;\nint currentRpm = 0;\n\nvoid countPulse() {\n  pulseCount++;\n}\n\nvoid setup() {\n  Serial.begin(9600);\n  pinMode(2, INPUT_PULLUP);\n  attachInterrupt(digitalPinToInterrupt(2), countPulse, FALLING);\n}\n\nvoid loop() {\n  unsigned long now = millis();\n  if (now - lastCalcTime >= 500) {\n    detachInterrupt(digitalPinToInterrupt(2));\n    currentRpm = (pulseCount * 60000) / ((now - lastCalcTime) * 1); // 1 slot\n    pulseCount = 0;\n    lastCalcTime = now;\n    attachInterrupt(digitalPinToInterrupt(2), countPulse, FALLING);\n    Serial.print(\"Motor Speed: \"); Serial.print(currentRpm); Serial.println(\" RPM\");\n  }\n}",
+      "codeExplanation": "- attachInterrupt() executes countPulse() instantly when a slot breaks the optical beam without polling delay.\n- volatile keyword ensures the compiler doesn't optimize away the interrupt-modified variable.\n- Periodic calculation window converts pulse frequency into engineering units (RPM).",
+      "verificationCheckpoints": [
+        "Understand hardware interrupt execution priority",
+        "Understand atomic variable access during time window calculation"
+      ]
+    },
+    {
+      "phaseNumber": 5,
+      "phaseTitle": "Upload & High-Speed Spin Bench Test",
+      "type": "uploadSketch",
+      "instructions": "Upload sketch. Power up DC motor with slotted disc spinning in the photogate slot. Observe precise, jitter-free RPM readings updating live!",
+      "verificationCheckpoints": [
+        "RPM scales smoothly with motor voltage",
+        "Display matches physical spin rate"
+      ]
+    },
+    {
+      "phaseNumber": 6,
+      "phaseTitle": "Mission Complete",
+      "type": "missionComplete",
+      "instructions": "Tachometer Instrument Specialist! You harnessed hardware interrupts to measure high-speed physical velocity.",
+      "verificationCheckpoints": [
+        "Ready to claim Tachometer Tech badge"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "proj_19_var_1",
+      "title": "Optical Slotted Photogate",
+      "description": "Use ITR9608 slotted optical gate instead of magnetic Hall sensor for detecting gear tooth passes.",
+      "alternativeComponents": [
+        "comp_05"
+      ],
+      "wiringDifferences": "Connect photogate digital output to Pin 2 interrupt",
+      "codeAdaptation": "Calculate RPM = (pulses / gearTeeth) * (60000 / sampleTimeMs)"
+    }
+  ],
+  "extensionMissions": [
+    {
+      "id": "proj_19_mis_1",
+      "title": "Overspeed Governor Interlock",
+      "objective": "Trip a safety relay to cut motor power if rotational speed exceeds 3,000 RPM.",
+      "difficulty": "engineer",
+      "hints": [
+        "In the loop(), check currentRPM > 3000",
+        "If triggered, drive relay pin LOW and latch fault state"
+      ],
+      "xpReward": 85
+    }
+  ],
+  "xpReward": 250,
+  "badgeRewardId": "badge_tachometer_tech",
+  "story": "How fast is that motor really spinning? Build laboratory instrumentation! Combine an optical slotted photogate and a magnetic Hall effect sensor with hardware interrupts to calculate rotational velocity in Revolutions Per Minute (RPM) and display on a 7-segment display.",
+  "troubleshooting": [
+    {
+      "symptom": "RPM reads zero even when motor is spinning",
+      "cause": "Sensor connected to non-interrupt pin, or slotted disc not passing between photogate posts",
+      "solution": "Verify sensor output is wired strictly to digital Pin 2 (Interrupt 0) or Pin 3 (Interrupt 1).",
+      "category": "wiring",
+      "diagnosticSteps": [
+        "Check interrupt pin wiring",
+        "Test countPulse() by manually tapping Pin 2 to GND"
+      ]
+    }
+  ]
+}

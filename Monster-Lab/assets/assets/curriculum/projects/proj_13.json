@@ -1,0 +1,149 @@
+{
+  "id": "proj_13",
+  "title": "MONSTER Autopilot",
+  "tagline": "Flight control computing! Stabilize robotic wings and vehicles using 6-axis gyroscope accelerometer fusion.",
+  "tier": "monsterMaster",
+  "estimatedMinutes": 90,
+  "requiredComponents": [
+    "comp_04",
+    "comp_07",
+    "comp_12",
+    "comp_25",
+    "comp_27"
+  ],
+  "prerequisiteLessons": [
+    "lesson_03",
+    "lesson_07"
+  ],
+  "phases": [
+    {
+      "phaseNumber": 1,
+      "phaseTitle": "Gather Flight Avionics",
+      "type": "gatherParts",
+      "instructions": "Collect the MPU-6050 6-DOF IMU sensor module, SG90 servo motor, tactile momentary button, 1602 LCD, and breadboard.",
+      "verificationCheckpoints": [
+        "MPU-6050 sensor board with onboard 3.3V regulator ready",
+        "SG90 servo motor with gimbal horn ready",
+        "Tactile push-button ready"
+      ]
+    },
+    {
+      "phaseNumber": 2,
+      "phaseTitle": "Avionics I2C Bus & Actuator Wiring",
+      "type": "breadboardWiring",
+      "instructions": "Connect MPU-6050 to 5V, GND, SDA (A4), SCL (A5), and INT to Pin 2. Connect Servo to Pin 9, and LCD to shared I2C bus.",
+      "wiringConnections": [
+        {
+          "from": "MPU-6050 VCC",
+          "to": "Arduino 5V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "MPU-6050 GND",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        },
+        {
+          "from": "MPU-6050 SDA",
+          "to": "Arduino Pin A4",
+          "wire": "Blue",
+          "type": "i2c"
+        },
+        {
+          "from": "MPU-6050 SCL",
+          "to": "Arduino Pin A5",
+          "wire": "Blue",
+          "type": "i2c"
+        },
+        {
+          "from": "MPU-6050 INT",
+          "to": "Arduino Pin 2",
+          "wire": "Green",
+          "type": "digitalIn"
+        },
+        {
+          "from": "Gimbal Servo PWM",
+          "to": "Arduino Pin 9",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "LCD SDA",
+          "to": "Arduino Pin A4",
+          "wire": "Blue",
+          "type": "i2c"
+        },
+        {
+          "from": "LCD SCL",
+          "to": "Arduino Pin A5",
+          "wire": "Blue",
+          "type": "i2c"
+        }
+      ],
+      "verificationCheckpoints": [
+        "MPU-6050 and LCD sharing I2C bus cleanly",
+        "Servo mounted to gimbal pivot bracket"
+      ]
+    },
+    {
+      "phaseNumber": 3,
+      "phaseTitle": "Pre-Flight IMU Calibration Orientation",
+      "type": "wiringCheck",
+      "instructions": "Keep the IMU completely flat and motionless on your desk during initial power-on calibration.",
+      "verificationCheckpoints": [
+        "Board resting flat on level surface",
+        "Wires relaxed without pulling on IMU board"
+      ]
+    },
+    {
+      "phaseNumber": 4,
+      "phaseTitle": "Code Walkthrough & Complementary Filter",
+      "type": "codeReview",
+      "instructions": "Review how the sketch fuses accelerometer gravity vectors with gyro angular rate integration to compute a drift-free tilt angle.",
+      "codeSnippet": "#include <Wire.h>\n#include <Servo.h>\n\nconst int MPU_ADDR = 0x68;\nServo gimbalServo;\nint16_t ax, ay, az, gx, gy, gz;\n\nvoid setup() {\n  Wire.begin();\n  Wire.beginTransmission(MPU_ADDR);\n  Wire.write(0x6B); // PWR_MGMT_1 register\n  Wire.write(0);    // Wake up MPU-6050\n  Wire.endTransmission(true);\n\n  gimbalServo.attach(9);\n  gimbalServo.write(90);\n}\n\nvoid loop() {\n  Wire.beginTransmission(MPU_ADDR);\n  Wire.write(0x3B); // Starting register for accelerometer\n  Wire.endTransmission(false);\n  Wire.requestFrom(MPU_ADDR, 6, true);\n\n  ax = Wire.read() << 8 | Wire.read();\n  ay = Wire.read() << 8 | Wire.read();\n  az = Wire.read() << 8 | Wire.read();\n\n  // Calculate tilt angle in degrees from gravity vector\n  float angle = atan2(ay, az) * 180.0 / PI;\n  int servoAngle = constrain(90 - (int)angle, 0, 180);\n  gimbalServo.write(servoAngle);\n  delay(20);\n}",
+      "codeExplanation": "- 0x6B register write wakes the MPU-6050 from sleep mode.\n- High and low bytes are combined (Wire.read() << 8 | Wire.read()) to form signed 16-bit acceleration values.\n- atan2(ay, az) calculates exact physical pitch angle from Earth's gravity vector.\n- Servo moves opposite to tilt angle (90 - angle), keeping platform level.",
+      "verificationCheckpoints": [
+        "Understand how gravity vector reveals tilt angle",
+        "Understand negative feedback loop in gimbal stabilization"
+      ]
+    },
+    {
+      "phaseNumber": 5,
+      "phaseTitle": "Upload & Gimbal Active Leveling Test",
+      "type": "uploadSketch",
+      "instructions": "Upload sketch. Pick up the breadboard and tilt it left and right: notice how the servo platform instantly tilts in reverse to stay horizontal!",
+      "verificationCheckpoints": [
+        "Platform counters roll and pitch tilts",
+        "Platform remains horizontal during gentle motion"
+      ]
+    },
+    {
+      "phaseNumber": 6,
+      "phaseTitle": "Mission Complete",
+      "type": "missionComplete",
+      "instructions": "Autopilot online! You engineered an active closed-loop inertial stabilization flight controller.",
+      "verificationCheckpoints": [
+        "Ready to claim Autopilot Ace badge"
+      ]
+    }
+  ],
+  "xpReward": 300,
+  "badgeRewardId": "badge_autopilot_ace",
+  "story": "Build an Autonomous Flight Control & Gimbal Autopilot! Read real-time pitch, roll, and angular acceleration from an MPU-6050 6-axis gyroscope/accelerometer over I2C, and actively counter external tilts using micro-servos to keep a camera platform perfectly level in mid-air.",
+  "troubleshooting": [
+    {
+      "symptom": "MPU-6050 readings always return -1 or 0",
+      "cause": "MPU-6050 didn't wake up or I2C address is 0x69 (if AD0 pin is high)",
+      "solution": "Verify AD0 pin is tied to GND (sets address to 0x68) and ensure 0x6B wake-up command is sent in setup.",
+      "category": "logic",
+      "diagnosticSteps": [
+        "Write 0x00 to power management register 0x6B to wake from sleep.",
+        "Verify SDA on A4 and SCL on A5."
+      ]
+    }
+  ],
+  "variants": [],
+  "extensionMissions": []
+}

@@ -1,0 +1,48 @@
+{
+  "id": "comp_03",
+  "peripheralNumber": 3,
+  "name": "PIR Motion Sensor",
+  "partNumber": "HC-SR501",
+  "category": "sensor",
+  "description": "Like thermal vision! Senses shifts in infrared heat radiated by moving human or animal bodies.",
+  "realWorldAnalogy": "Like thermal vision! Senses shifts in infrared heat radiated by moving human or animal bodies.",
+  "voltage": "dual",
+  "pinout": [
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "Power (4.5V-12V)"
+    },
+    {
+      "pinName": "OUT",
+      "type": "digitalIn",
+      "description": "Digital motion trigger (3.3V logic)"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_01"
+  ],
+  "datasheetRef": "HC-SR501.pdf",
+  "wiringGuidance": "Connect VCC (Red wire) to 5V, GND (Dark Slate wire) to GND, and OUT (Green wire) to digital pin 2.",
+  "commonMistakes": [
+    "Testing immediately after power-up\u2014PIR sensors require a 30 to 60-second warm-up calibration cycle.",
+    "Confusing the time delay and sensitivity trim potentiometers on the board."
+  ],
+  "miniExperiment": {
+    "title": "Motion Sentry Alarm",
+    "circuit": "VCC to 5V, GND to GND, OUT to Pin 2.",
+    "code": "const int motionPin = 2;\nconst int ledPin = 13;\n\nvoid setup() {\n  pinMode(motionPin, INPUT);\n  pinMode(ledPin, OUTPUT);\n  Serial.begin(9600);\n  Serial.println(\"Warming up sensor for 10s...\");\n  delay(10000);\n  Serial.println(\"Sentry Armed!\");\n}\n\nvoid loop() {\n  int motion = digitalRead(motionPin);\n  if (motion == HIGH) {\n    digitalWrite(ledPin, HIGH);\n    Serial.println(\"MOTION DETECTED!\");\n  } else {\n    digitalWrite(ledPin, LOW);\n  }\n  delay(100);\n}",
+    "expectedOutput": "Pin 13 LED turns ON and Serial prints 'MOTION DETECTED!' whenever a person moves in front of the Fresnel lens."
+  }
+}

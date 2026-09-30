@@ -1,0 +1,164 @@
+{
+  "id": "proj_04",
+  "title": "Smart MONSTER Door",
+  "tagline": "Build a secret passcode door lock with keypad, servo latch, and access alarms!",
+  "tier": "builder",
+  "estimatedMinutes": 50,
+  "requiredComponents": [
+    "comp_06",
+    "comp_25",
+    "comp_34"
+  ],
+  "prerequisiteLessons": [
+    "lesson_03",
+    "lesson_07"
+  ],
+  "phases": [
+    {
+      "phaseNumber": 1,
+      "phaseTitle": "Gather Vault Hardware",
+      "type": "gatherParts",
+      "instructions": "Collect the 4x4 matrix keypad, SG90 micro-servo motor, servo horn, piezo buzzer, and breadboard.",
+      "verificationCheckpoints": [
+        "4x4 membrane keypad ribbon intact",
+        "SG90 servo with single-arm horn attached",
+        "Piezo buzzer ready"
+      ]
+    },
+    {
+      "phaseNumber": 2,
+      "phaseTitle": "Servo Latch & Keypad Wiring",
+      "type": "breadboardWiring",
+      "instructions": "Wire Keypad rows to pins 9-6, cols to pins 5-2. Connect Servo PWM signal to Pin 11 and Buzzer to Pin 12.",
+      "wiringConnections": [
+        {
+          "from": "Keypad R1-R4",
+          "to": "Pins 9, 8, 7, 6",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "Keypad C1-C4",
+          "to": "Pins 5, 4, 3, 2",
+          "wire": "Green",
+          "type": "digitalIn"
+        },
+        {
+          "from": "Servo Red",
+          "to": "Arduino 5V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "Servo Brown",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        },
+        {
+          "from": "Servo Orange",
+          "to": "Arduino Pin 11",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "Buzzer (+)",
+          "to": "Arduino Pin 12",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "Buzzer (-)",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        }
+      ],
+      "verificationCheckpoints": [
+        "Keypad pins matched sequentially",
+        "Servo Red wire to 5V, Brown to GND"
+      ]
+    },
+    {
+      "phaseNumber": 3,
+      "phaseTitle": "Pre-Flight Servo & Pin Check",
+      "type": "wiringCheck",
+      "instructions": "Make sure the servo arm has room to swing freely from 0 to 90 degrees without bumping into components.",
+      "verificationCheckpoints": [
+        "Servo arm moves freely",
+        "No power short on servo leads"
+      ]
+    },
+    {
+      "phaseNumber": 4,
+      "phaseTitle": "Code Walkthrough & Passcode Verification",
+      "type": "codeReview",
+      "instructions": "Inspect the keypad scanning routine and servo unlock deadbolt logic.",
+      "codeSnippet": "#include <Servo.h>\nServo lockServo;\nconst String SECRET_CODE = \"1234\";\nString enteredCode = \"\";\n\nvoid setup() {\n  Serial.begin(9600);\n  lockServo.attach(11);\n  lockServo.write(0); // Locked position\n}\n\nvoid loop() {\n  // Keypad scanning logic parses digits\n  // If enteredCode == SECRET_CODE:\n  // lockServo.write(90); delay(3000); lockServo.write(0);\n}",
+      "codeExplanation": "- SECRET_CODE stores the 4-digit master passkey.\n- lockServo.write(0) extends the deadbolt into the locked position.\n- Upon passcode match, lockServo.write(90) pulls back the bolt to open.",
+      "verificationCheckpoints": [
+        "Understand deadbolt angle positions (0 vs 90)",
+        "Understand passcode buffer matching"
+      ]
+    },
+    {
+      "phaseNumber": 5,
+      "phaseTitle": "Upload & Passcode Validation Test",
+      "type": "uploadSketch",
+      "instructions": "Upload sketch and tap digits '1234' on the keypad. The servo deadbolt should swing open for 3 seconds!",
+      "verificationCheckpoints": [
+        "Entering '1234' unlocks deadbolt",
+        "Wrong passcode sounds warning beep"
+      ]
+    },
+    {
+      "phaseNumber": 6,
+      "phaseTitle": "Mission Complete",
+      "type": "missionComplete",
+      "instructions": "Vault secured! You built a real physical access control system with matrix scanning and servo mechanics.",
+      "verificationCheckpoints": [
+        "Ready to claim Smart Security badge"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "proj_04_var_1",
+      "title": "Reverse Deadbolt Mechanism",
+      "description": "Invert servo throw angles (0 deg locked, 90 deg unlocked) and add auto-lock timer.",
+      "alternativeComponents": [
+        "comp_11"
+      ],
+      "wiringDifferences": "No wiring changes required",
+      "codeAdaptation": "Change servo.write(90) to servo.write(0) and track millis() for 10-second auto relock"
+    }
+  ],
+  "extensionMissions": [
+    {
+      "id": "proj_04_mis_1",
+      "title": "Lockout Tamper Penalty",
+      "objective": "Add a security lockout that disables keypad inputs for 60 seconds after 3 consecutive wrong passcodes.",
+      "difficulty": "builder",
+      "hints": [
+        "Keep a failedAttempts counter",
+        "When failedAttempts >= 3, record millis() and ignore key presses until 60,000ms elapse"
+      ],
+      "xpReward": 60
+    }
+  ],
+  "xpReward": 175,
+  "badgeRewardId": "badge_smart_security",
+  "story": "Protect your monster vault! Construct a motorized safe door featuring a 16-key matrix keypad, 9g micro-servo locking deadbolt, and wrong-passcode siren.",
+  "troubleshooting": [
+    {
+      "symptom": "Keypad presses do not register",
+      "cause": "Keypad ribbon inverted 180 degrees",
+      "solution": "Unplug the 8-pin keypad ribbon and reverse its pin connection.",
+      "category": "wiring",
+      "diagnosticSteps": [
+        "Verify ribbon cable row/column order against pin table.",
+        "Ensure keypad library #include <Keypad.h> is installed in Arduino IDE."
+      ]
+    }
+  ]
+}

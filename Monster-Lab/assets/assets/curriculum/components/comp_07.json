@@ -1,0 +1,61 @@
+{
+  "id": "comp_07",
+  "peripheralNumber": 7,
+  "name": "16x2 Character LCD with I2C",
+  "partNumber": "LCD1602-PCF8574",
+  "category": "display",
+  "description": "Like a digital nametag! Displays 32 letters/numbers over a simple two-wire I2C communication bus.",
+  "realWorldAnalogy": "Like a digital nametag! Displays 32 letters/numbers over a simple two-wire I2C communication bus.",
+  "voltage": "v5",
+  "pinout": [
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "5V Power"
+    },
+    {
+      "pinName": "SDA",
+      "type": "i2c",
+      "description": "I2C Data line (A4)"
+    },
+    {
+      "pinName": "SCL",
+      "type": "i2c",
+      "description": "I2C Clock line (A5)"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_05",
+    "proj_06",
+    "proj_07",
+    "proj_10",
+    "proj_11",
+    "proj_12",
+    "proj_13",
+    "proj_15",
+    "proj_18"
+  ],
+  "datasheetRef": "1602 I2C LCD.pdf",
+  "wiringGuidance": "Connect GND (Dark Slate) to GND, VCC (Red) to 5V, SDA (Blue) to Arduino pin A4, and SCL (Blue) to pin A5.",
+  "commonMistakes": [
+    "Not adjusting the blue contrast potentiometer on the back I2C backpack\u2014characters appear invisible!",
+    "Using incorrect I2C address (typically 0x27 or 0x3F)."
+  ],
+  "miniExperiment": {
+    "title": "I2C Hello World Display",
+    "circuit": "GND to GND, VCC to 5V, SDA to A4 (Blue), SCL to A5 (Blue).",
+    "code": "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n\nLiquidCrystal_I2C lcd(0x27, 16, 2);\n\nvoid setup() {\n  lcd.init();\n  lcd.backlight();\n  lcd.setCursor(0, 0);\n  lcd.print(\"Monster Lab!\");\n  lcd.setCursor(0, 1);\n  lcd.print(\"System Online\");\n}\n\nvoid loop() {}",
+    "expectedOutput": "The 16x2 LCD backlight illuminates and displays 'Monster Lab!' on line 1 and 'System Online' on line 2."
+  }
+}

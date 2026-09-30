@@ -1,0 +1,26 @@
+{
+  "id": "chal_06",
+  "title": "The Ghost Button Trigger",
+  "type": "explainWhatHappened",
+  "difficulty": "builder",
+  "prompt": "A pushbutton is wired between Pin 2 and GND. In the code, pinMode(2, INPUT) was used. When you wave your hand near the wire, the Arduino randomly triggers button presses! Why?",
+  "codeSnippet": "pinMode(2, INPUT); // Button between pin 2 and GND\nif (digitalRead(2) == LOW) { /* triggers randomly! */ }",
+  "challengeData": {
+    "options": [
+      "Static electricity in your hand broke the microcontroller",
+      "The pin is 'floating' without a pull-up resistor, picking up ambient electromagnetic noise",
+      "Pin 2 is reserved for serial communication",
+      "The pushbutton requires 9V to latch properly"
+    ]
+  },
+  "hint": "An unconnected input pin acts like an antenna.",
+  "hints": [
+    "An unconnected input pin acts like an antenna.",
+    "Without a pull-up or pull-down resistor, the voltage is indeterminate."
+  ],
+  "explanation": "An input pin with no resistor floats between 0V and 5V, picking up electromagnetic noise. Using pinMode(2, INPUT_PULLUP) activates the internal 20k pull-up resistor to stabilize it.",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 40
+}

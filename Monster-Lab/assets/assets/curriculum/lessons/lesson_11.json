@@ -1,0 +1,49 @@
+{
+  "id": "lesson_11",
+  "title": "Serial UART & Wireless Communication",
+  "summary": "Connect Arduinos to computers, Bluetooth modules, and GPS with asynchronous TX/RX serial streams.",
+  "tier": "engineer",
+  "estimatedMinutes": 30,
+  "prerequisites": [
+    "lesson_04"
+  ],
+  "componentIds": [
+    "comp_29"
+  ],
+  "steps": [
+    {
+      "stepId": "l11_s01",
+      "title": "Asynchronous Streams",
+      "type": "story",
+      "markdownContent": "UART serial needs no shared clock line! Both devices simply agree on a common speed (the **Baud Rate**, such as 9600 or 115200 bits per second)."
+    },
+    {
+      "stepId": "l11_s02",
+      "title": "Crossed Wires: TX to RX",
+      "type": "visualExplanation",
+      "markdownContent": "Always cross serial wires: Arduino's `TX` (Transmit) connects to the peripheral's `RX` (Receive), and peripheral `TX` connects to Arduino `RX`!"
+    },
+    {
+      "stepId": "l11_s03",
+      "title": "SoftwareSerial for Modules",
+      "type": "codeExperiment",
+      "markdownContent": "Pins 0 and 1 are used by the USB cable for programming. To talk to Bluetooth (HC-05), we use the `<SoftwareSerial.h>` library on pins 10 and 11!"
+    },
+    {
+      "stepId": "l11_s04",
+      "title": "UART Checkpoint",
+      "type": "quizCheckpoint",
+      "markdownContent": "What happens if two devices attempt to communicate with mismatched baud rates (e.g. 9600 vs 115200)?",
+      "interactiveConfig": {
+        "question": "What happens when baud rates do not match?",
+        "options": [
+          "Garbled characters or complete silence",
+          "The board gets too hot",
+          "The code fails to compile"
+        ],
+        "correctIndex": 0
+      }
+    }
+  ],
+  "xpReward": 90
+}

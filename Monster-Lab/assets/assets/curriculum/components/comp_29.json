@@ -1,0 +1,63 @@
+{
+  "id": "comp_29",
+  "peripheralNumber": 29,
+  "name": "UART Bluetooth Serial Module",
+  "partNumber": "HC-05",
+  "category": "communication",
+  "description": "Like a wireless serial cable! Links your phone or computer to the Arduino using Bluetooth radio.",
+  "realWorldAnalogy": "Like a wireless serial cable! Links your phone or computer to the Arduino using Bluetooth radio.",
+  "voltage": "dual",
+  "pinout": [
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "Power (3.6V-6V)"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "TXD",
+      "type": "uart",
+      "description": "UART Serial Transmit"
+    },
+    {
+      "pinName": "RXD",
+      "type": "uart",
+      "description": "UART Serial Receive (3.3V logic)"
+    },
+    {
+      "pinName": "STATE",
+      "type": "digitalIn",
+      "description": "Connection state"
+    },
+    {
+      "pinName": "EN",
+      "type": "digitalOut",
+      "description": "AT command mode enable"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_18"
+  ],
+  "datasheetRef": "IR-Receiver-AX-1838HS .pdf",
+  "wiringGuidance": "Connect VCC (Red) to 5V, GND (Dark Slate) to GND, TXD (Purple) to Pin 2, and RXD (Purple) through a voltage divider to Pin 3.",
+  "commonMistakes": [
+    "Connecting Arduino 5V TX directly to HC-05 RXD without a voltage divider.",
+    "Leaving Bluetooth connected to pins 0 and 1 while uploading sketches."
+  ],
+  "miniExperiment": {
+    "title": "Bluetooth Serial Echo",
+    "circuit": "VCC to 5V, GND to GND, TX to Pin 2, RX via divider to Pin 3.",
+    "code": "#include <SoftwareSerial.h>\nSoftwareSerial btSerial(2, 3);\n\nvoid setup() {\n  Serial.begin(9600);\n  btSerial.begin(9600);\n  Serial.println(\"Bluetooth Ready\");\n}\n\nvoid loop() {\n  if (btSerial.available()) Serial.write(btSerial.read());\n  if (Serial.available()) btSerial.write(Serial.read());\n}",
+    "expectedOutput": "Messages sent from a Bluetooth terminal smartphone app appear in the Serial Monitor."
+  }
+}

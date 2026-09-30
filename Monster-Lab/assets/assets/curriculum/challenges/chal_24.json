@@ -1,0 +1,25 @@
+{
+  "id": "chal_24",
+  "title": "Soil Sensor Electrolysis Prevention",
+  "type": "buildFromGoal",
+  "difficulty": "builder",
+  "prompt": "Resistive soil moisture probes rapidly corrode away due to electrochemical galvanic action when powered continuously. What hardware and code design prevents this erosion?",
+  "challengeData": {
+    "options": [
+      "Coat the entire sensor in thick waterproof electrical tape",
+      "Power the sensor VCC from an Arduino digital pin, only driving it HIGH for 10ms during sampling then setting it LOW",
+      "Run the sensor on 12V instead of 5V",
+      "Submerge the probe in saltwater"
+    ]
+  },
+  "hint": "Only apply electrical current when taking a measurement.",
+  "hints": [
+    "Only apply electrical current when taking a measurement.",
+    "Powering VCC via a digital GPIO pin lets you switch off DC current between readings."
+  ],
+  "explanation": "By powering the probe from a digital pin (e.g. Pin 7) and only setting it HIGH for 10 milliseconds during analogRead(), the DC current exposure is reduced by 99.9%, preserving probe metal for years.",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 60
+}

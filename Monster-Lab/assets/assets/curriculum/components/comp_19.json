@@ -1,0 +1,44 @@
+{
+  "id": "comp_19",
+  "peripheralNumber": 19,
+  "name": "Light Dependent Resistor (LDR)",
+  "partNumber": "CDS-55",
+  "category": "sensor",
+  "description": "Like a pupil! Resistance drops dramatically when light hits it, allowing light level tracking.",
+  "realWorldAnalogy": "Like a pupil! Resistance drops dramatically when light hits it, allowing light level tracking.",
+  "voltage": "dual",
+  "pinout": [
+    {
+      "pinName": "PIN1",
+      "type": "passive",
+      "description": "Resistor terminal 1"
+    },
+    {
+      "pinName": "PIN2",
+      "type": "passive",
+      "description": "Resistor terminal 2"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_12",
+    "proj_16"
+  ],
+  "datasheetRef": "CDS-55 Photoresistor.pdf",
+  "wiringGuidance": "Connect one leg of LDR to 5V (Red). Connect the second leg to analog pin A0 (Yellow) and through a 10k resistor to GND (Dark Slate).",
+  "commonMistakes": [
+    "Omitting the series 10k fixed resistor, creating a short circuit when exposed to bright light.",
+    "Using digitalRead instead of analogRead."
+  ],
+  "miniExperiment": {
+    "title": "Light & Shadow Theremin",
+    "circuit": "5V -> LDR -> Pin A0 -> 10k resistor -> GND.",
+    "code": "void setup() {\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  int lightVal = analogRead(A0);\n  Serial.print(\"Light Level: \");\n  Serial.println(lightVal);\n  delay(100);\n}",
+    "expectedOutput": "Outputs 600-900 in room light, falling below 150 when you cover the LDR with your palm."
+  }
+}

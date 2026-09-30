@@ -1,0 +1,40 @@
+{
+  "id": "lesson_06",
+  "title": "Potentiometer: Reading Analog Signals",
+  "summary": "Convert physical rotation into digital numbers! Discover the 10-bit Analog to Digital Converter (ADC).",
+  "tier": "rookie",
+  "estimatedMinutes": 30,
+  "prerequisites": [
+    "lesson_05"
+  ],
+  "componentIds": [
+    "comp_20"
+  ],
+  "steps": [
+    {
+      "stepId": "l06_s01",
+      "title": "Analog vs Digital",
+      "type": "story",
+      "markdownContent": "While digital is just ON or OFF, the physical world has smooth gradients\u2014like volume, temperature, and speed. Analog pins measure these shades!"
+    },
+    {
+      "stepId": "l06_s02",
+      "title": "The Voltage Divider Knob",
+      "type": "visualExplanation",
+      "markdownContent": "A potentiometer has 3 pins: 5V, Ground, and a middle wiper pin. Turning the knob slides the wiper along a resistive track, outputting 0V to 5V."
+    },
+    {
+      "stepId": "l06_s03",
+      "title": "Breadboard Wiring",
+      "type": "interactiveWiring",
+      "markdownContent": "Connect the outer pins of the potentiometer to 5V and GND, and connect the center wiper pin to Arduino analog pin `A0`."
+    },
+    {
+      "stepId": "l06_s04",
+      "title": "ADC Math (0 to 1023)",
+      "type": "codeExperiment",
+      "markdownContent": "The Arduino converts 0V-5V into a number from 0 to 1023 (10 bits = 2^10 = 1024 steps). `int val = analogRead(A0);` captures the knob position!"
+    }
+  ],
+  "xpReward": 80
+}

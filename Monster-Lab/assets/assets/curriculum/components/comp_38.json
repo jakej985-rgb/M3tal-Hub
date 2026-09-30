@@ -1,0 +1,48 @@
+{
+  "id": "comp_38",
+  "peripheralNumber": 38,
+  "name": "Magnetic Field Hall Effect Sensor",
+  "partNumber": "3144",
+  "category": "sensor",
+  "description": "Like a magnetic compass detector! Senses proximity of permanent magnetic fields (neodymium magnets).",
+  "realWorldAnalogy": "Like a magnetic compass detector! Senses proximity of permanent magnetic fields (neodymium magnets).",
+  "voltage": "v5",
+  "pinout": [
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "Power (4.5V-24V)"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "OUT",
+      "type": "digitalIn",
+      "description": "Digital magnetic presence trigger"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_19"
+  ],
+  "datasheetRef": "Button.pdf",
+  "wiringGuidance": "Connect VCC (Red) to 5V, GND (Dark Slate) to GND, and OUT (Green) to digital pin 2 with a 10k pull-up resistor to 5V.",
+  "commonMistakes": [
+    "Omitting the 10k pull-up resistor (the 3144 has an open-collector output).",
+    "Testing with the wrong magnetic pole (3144 detects South magnetic poles only)."
+  ],
+  "miniExperiment": {
+    "title": "Magnetic Field Detector",
+    "circuit": "VCC to 5V, GND to GND, OUT to Pin 2 with 10k pullup.",
+    "code": "const int hallPin = 2;\n\nvoid setup() {\n  pinMode(hallPin, INPUT_PULLUP);\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  if (digitalRead(hallPin) == LOW) {\n    Serial.println(\"MAGNET DETECTED!\");\n    delay(200);\n  }\n}",
+    "expectedOutput": "Approaching the sensor with the South pole of a magnet triggers 'MAGNET DETECTED!' in Serial Monitor."
+  }
+}

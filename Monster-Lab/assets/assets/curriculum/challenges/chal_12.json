@@ -1,0 +1,26 @@
+{
+  "id": "chal_12",
+  "title": "Hardware Interrupt Pin Trap",
+  "type": "debugLogic",
+  "difficulty": "engineer",
+  "prompt": "A student writes `attachInterrupt(digitalPinToInterrupt(7), onMotion, RISING);` on an Arduino Uno (ATmega328P), but the interrupt service routine never fires when sensor Pin 7 goes HIGH. Why?",
+  "codeSnippet": "void setup() {\n  pinMode(7, INPUT);\n  attachInterrupt(digitalPinToInterrupt(7), onMotion, RISING);\n}",
+  "challengeData": {
+    "options": [
+      "Pin 7 is an output-only pin",
+      "The Arduino Uno hardware external interrupts are strictly limited to pins 2 and 3",
+      "Interrupt routines require delay(100) inside them",
+      "The RISING parameter must always be CHANGE"
+    ]
+  },
+  "hint": "Check the Arduino Uno hardware specs for external interrupt pins.",
+  "hints": [
+    "Check the Arduino Uno hardware specs for external interrupt pins.",
+    "Uno only supports hardware external interrupts on pins 2 and 3."
+  ],
+  "explanation": "On the Arduino Uno (ATmega328P), only digital pins 2 (Interrupt 0) and 3 (Interrupt 1) support hardware external interrupts via `attachInterrupt`.",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 50
+}

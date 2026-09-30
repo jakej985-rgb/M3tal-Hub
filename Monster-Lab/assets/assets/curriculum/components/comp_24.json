@@ -1,0 +1,58 @@
+{
+  "id": "comp_24",
+  "peripheralNumber": 24,
+  "name": "Quadrature Rotary Encoder",
+  "partNumber": "KY-040",
+  "category": "sensor",
+  "description": "Like an endless digital knob! Outputs quadrature pulses to measure clicks, speed, and direction of rotation.",
+  "realWorldAnalogy": "Like an endless digital knob! Outputs quadrature pulses to measure clicks, speed, and direction of rotation.",
+  "voltage": "v5",
+  "pinout": [
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "+",
+      "type": "power",
+      "description": "5V Power"
+    },
+    {
+      "pinName": "SW",
+      "type": "digitalIn",
+      "description": "Pushbutton switch"
+    },
+    {
+      "pinName": "DT",
+      "type": "digitalIn",
+      "description": "Encoder Channel B"
+    },
+    {
+      "pinName": "CLK",
+      "type": "digitalIn",
+      "description": "Encoder Channel A"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_10"
+  ],
+  "datasheetRef": "Rotary Encoder module.pdf",
+  "wiringGuidance": "Connect GND (Dark Slate) to GND, + (Red) to 5V, CLK (Green) to Pin 2, DT (Green) to Pin 3, and SW (Green) to Pin 4.",
+  "commonMistakes": [
+    "Missing switch debounce filtering in software, causing erratic count jumps.",
+    "Swapping CLK and DT, which inverts rotation direction."
+  ],
+  "miniExperiment": {
+    "title": "Endless Dial Counter",
+    "circuit": "GND to GND, + to 5V, CLK to Pin 2, DT to Pin 3.",
+    "code": "const int pinA = 2;\nconst int pinB = 3;\nint counter = 0;\nint lastStateA;\n\nvoid setup() {\n  pinMode(pinA, INPUT);\n  pinMode(pinB, INPUT);\n  Serial.begin(9600);\n  lastStateA = digitalRead(pinA);\n}\n\nvoid loop() {\n  int stateA = digitalRead(pinA);\n  if (stateA != lastStateA && stateA == 1) {\n    if (digitalRead(pinB) != stateA) counter++;\n    else counter--;\n    Serial.print(\"Position: \");\n    Serial.println(counter);\n  }\n  lastStateA = stateA;\n}",
+    "expectedOutput": "Rotating the knob clockwise increases position in Serial Monitor; counter-clockwise decreases it."
+  }
+}

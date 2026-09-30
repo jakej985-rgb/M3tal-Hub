@@ -1,0 +1,172 @@
+{
+  "id": "proj_12",
+  "title": "Weather & Water Reservoir Station",
+  "tagline": "Environmental science lab! Monitor rainfall, water depth, temp, and trigger automated floodgates.",
+  "tier": "engineer",
+  "estimatedMinutes": 70,
+  "requiredComponents": [
+    "comp_07",
+    "comp_09",
+    "comp_22",
+    "comp_25",
+    "comp_35"
+  ],
+  "prerequisiteLessons": [
+    "lesson_06"
+  ],
+  "phases": [
+    {
+      "phaseNumber": 1,
+      "phaseTitle": "Gather Hydrological Sensors",
+      "type": "gatherParts",
+      "instructions": "Collect the DHT11 temp/humidity sensor, FC-37 rain sensor module, Water Level depth sensor, 1602 LCD, and SG90 servo floodgate.",
+      "verificationCheckpoints": [
+        "DHT11 blue digital temperature/humidity sensor ready",
+        "FC-37 nickel-plated rain sensor board ready",
+        "Submersible water depth sensor plate ready",
+        "SG90 servo motor ready"
+      ]
+    },
+    {
+      "phaseNumber": 2,
+      "phaseTitle": "Sensor Matrix Wiring",
+      "type": "breadboardWiring",
+      "instructions": "Wire DHT11 to Pin 2, Rain Sensor Analog to A1, Water Depth Sensor to A2, Servo to Pin 9, and LCD to A4/A5.",
+      "wiringConnections": [
+        {
+          "from": "DHT11 DATA",
+          "to": "Arduino Pin 2",
+          "wire": "Green",
+          "type": "digitalIn"
+        },
+        {
+          "from": "DHT11 VCC",
+          "to": "Arduino 5V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "DHT11 GND",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        },
+        {
+          "from": "Rain Plate A0",
+          "to": "Arduino Pin A1",
+          "wire": "Yellow",
+          "type": "analogIn"
+        },
+        {
+          "from": "Water Level S",
+          "to": "Arduino Pin A2",
+          "wire": "Yellow",
+          "type": "analogIn"
+        },
+        {
+          "from": "Servo PWM",
+          "to": "Arduino Pin 9",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "LCD SDA",
+          "to": "Arduino Pin A4",
+          "wire": "Blue",
+          "type": "i2c"
+        },
+        {
+          "from": "LCD SCL",
+          "to": "Arduino Pin A5",
+          "wire": "Blue",
+          "type": "i2c"
+        }
+      ],
+      "verificationCheckpoints": [
+        "Rain sensor in A1, Water depth in A2",
+        "DHT11 data line has 10k pull-up resistor or onboard module resistor"
+      ]
+    },
+    {
+      "phaseNumber": 3,
+      "phaseTitle": "Pre-Flight Waterproof Inspection",
+      "type": "wiringCheck",
+      "instructions": "WATER SAFETY CHECK: Only the sensing traces of the water probe may touch water. Never submerge the Arduino board, breadboard, or servo motor in liquid!",
+      "verificationCheckpoints": [
+        "Breadboard and Arduino kept on dry towel",
+        "Water cup kept separate from electronics"
+      ]
+    },
+    {
+      "phaseNumber": 4,
+      "phaseTitle": "Code Walkthrough & Reservoir Management",
+      "type": "codeReview",
+      "instructions": "Review how the Arduino monitors rain presence and reservoir depth, triggering emergency floodgate evacuation if critical depth is reached.",
+      "codeSnippet": "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n#include <Servo.h>\n\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nServo floodgateServo;\nconst int RAIN_PIN = A1;\nconst int WATER_PIN = A2;\nconst int FLOOD_LIMIT = 450;\n\nvoid setup() {\n  lcd.init(); lcd.backlight();\n  floodgateServo.attach(9);\n  floodgateServo.write(0); // Gate sealed\n}\n\nvoid loop() {\n  int rainVal = analogRead(RAIN_PIN);\n  int waterLevel = analogRead(WATER_PIN);\n\n  lcd.setCursor(0, 0);\n  lcd.print(\"Water: \"); lcd.print(waterLevel);\n  lcd.print(\" Rain: \"); lcd.print(rainVal < 600 ? \"Y\" : \"N\");\n\n  if (waterLevel > FLOOD_LIMIT) {\n    lcd.setCursor(0, 1);\n    lcd.print(\"FLOODGATE OPEN! \");\n    floodgateServo.write(90); // Open spillway\n  } else {\n    lcd.setCursor(0, 1);\n    lcd.print(\"RESERVOIR SAFE  \");\n    floodgateServo.write(0);  // Close spillway\n  }\n  delay(500);\n}",
+      "codeExplanation": "- FC-37 resistance drops when water droplets bridge the nickel tracks (rainVal < 600 indicates rain).\n- Water level probe acts as variable resistor immersed in water (higher water = higher analog reading).\n- When waterLevel exceeds FLOOD_LIMIT (450), the servo gate swings 90 degrees to release water.",
+      "verificationCheckpoints": [
+        "Understand how water conductivity decreases electrical resistance",
+        "Understand automated threshold protective response"
+      ]
+    },
+    {
+      "phaseNumber": 5,
+      "phaseTitle": "Upload & Spillway Verification Test",
+      "type": "uploadSketch",
+      "instructions": "Upload sketch. Dip water probe into a shallow cup of water. When depth exceeds threshold, verify servo floodgate swings open!",
+      "verificationCheckpoints": [
+        "LCD displays live water level",
+        "Dipping probe past threshold opens floodgate servo"
+      ]
+    },
+    {
+      "phaseNumber": 6,
+      "phaseTitle": "Mission Complete",
+      "type": "missionComplete",
+      "instructions": "Reservoir protected! You built an automated environmental civil engineering defense station.",
+      "verificationCheckpoints": [
+        "Ready to claim Earth Scientist badge"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "proj_12_var_1",
+      "title": "Reservoir Auto-Fill Sump",
+      "description": "Use the water level sensor to control an inlet relay solenoid rather than a drain pump.",
+      "alternativeComponents": [
+        "comp_36"
+      ],
+      "wiringDifferences": "Connect relay module to Pin 7 to drive 12V pump solenoid",
+      "codeAdaptation": "Invert logic: energize relay when water < 300, de-energize when water > 700"
+    }
+  ],
+  "extensionMissions": [
+    {
+      "id": "proj_12_mis_1",
+      "title": "Electrolysis Protection Pulse",
+      "objective": "Prevent probe corrosion by only supplying power to the water sensor trace for 10ms right before analogRead().",
+      "difficulty": "engineer",
+      "hints": [
+        "Power sensor VCC from digital pin 6 instead of 5V rail",
+        "digitalWrite(6, HIGH); delay(10); analogRead(A0); digitalWrite(6, LOW);"
+      ],
+      "xpReward": 75
+    }
+  ],
+  "xpReward": 240,
+  "badgeRewardId": "badge_earth_scientist",
+  "story": "Build an Automated Environmental & Floodgate Station! Monitor environmental conditions with DHT11 temperature/humidity, FC-37 raindrop plate, and water level depth sensor. If rainfall exceeds capacity, an emergency servo floodgate opens automatically.",
+  "troubleshooting": [
+    {
+      "symptom": "Water level reading is erratic or fluctuating wildly",
+      "cause": "Sensing traces have corrosion or static pickup",
+      "solution": "Dry probe with paper towel, and connect probe GND directly to Arduino main ground pin.",
+      "category": "wiring",
+      "diagnosticSteps": [
+        "Wipe trace electrodes dry with paper towel.",
+        "Verify analog pin A0 wire has good breadboard grip."
+      ]
+    }
+  ]
+}

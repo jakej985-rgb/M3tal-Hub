@@ -1,0 +1,177 @@
+{
+  "id": "proj_08",
+  "title": "Electric Motor Control MONSTER",
+  "tagline": "Take command of dual mechanical power! Control DC motor speed and stepper angles with an analog joystick.",
+  "tier": "engineer",
+  "estimatedMinutes": 60,
+  "requiredComponents": [
+    "comp_20",
+    "comp_21",
+    "comp_27",
+    "comp_33"
+  ],
+  "prerequisiteLessons": [
+    "lesson_06",
+    "lesson_07"
+  ],
+  "phases": [
+    {
+      "phaseNumber": 1,
+      "phaseTitle": "Gather Motor Drivers",
+      "type": "gatherParts",
+      "instructions": "Collect the 28BYJ-48 Stepper Motor + ULN2003 Driver Board, 130 DC Motor + L293D Driver IC, Analog Joystick module, and 10k potentiometer.",
+      "verificationCheckpoints": [
+        "28BYJ-48 5V stepper motor ready",
+        "ULN2003 driver board with 4 red indicator LEDs ready",
+        "L293D dual H-bridge motor driver chip ready",
+        "Analog thumb joystick ready"
+      ]
+    },
+    {
+      "phaseNumber": 2,
+      "phaseTitle": "Driver Shield & Joystick Wiring",
+      "type": "breadboardWiring",
+      "instructions": "Connect ULN2003 inputs to pins 8-11. Connect L293D PWM enable to Pin 5 and direction to Pin 4. Connect Joystick X to A0 and Y to A1.",
+      "wiringConnections": [
+        {
+          "from": "ULN2003 IN1-IN4",
+          "to": "Pins 8, 9, 10, 11",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "ULN2003 VCC",
+          "to": "Arduino 5V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "ULN2003 GND",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        },
+        {
+          "from": "L293D Enable 1 (PWM)",
+          "to": "Arduino Pin 5",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "L293D IN1 (Dir)",
+          "to": "Arduino Pin 4",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "Joystick X",
+          "to": "Arduino Pin A0",
+          "wire": "Yellow",
+          "type": "analogIn"
+        },
+        {
+          "from": "Joystick Y",
+          "to": "Arduino Pin A1",
+          "wire": "Yellow",
+          "type": "analogIn"
+        },
+        {
+          "from": "Joystick VCC",
+          "to": "Arduino 5V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "Joystick GND",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        }
+      ],
+      "verificationCheckpoints": [
+        "ULN2003 stepper inputs matched sequentially",
+        "Joystick connected to A0 and A1"
+      ]
+    },
+    {
+      "phaseNumber": 3,
+      "phaseTitle": "Pre-Flight Motor Power Isolation",
+      "type": "wiringCheck",
+      "instructions": "Check that the DC motor has a flyback suppression capacitor or diode across its terminals to prevent inductive voltage spikes from damaging the Arduino.",
+      "verificationCheckpoints": [
+        "Motor wiring clear of breadboard shorts",
+        "Motor shafts free to spin without obstruction"
+      ]
+    },
+    {
+      "phaseNumber": 4,
+      "phaseTitle": "Code Walkthrough & Dual Actuation",
+      "type": "codeReview",
+      "instructions": "Study how Stepper library generates 4-phase step sequences while analogRead maps joystick displacement to PWM motor speed.",
+      "codeSnippet": "#include <Stepper.h>\n\nconst int STEPS_PER_REV = 2048;\nStepper myStepper(STEPS_PER_REV, 8, 10, 9, 11);\nconst int DC_PWM_PIN = 5;\nconst int DC_DIR_PIN = 4;\n\nvoid setup() {\n  myStepper.setSpeed(10);\n  pinMode(DC_PWM_PIN, OUTPUT);\n  pinMode(DC_DIR_PIN, OUTPUT);\n}\n\nvoid loop() {\n  int joyX = analogRead(A0);\n  int joyY = analogRead(A1);\n\n  // Stepper positioning via X-axis\n  if (joyX > 600) myStepper.step(20);\n  else if (joyX < 400) myStepper.step(-20);\n\n  // DC motor throttle via Y-axis\n  int speed = map(abs(joyY - 512), 50, 512, 0, 255);\n  speed = constrain(speed, 0, 255);\n  digitalWrite(DC_DIR_PIN, joyY > 512 ? HIGH : LOW);\n  analogWrite(DC_PWM_PIN, speed);\n}",
+      "codeExplanation": "- myStepper(2048, 8, 10, 9, 11) initializes 4-step sequence for internal 64:1 reduction gearing.\n- Pushing joystick X left/right steps the motor in discrete micro-steps.\n- Pushing joystick Y controls DC motor PWM speed and rotational direction.",
+      "verificationCheckpoints": [
+        "Understand difference between continuous DC rotation vs discrete stepper stepping",
+        "Understand PWM speed control with analogWrite"
+      ]
+    },
+    {
+      "phaseNumber": 5,
+      "phaseTitle": "Upload & Flight Control Test",
+      "type": "uploadSketch",
+      "instructions": "Upload sketch and maneuver joystick in all directions to verify simultaneous stepper indexing and DC motor variable throttle.",
+      "verificationCheckpoints": [
+        "Stepper indexes smoothly with joystick X",
+        "DC motor accelerates smoothly with joystick Y"
+      ]
+    },
+    {
+      "phaseNumber": 6,
+      "phaseTitle": "Mission Complete",
+      "type": "missionComplete",
+      "instructions": "Command deck operational! You mastered multi-motor control across both continuous and stepper domains.",
+      "verificationCheckpoints": [
+        "Ready to claim Motor Dynamo badge"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "proj_08_var_1",
+      "title": "Encoder Speed Controller",
+      "description": "Replace standard potentiometer with a rotary encoder for detented digital speed steps.",
+      "alternativeComponents": [
+        "comp_24"
+      ],
+      "wiringDifferences": "Connect rotary encoder CLK to Pin 2 and DT to Pin 3",
+      "codeAdaptation": "Use pin change interrupts or polling to increment/decrement PWM duty cycle"
+    }
+  ],
+  "extensionMissions": [
+    {
+      "id": "proj_08_mis_1",
+      "title": "Soft-Start Ramp Profiler",
+      "objective": "Prevent motor stall and current spikes by smoothly accelerating motor PWM from 0 to target speed over 1.5 seconds.",
+      "difficulty": "builder",
+      "hints": [
+        "Use a timer loop to increment PWM by 5 every 30ms until reaching targetPWM"
+      ],
+      "xpReward": 70
+    }
+  ],
+  "xpReward": 200,
+  "badgeRewardId": "badge_motor_dynamo",
+  "story": "Build a Dual Motor Control command deck! Harness analog joystick vectors to drive both a high-speed DC motor (via L293D H-Bridge driver) and a precision 28BYJ-48 stepper motor (via ULN2003 Darlington array).",
+  "troubleshooting": [
+    {
+      "symptom": "Stepper motor vibrates and buzzes but does not rotate",
+      "cause": "Sequence coil pins 9 and 10 are reversed in stepper constructor",
+      "solution": "Use pin order (8, 10, 9, 11) in Stepper constructor for 28BYJ-48 motors.",
+      "category": "wiring",
+      "diagnosticSteps": [
+        "Check 4-phase sequence wires (IN1 to IN4) on driver board.",
+        "Ensure 5V power supply has enough current (>500mA)."
+      ]
+    }
+  ]
+}

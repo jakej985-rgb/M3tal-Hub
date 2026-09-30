@@ -1,0 +1,26 @@
+{
+  "id": "chal_22",
+  "title": "Hall Effect RPM Calculation",
+  "type": "changeCode",
+  "difficulty": "engineer",
+  "prompt": "A 3144 Hall effect sensor detects 2 magnet passes per motor shaft revolution. An interrupt counts 120 pulses over a 1000ms sampling window. What is the calculated motor RPM?",
+  "codeSnippet": "volatile int pulses = 0;\n// 120 pulses counted in 1000 ms\n// 2 pulses per revolution\nint rpm = ???;",
+  "challengeData": {
+    "options": [
+      "1200 RPM",
+      "3600 RPM",
+      "7200 RPM",
+      "240 RPM"
+    ]
+  },
+  "hint": "Revolutions = pulses / 2. Then scale from seconds to minutes (x 60).",
+  "hints": [
+    "Revolutions = pulses / 2. Then scale from seconds to minutes (x 60).",
+    "120 pulses / 2 = 60 revs in 1 second. 60 revs/sec * 60 sec/min = ?"
+  ],
+  "explanation": "120 pulses / 2 pulses_per_rev = 60 revolutions per second. 60 rev/s * 60 seconds/minute = 3600 RPM.",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 65
+}

@@ -1,0 +1,149 @@
+{
+  "id": "proj_10",
+  "title": "Oil Drill Rig MONSTER",
+  "tagline": "Industrial heavy machinery! Control stepper drilling depth with a rotary click encoder and LCD telemetry.",
+  "tier": "engineer",
+  "estimatedMinutes": 75,
+  "requiredComponents": [
+    "comp_07",
+    "comp_24",
+    "comp_27",
+    "comp_25"
+  ],
+  "prerequisiteLessons": [
+    "lesson_06",
+    "lesson_07"
+  ],
+  "phases": [
+    {
+      "phaseNumber": 1,
+      "phaseTitle": "Gather Drill Rig Components",
+      "type": "gatherParts",
+      "instructions": "Collect the KY-040 Rotary Encoder module, 28BYJ-48 Stepper Motor + ULN2003 driver, 1602 I2C LCD display, and breadboard.",
+      "verificationCheckpoints": [
+        "KY-040 rotary click encoder ready",
+        "28BYJ-48 Stepper with reduction gear shaft ready",
+        "ULN2003 driver board ready",
+        "1602 LCD with I2C backpack ready"
+      ]
+    },
+    {
+      "phaseNumber": 2,
+      "phaseTitle": "Rig Telemetry & Driver Wiring",
+      "type": "breadboardWiring",
+      "instructions": "Connect Rotary Encoder CLK to Pin 2 and DT to Pin 3 (hardware interrupt pins). Connect ULN2003 driver to pins 8-11 and LCD to A4/A5.",
+      "wiringConnections": [
+        {
+          "from": "Encoder CLK",
+          "to": "Arduino Pin 2 (INT0)",
+          "wire": "Green",
+          "type": "digitalIn"
+        },
+        {
+          "from": "Encoder DT",
+          "to": "Arduino Pin 3 (INT1)",
+          "wire": "Green",
+          "type": "digitalIn"
+        },
+        {
+          "from": "Encoder SW (Button)",
+          "to": "Arduino Pin 4",
+          "wire": "Green",
+          "type": "digitalIn"
+        },
+        {
+          "from": "Encoder VCC",
+          "to": "Arduino 5V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "Encoder GND",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        },
+        {
+          "from": "ULN2003 IN1-IN4",
+          "to": "Pins 8, 10, 9, 11",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "LCD SDA",
+          "to": "Arduino Pin A4",
+          "wire": "Blue",
+          "type": "i2c"
+        },
+        {
+          "from": "LCD SCL",
+          "to": "Arduino Pin A5",
+          "wire": "Blue",
+          "type": "i2c"
+        }
+      ],
+      "verificationCheckpoints": [
+        "Encoder CLK connected specifically to Pin 2 for hardware interrupt support",
+        "LCD on A4/A5"
+      ]
+    },
+    {
+      "phaseNumber": 3,
+      "phaseTitle": "Pre-Flight Rig Safety Check",
+      "type": "wiringCheck",
+      "instructions": "Ensure the drill bit shaft has vertical clearance to lower and raise without snagging cables.",
+      "verificationCheckpoints": [
+        "Stepper wires not tangled",
+        "Encoder knob clicks cleanly in both directions"
+      ]
+    },
+    {
+      "phaseNumber": 4,
+      "phaseTitle": "Code Walkthrough & Quadrature Decoding",
+      "type": "codeReview",
+      "instructions": "Examine how hardware interrupts on Pin 2 decode 2-bit Gray code quadrature pulses to determine rotation direction.",
+      "codeSnippet": "#include <Stepper.h>\n#include <LiquidCrystal_I2C.h>\n\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nStepper drillStepper(2048, 8, 10, 9, 11);\nconst int ENCODER_CLK = 2;\nconst int ENCODER_DT = 3;\nvolatile int drillDepthMm = 0;\n\nvoid readEncoder() {\n  int dtVal = digitalRead(ENCODER_DT);\n  if (dtVal == HIGH) drillDepthMm++;\n  else drillDepthMm--;\n}\n\nvoid setup() {\n  lcd.init(); lcd.backlight();\n  drillStepper.setSpeed(12);\n  pinMode(ENCODER_CLK, INPUT_PULLUP);\n  pinMode(ENCODER_DT, INPUT_PULLUP);\n  attachInterrupt(digitalPinToInterrupt(ENCODER_CLK), readEncoder, FALLING);\n}\n\nvoid loop() {\n  lcd.setCursor(0, 0);\n  lcd.print(\"DRILL DEPTH:    \");\n  lcd.setCursor(0, 1);\n  lcd.print(drillDepthMm);\n  lcd.print(\" mm            \");\n  delay(100);\n}",
+      "codeExplanation": "- attachInterrupt() executes readEncoder immediately whenever CLK falls, with zero missed clicks.\n- Checking DT state determines whether rotation was clockwise (drilling down) or counter-clockwise (retracting).\n- LCD renders depth telemetry in real time.",
+      "verificationCheckpoints": [
+        "Understand how 90-degree phase shift in quadrature pulses indicates direction",
+        "Understand why hardware interrupts prevent missed encoder steps"
+      ]
+    },
+    {
+      "phaseNumber": 5,
+      "phaseTitle": "Upload & Drilling Simulation Test",
+      "type": "uploadSketch",
+      "instructions": "Upload code, turn the rotary knob clockwise to lower drill bit, and push the knob down to trigger high-speed auto-retract!",
+      "verificationCheckpoints": [
+        "Clockwise rotation increments depth readout",
+        "Counter-clockwise rotation decrements depth"
+      ]
+    },
+    {
+      "phaseNumber": 6,
+      "phaseTitle": "Mission Complete",
+      "type": "missionComplete",
+      "instructions": "Mission Accomplished! You built an industrial-grade precision positioning mechanism.",
+      "verificationCheckpoints": [
+        "Ready to claim Industrial Chief badge"
+      ]
+    }
+  ],
+  "xpReward": 230,
+  "badgeRewardId": "badge_industrial_chief",
+  "story": "Operate heavy industrial robotic drilling equipment! Construct an automated Oil Drill Rig where an incremental rotary encoder with push-button controls stepper drilling depth with precision micrometer readouts on an I2C LCD screen.",
+  "troubleshooting": [
+    {
+      "symptom": "Encoder skips numbers or increments randomly",
+      "cause": "Mechanical switch bouncing",
+      "solution": "Add small 10nF ceramic capacitors between CLK/DT and GND, or add a 5ms software debounce filter.",
+      "category": "logic",
+      "diagnosticSteps": [
+        "Check CLK and DT pull-up resistors or software debouncing.",
+        "Verify interrupt service routine has no delay() calls."
+      ]
+    }
+  ],
+  "variants": [],
+  "extensionMissions": []
+}

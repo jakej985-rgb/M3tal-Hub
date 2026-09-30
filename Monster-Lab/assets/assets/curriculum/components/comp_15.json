@@ -1,0 +1,58 @@
+{
+  "id": "comp_15",
+  "peripheralNumber": 15,
+  "name": "8x8 Dot Matrix LED Display",
+  "partNumber": "MAX7219",
+  "category": "display",
+  "description": "Like a retro arcade screen! 64 individually addressable bright red LEDs for faces, icons, and text.",
+  "realWorldAnalogy": "Like a retro arcade screen! 64 individually addressable bright red LEDs for faces, icons, and text.",
+  "voltage": "v5",
+  "pinout": [
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "5V Power"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "DIN",
+      "type": "spi",
+      "description": "Serial Data in"
+    },
+    {
+      "pinName": "CS",
+      "type": "spi",
+      "description": "Chip Select / Load"
+    },
+    {
+      "pinName": "CLK",
+      "type": "spi",
+      "description": "Serial Clock"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_03"
+  ],
+  "datasheetRef": "MAX7219 8x8 Matrix Display Module.pdf",
+  "wiringGuidance": "Connect VCC (Red) to 5V, GND (Dark Slate) to GND, DIN (Orange) to Pin 11, CS (Orange) to Pin 10, and CLK (Orange) to Pin 13.",
+  "commonMistakes": [
+    "Powering with 3.3V instead of 5V, leading to dim LEDs and erratic controller sync.",
+    "Swapping DIN and CLK wires."
+  ],
+  "miniExperiment": {
+    "title": "Smiley Face Pixel Matrix",
+    "circuit": "VCC to 5V, GND to GND, DIN to 11, CS to 10, CLK to 13.",
+    "code": "#include <LedControl.h>\nLedControl lc = LedControl(11, 13, 10, 1);\n\nbyte smile[8] = {\n  B00111100,\n  B01000010,\n  B10100101,\n  B10000001,\n  B10100101,\n  B10011001,\n  B01000010,\n  B00111100\n};\n\nvoid setup() {\n  lc.shutdown(0, false);\n  lc.setIntensity(0, 8);\n  lc.clearDisplay(0);\n  for (int i = 0; i < 8; i++) {\n    lc.setRow(0, i, smile[i]);\n  }\n}\n\nvoid loop() {}",
+    "expectedOutput": "The 8x8 LED matrix lights up displaying a bright, smiling monster face."
+  }
+}

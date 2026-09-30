@@ -1,0 +1,55 @@
+{
+  "id": "comp_25",
+  "peripheralNumber": 25,
+  "name": "9g Micro Position Servo Motor",
+  "partNumber": "SG90",
+  "category": "actuator",
+  "description": "Like a robotic elbow! Rotates to exact angular positions from 0 to 180 degrees using PWM pulses.",
+  "realWorldAnalogy": "Like a robotic elbow! Rotates to exact angular positions from 0 to 180 degrees using PWM pulses.",
+  "voltage": "v5",
+  "pinout": [
+    {
+      "pinName": "Brown",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "Red",
+      "type": "power",
+      "description": "5V Power"
+    },
+    {
+      "pinName": "Orange",
+      "type": "digitalOut",
+      "description": "PWM Control signal (50Hz)"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_04",
+    "proj_07",
+    "proj_09",
+    "proj_10",
+    "proj_11",
+    "proj_12",
+    "proj_13",
+    "proj_14"
+  ],
+  "datasheetRef": "Servo SG90.pdf",
+  "wiringGuidance": "Connect Brown wire (Dark Slate) to GND, Red wire (Red) to 5V, and Orange wire (Green) to digital pin 9.",
+  "commonMistakes": [
+    "Manually forcing the horn past 0 or 180 degrees, stripping the small plastic gears.",
+    "Powering several servos directly from Arduino 5V regulator, triggering brownout resets."
+  ],
+  "miniExperiment": {
+    "title": "Servo Arm Sweep",
+    "circuit": "Brown to GND, Red to 5V, Orange to Pin 9.",
+    "code": "#include <Servo.h>\nServo myServo;\n\nvoid setup() {\n  myServo.attach(9);\n}\n\nvoid loop() {\n  myServo.write(0);\n  delay(1000);\n  myServo.write(90);\n  delay(1000);\n  myServo.write(180);\n  delay(1000);\n}",
+    "expectedOutput": "The servo arm smoothly steps between 0, 90, and 180 degrees every second."
+  }
+}

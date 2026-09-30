@@ -1,0 +1,55 @@
+{
+  "id": "comp_16",
+  "peripheralNumber": 16,
+  "name": "Alcohol Vapor Gas Sensor",
+  "partNumber": "MQ-3",
+  "category": "sensor",
+  "description": "Chemical vapor nose! Uses a heated tin-dioxide element to detect alcohol vapors in air.",
+  "realWorldAnalogy": "Chemical vapor nose! Uses a heated tin-dioxide element to detect alcohol vapors in air.",
+  "voltage": "v5",
+  "pinout": [
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "5V Power (150mA heater)"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "D0",
+      "type": "digitalIn",
+      "description": "Digital alarm threshold"
+    },
+    {
+      "pinName": "A0",
+      "type": "analogIn",
+      "description": "Analog vapor concentration"
+    }
+  ],
+  "safety": {
+    "level": "restrictedAdultSupervision",
+    "hazards": [
+      "Heated metal mesh reaches high temperature (burn hazard)",
+      "Requires adult supervision"
+    ],
+    "childSafeAlternative": "Use rubbing alcohol swab at distance; never inhale",
+    "requiresParentUnlock": true
+  },
+  "projectIds": [
+    "proj_06"
+  ],
+  "wiringGuidance": "Connect VCC (Red) to 5V (requires ~150mA current), GND (Dark Slate) to GND, and A0 (Yellow) to analog pin A0.",
+  "commonMistakes": [
+    "Touching the heated metal casing while powered on (burn hazard).",
+    "Not waiting 2-3 minutes for the internal heater to reach operating temperature."
+  ],
+  "miniExperiment": {
+    "title": "Vapor Concentration Meter",
+    "circuit": "VCC to 5V, GND to GND, A0 to Analog Pin A0.",
+    "code": "void setup() {\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  int sensorVal = analogRead(A0);\n  Serial.print(\"Vapor Index: \");\n  Serial.println(sensorVal);\n  delay(500);\n}",
+    "expectedOutput": "Outputs steady ambient readings (~50-150). Approaching with an alcohol swab causes readings to jump to 600+."
+  }
+}

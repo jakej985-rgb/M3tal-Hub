@@ -1,0 +1,51 @@
+{
+  "id": "lesson_09",
+  "title": "The I2C Communication Bus",
+  "summary": "Network dozens of sensors and displays using only two wires: SDA and SCL! Master addresses and bus scanning.",
+  "tier": "builder",
+  "estimatedMinutes": 25,
+  "prerequisites": [
+    "lesson_03",
+    "lesson_04"
+  ],
+  "componentIds": [
+    "comp_07",
+    "comp_10"
+  ],
+  "steps": [
+    {
+      "stepId": "l09_s01",
+      "title": "Why Buses Save Wires",
+      "type": "story",
+      "markdownContent": "Connecting a display, clock, and accelerometer individually would use up all 14 pins! With **I2C** (Inter-Integrated Circuit), all devices share just two wires: `SDA` (Data) and `SCL` (Clock)."
+    },
+    {
+      "stepId": "l09_s02",
+      "title": "Device Hex Addresses",
+      "type": "visualExplanation",
+      "markdownContent": "Every I2C module has a unique street address, like `0x27` for LCDs or `0x68` for Real Time Clocks. Arduino calls out the address before sending data!"
+    },
+    {
+      "stepId": "l09_s03",
+      "title": "The Wire Library",
+      "type": "codeExperiment",
+      "markdownContent": "Include `<Wire.h>` and call `Wire.begin();`. On Arduino Uno, SDA is on pin `A4` and SCL is on pin `A5`."
+    },
+    {
+      "stepId": "l09_s04",
+      "title": "I2C Bus Checkpoint",
+      "type": "quizCheckpoint",
+      "markdownContent": "How many communication signal wires does the I2C bus use to talk to multiple devices?",
+      "interactiveConfig": {
+        "question": "How many signal wires does I2C use?",
+        "options": [
+          "2 wires (SDA and SCL)",
+          "8 wires (one for each bit)",
+          "14 wires"
+        ],
+        "correctIndex": 0
+      }
+    }
+  ],
+  "xpReward": 80
+}

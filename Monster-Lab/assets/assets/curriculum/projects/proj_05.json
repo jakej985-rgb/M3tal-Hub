@@ -1,0 +1,171 @@
+{
+  "id": "proj_05",
+  "title": "MONSTER Alarm Clock",
+  "tagline": "Build an unhackable bedside desk clock with real-time clock chip, I2C LCD, and snooze buzzer!",
+  "tier": "builder",
+  "estimatedMinutes": 45,
+  "requiredComponents": [
+    "comp_07",
+    "comp_10",
+    "comp_34"
+  ],
+  "prerequisiteLessons": [
+    "lesson_03"
+  ],
+  "phases": [
+    {
+      "phaseNumber": 1,
+      "phaseTitle": "Gather Clock Components",
+      "type": "gatherParts",
+      "instructions": "Collect the DS3231 RTC module (with CR2032 coin cell), 1602 I2C LCD display, piezo buzzer, and breadboard jumpers.",
+      "verificationCheckpoints": [
+        "DS3231 RTC module ready with coin cell battery",
+        "1602 LCD with black I2C backpack board attached",
+        "Active buzzer ready"
+      ]
+    },
+    {
+      "phaseNumber": 2,
+      "phaseTitle": "I2C Shared Bus Wiring",
+      "type": "breadboardWiring",
+      "instructions": "Connect both the RTC and LCD to the Arduino I2C bus. Because I2C uses unique hardware addresses, both devices share SDA (A4) and SCL (A5) lines!",
+      "wiringConnections": [
+        {
+          "from": "DS3231 VCC",
+          "to": "Arduino 5V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "DS3231 GND",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        },
+        {
+          "from": "DS3231 SDA",
+          "to": "Arduino Pin A4",
+          "wire": "Blue",
+          "type": "i2c"
+        },
+        {
+          "from": "DS3231 SCL",
+          "to": "Arduino Pin A5",
+          "wire": "Blue",
+          "type": "i2c"
+        },
+        {
+          "from": "LCD VCC",
+          "to": "Arduino 5V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "LCD GND",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        },
+        {
+          "from": "LCD SDA",
+          "to": "Arduino Pin A4",
+          "wire": "Blue",
+          "type": "i2c"
+        },
+        {
+          "from": "LCD SCL",
+          "to": "Arduino Pin A5",
+          "wire": "Blue",
+          "type": "i2c"
+        },
+        {
+          "from": "Buzzer (+)",
+          "to": "Arduino Pin 8",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "Buzzer (-)",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        }
+      ],
+      "verificationCheckpoints": [
+        "Both SDA pins connected to A4",
+        "Both SCL pins connected to A5",
+        "Buzzer connected to Pin 8"
+      ]
+    },
+    {
+      "phaseNumber": 3,
+      "phaseTitle": "I2C Bus Pre-Flight Check",
+      "type": "wiringCheck",
+      "instructions": "Verify that neither I2C device has crossed lines between SDA and SCL, and verify 5V power rails.",
+      "verificationCheckpoints": [
+        "Power rail 5V connected to Red bus",
+        "Ground rail connected to Dark Slate bus",
+        "No crossed signal wires between A4 and A5"
+      ]
+    },
+    {
+      "phaseNumber": 4,
+      "phaseTitle": "Code Walkthrough & Clock Synchronization",
+      "type": "codeReview",
+      "instructions": "Study how the RTClib library queries time registers over I2C and prints formatted HH:MM:SS text to the LiquidCrystal_I2C screen.",
+      "codeSnippet": "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n#include \"RTClib.h\"\n\nRTC_DS3231 rtc;\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nconst int BUZZER_PIN = 8;\nconst int ALARM_HOUR = 7;\nconst int ALARM_MIN = 30;\n\nvoid setup() {\n  Wire.begin();\n  lcd.init();\n  lcd.backlight();\n  rtc.begin();\n  pinMode(BUZZER_PIN, OUTPUT);\n}\n\nvoid loop() {\n  DateTime now = rtc.now();\n  lcd.setCursor(0, 0);\n  lcd.print(\"TIME: \");\n  if (now.hour() < 10) lcd.print('0');\n  lcd.print(now.hour());\n  lcd.print(':');\n  if (now.minute() < 10) lcd.print('0');\n  lcd.print(now.minute());\n  lcd.print(':');\n  if (now.second() < 10) lcd.print('0');\n  lcd.print(now.second());\n\n  if (now.hour() == ALARM_HOUR && now.minute() == ALARM_MIN) {\n    tone(BUZZER_PIN, 1500, 200);\n  }\n  delay(500);\n}",
+      "codeExplanation": "- Wire.h manages I2C bus communication between Arduino, RTC, and LCD.\n- rtc.now() queries battery-backed time from the DS3231 oscillator.\n- lcd.print() draws formatted two-digit time strings on row 0.\n- When current hour and minute match alarm settings, tone() sounds.",
+      "verificationCheckpoints": [
+        "Understand how 2 devices share 2 I2C wires via unique addresses (0x68 and 0x27)",
+        "Understand time comparison logic for alarm trigger"
+      ]
+    },
+    {
+      "phaseNumber": 5,
+      "phaseTitle": "Upload & Clock Verification Test",
+      "type": "uploadSketch",
+      "instructions": "Upload the alarm clock sketch. Adjust the blue contrast potentiometer on the back of the LCD with a small screwdriver until characters appear crisp and sharp.",
+      "verificationCheckpoints": [
+        "LCD displays live advancing seconds",
+        "Adjust contrast trimmer so black text is clear against blue backlight"
+      ]
+    },
+    {
+      "phaseNumber": 6,
+      "phaseTitle": "Mission Complete",
+      "type": "missionComplete",
+      "instructions": "Congratulations! You mastered multi-device I2C bus arbitration and built a functional real-time clock.",
+      "verificationCheckpoints": [
+        "RTC retains time even when USB unplugged",
+        "Ready to claim Time Master badge"
+      ]
+    }
+  ],
+  "xpReward": 150,
+  "badgeRewardId": "badge_time_master",
+  "story": "Build an unhackable desktop alarm clock! You will wire a precision DS3231 real-time clock module with battery backup, an I2C 1602 liquid crystal display, and an alarm buzzer that ensures you never miss morning monster training.",
+  "troubleshooting": [
+    {
+      "symptom": "LCD shows 16 solid white boxes and no text",
+      "cause": "Contrast potentiometer out of adjustment or wrong I2C address",
+      "solution": "Turn the blue potentiometer on the back of the LCD module until text appears, or verify whether I2C address is 0x27 or 0x3F.",
+      "category": "logic",
+      "diagnosticSteps": [
+        "Turn the brass contrast trimmer screw on the back of the I2C backpack.",
+        "Run an I2C scanner sketch to verify if address is 0x27 or 0x3F."
+      ]
+    },
+    {
+      "symptom": "Time resets to 2000/01/01 every time USB is unplugged",
+      "cause": "DS3231 coin cell battery missing or dead",
+      "solution": "Insert a fresh CR2032 3V coin cell battery into the RTC battery holder.",
+      "category": "power",
+      "diagnosticSteps": [
+        "Check CR2032 coin battery orientation (+ side facing up).",
+        "Verify battery contacts are clean and tight."
+      ]
+    }
+  ],
+  "variants": [],
+  "extensionMissions": []
+}

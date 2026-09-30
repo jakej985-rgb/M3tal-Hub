@@ -1,0 +1,44 @@
+{
+  "id": "comp_33",
+  "peripheralNumber": 33,
+  "name": "High-Speed Toy DC Motor",
+  "partNumber": "130-DC",
+  "category": "actuator",
+  "description": "Like an electric fan propeller! Spins continuously when power is applied, controllable via H-Bridge.",
+  "realWorldAnalogy": "Like an electric fan propeller! Spins continuously when power is applied, controllable via H-Bridge.",
+  "voltage": "v5",
+  "pinout": [
+    {
+      "pinName": "+",
+      "type": "power",
+      "description": "Motor terminal 1"
+    },
+    {
+      "pinName": "-",
+      "type": "ground",
+      "description": "Motor terminal 2"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_08",
+    "proj_17"
+  ],
+  "datasheetRef": "130 DC Motor.pdf",
+  "wiringGuidance": "Connect motor terminals through a transistor (e.g. PN2222) or motor driver shield. Never connect motor leads directly to Arduino pins!",
+  "commonMistakes": [
+    "Connecting DC motor directly to Arduino pins (exceeds 40mA max pin rating and fries the board).",
+    "Omitting the flyback protection diode across the motor terminals."
+  ],
+  "miniExperiment": {
+    "title": "Transistor Motor Speed Control",
+    "circuit": "Arduino Pin 9 -> 1k resistor -> Base of NPN transistor. Collector -> Motor -> 5V. Emitter -> GND. Diode across motor.",
+    "code": "const int motorPin = 9;\n\nvoid setup() {\n  pinMode(motorPin, OUTPUT);\n}\n\nvoid loop() {\n  for (int speed = 0; speed <= 255; speed += 5) {\n    analogWrite(motorPin, speed);\n    delay(50);\n  }\n  delay(1000);\n  analogWrite(motorPin, 0);\n  delay(1000);\n}",
+    "expectedOutput": "Motor smoothly spins up from zero to full speed, stops, and repeats."
+  }
+}

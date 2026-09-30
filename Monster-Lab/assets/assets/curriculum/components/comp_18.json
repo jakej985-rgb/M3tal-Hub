@@ -1,0 +1,49 @@
+{
+  "id": "comp_18",
+  "peripheralNumber": 18,
+  "name": "Infrared Obstacle Proximity Sensor",
+  "partNumber": "FC-51",
+  "category": "sensor",
+  "description": "Like a blind person's cane! Bounces short-range infrared light off nearby obstacles to avoid collisions.",
+  "realWorldAnalogy": "Like a blind person's cane! Bounces short-range infrared light off nearby obstacles to avoid collisions.",
+  "voltage": "dual",
+  "pinout": [
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "Power rail"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "OUT",
+      "type": "digitalIn",
+      "description": "Active LOW obstacle detect"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_11",
+    "proj_13"
+  ],
+  "datasheetRef": "IR-Receiver-AX-1838HS .pdf",
+  "wiringGuidance": "Connect VCC (Red) to 5V, GND (Dark Slate) to GND, and OUT (Green) to digital pin 4.",
+  "commonMistakes": [
+    "Turning the sensitivity potentiometer too far until the sensor is stuck LOW.",
+    "Expecting reliable detection on dark black surfaces."
+  ],
+  "miniExperiment": {
+    "title": "Proximity Trap",
+    "circuit": "VCC to 5V, GND to GND, OUT to Pin 4.",
+    "code": "const int obsPin = 4;\n\nvoid setup() {\n  pinMode(obsPin, INPUT);\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  if (digitalRead(obsPin) == LOW) {\n    Serial.println(\"OBSTACLE DETECTED IN FRONT!\");\n    delay(200);\n  }\n}",
+    "expectedOutput": "Serial Monitor prints obstacle warnings whenever an object approaches within 2-10cm."
+  }
+}

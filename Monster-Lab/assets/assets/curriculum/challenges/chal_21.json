@@ -1,0 +1,25 @@
+{
+  "id": "chal_21",
+  "title": "H-Bridge Shoot-Through Prevention",
+  "type": "debugLogic",
+  "difficulty": "engineer",
+  "prompt": "In a discrete or integrated H-bridge motor driver, what dangerous electrical condition occurs if both high-side and low-side transistors in the same half-bridge turn ON at the same time?",
+  "challengeData": {
+    "options": [
+      "The motor spins at twice its rated speed",
+      "Shoot-through: a direct short circuit from VCC to GND destroying the transistors",
+      "The battery charges automatically through regenerative braking",
+      "The PWM frequency drops to 0Hz"
+    ]
+  },
+  "hint": "What happens when both top and bottom switches on a leg close simultaneously?",
+  "hints": [
+    "What happens when both top and bottom switches on a leg close simultaneously?",
+    "Power connects straight to ground with near-zero resistance."
+  ],
+  "explanation": "Shoot-through creates a direct short from power to ground through both transistors simultaneously. Massive current surges through the silicon, causing thermal runaway and chip destruction.",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 60
+}

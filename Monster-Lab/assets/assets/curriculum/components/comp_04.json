@@ -1,0 +1,49 @@
+{
+  "id": "comp_04",
+  "peripheralNumber": 4,
+  "name": "Impact Collision Switch",
+  "partNumber": "KW11",
+  "category": "switch",
+  "description": "Like a robot bumper! Mechanical microswitch that triggers immediately upon physical collision.",
+  "realWorldAnalogy": "Like a robot bumper! Mechanical microswitch that triggers immediately upon physical collision.",
+  "voltage": "dual",
+  "pinout": [
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "Power rail"
+    },
+    {
+      "pinName": "OUT",
+      "type": "digitalIn",
+      "description": "Normally Open switch contact"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_13",
+    "proj_17"
+  ],
+  "datasheetRef": "Button.pdf",
+  "wiringGuidance": "Connect one terminal to GND (Dark Slate wire) and the NO terminal to digital pin 3 (Green wire). Use Arduino internal pull-up resistor.",
+  "commonMistakes": [
+    "Forgetting to enable INPUT_PULLUP in code, resulting in erratic floating values.",
+    "Connecting to NC (Normally Closed) instead of NO (Normally Open), reversing switch logic."
+  ],
+  "miniExperiment": {
+    "title": "Bumper Impact Trigger",
+    "circuit": "Connect Common to GND, NO to Digital Pin 3.",
+    "code": "const int bumperPin = 3;\n\nvoid setup() {\n  pinMode(bumperPin, INPUT_PULLUP);\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  if (digitalRead(bumperPin) == LOW) {\n    Serial.println(\"CRASH! Bumper triggered!\");\n    delay(200);\n  }\n}",
+    "expectedOutput": "Serial Monitor prints 'CRASH! Bumper triggered!' whenever the microswitch lever is pressed."
+  }
+}

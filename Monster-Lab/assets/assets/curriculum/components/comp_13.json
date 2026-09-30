@@ -1,0 +1,48 @@
+{
+  "id": "comp_13",
+  "peripheralNumber": 13,
+  "name": "Infrared Remote & Receiver Kit",
+  "partNumber": "AX-1838HS",
+  "category": "communication",
+  "description": "Like a television remote! Sends pulses of invisible 38kHz infrared light encoded with button commands.",
+  "realWorldAnalogy": "Like a television remote! Sends pulses of invisible 38kHz infrared light encoded with button commands.",
+  "voltage": "dual",
+  "pinout": [
+    {
+      "pinName": "OUT",
+      "type": "digitalIn",
+      "description": "Demodulated data pulse"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "Power rail"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_03"
+  ],
+  "datasheetRef": "IR Remote Control.pdf",
+  "wiringGuidance": "Connect VCC (Red) to 5V, GND (Dark Slate) to GND, and OUT (Green) to digital pin 11.",
+  "commonMistakes": [
+    "Wiring VCC and GND in reverse (destroys the infrared demodulator chip).",
+    "Operating under high-frequency ballast fluorescent lights causing noise spikes."
+  ],
+  "miniExperiment": {
+    "title": "Remote Control Hex Decoder",
+    "circuit": "VCC to 5V, GND to GND, OUT to Pin 11.",
+    "code": "#include <IRremote.h>\nconst int RECV_PIN = 11;\n\nvoid setup() {\n  Serial.begin(9600);\n  IrReceiver.begin(RECV_PIN, ENABLE_LED_FEEDBACK);\n}\n\nvoid loop() {\n  if (IrReceiver.decode()) {\n    Serial.print(\"Hex Code: 0x\");\n    Serial.println(IrReceiver.decodedIRData.decodedRawData, HEX);\n    IrReceiver.resume();\n  }\n}",
+    "expectedOutput": "Pressing buttons on the handheld remote prints unique hexadecimal codes in Serial Monitor."
+  }
+}

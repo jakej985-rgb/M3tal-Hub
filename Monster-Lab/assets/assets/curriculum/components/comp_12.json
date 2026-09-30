@@ -1,0 +1,73 @@
+{
+  "id": "comp_12",
+  "peripheralNumber": 12,
+  "name": "6-Axis Gyroscope & Accelerometer",
+  "partNumber": "GY-521",
+  "category": "sensor",
+  "description": "Like the inner ear of an acrobat! Measures tilt angles, gravity vector, and rotational spin speed.",
+  "realWorldAnalogy": "Like the inner ear of an acrobat! Measures tilt angles, gravity vector, and rotational spin speed.",
+  "voltage": "dual",
+  "pinout": [
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "Power (3.3V-5V)"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "SCL",
+      "type": "i2c",
+      "description": "I2C Clock"
+    },
+    {
+      "pinName": "SDA",
+      "type": "i2c",
+      "description": "I2C Data"
+    },
+    {
+      "pinName": "XDA",
+      "type": "i2c",
+      "description": "Auxiliary I2C Data"
+    },
+    {
+      "pinName": "XCL",
+      "type": "i2c",
+      "description": "Auxiliary I2C Clock"
+    },
+    {
+      "pinName": "AD0",
+      "type": "digitalIn",
+      "description": "I2C address select"
+    },
+    {
+      "pinName": "INT",
+      "type": "digitalIn",
+      "description": "Motion interrupt"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_13"
+  ],
+  "datasheetRef": "RM-MPU-6050A.pdf",
+  "wiringGuidance": "Connect VCC (Red) to 5V, GND (Dark Slate) to GND, SCL (Blue) to A5, and SDA (Blue) to A4.",
+  "commonMistakes": [
+    "Leaving the module loose or unfastened, causing extreme noise in accelerometer values.",
+    "Connecting AD0 to 5V when using default address 0x68 (AD0 must connect to GND)."
+  ],
+  "miniExperiment": {
+    "title": "Tilt & Gyro Balance Stream",
+    "circuit": "VCC to 5V, GND to GND, SCL to A5, SDA to A4.",
+    "code": "#include <Wire.h>\n#include <MPU6050.h>\n\nMPU6050 mpu;\n\nvoid setup() {\n  Serial.begin(9600);\n  Wire.begin();\n  mpu.initialize();\n}\n\nvoid loop() {\n  int16_t ax, ay, az;\n  mpu.getAcceleration(&ax, &ay, &az);\n  Serial.print(\"X: \"); Serial.print(ax);\n  Serial.print(\" | Y: \"); Serial.print(ay);\n  Serial.print(\" | Z: \"); Serial.println(az);\n  delay(100);\n}",
+    "expectedOutput": "Serial Monitor streams raw 3-axis acceleration vectors that change as you tilt the sensor."
+  }
+}

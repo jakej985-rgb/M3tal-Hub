@@ -1,0 +1,163 @@
+{
+  "id": "proj_06",
+  "title": "Gas Leak Detection and Warning",
+  "tagline": "Build an industrial air quality laboratory monitor that alerts you if hazardous gas is detected!",
+  "tier": "builder",
+  "estimatedMinutes": 50,
+  "requiredComponents": [
+    "comp_07",
+    "comp_17",
+    "comp_34"
+  ],
+  "prerequisiteLessons": [
+    "lesson_06"
+  ],
+  "phases": [
+    {
+      "phaseNumber": 1,
+      "phaseTitle": "Gather Safety Components",
+      "type": "gatherParts",
+      "instructions": "Collect the MQ-9 Gas Sensor module, 1602 I2C LCD, Piezo Buzzer, and Red/Green status LEDs.",
+      "verificationCheckpoints": [
+        "MQ-9 sensor with stainless steel mesh head ready",
+        "1602 I2C LCD ready",
+        "Piezo buzzer ready"
+      ]
+    },
+    {
+      "phaseNumber": 2,
+      "phaseTitle": "Sensor & Alarm Wiring",
+      "type": "breadboardWiring",
+      "instructions": "Connect MQ-9 analog pin to Arduino A0. Connect 1602 LCD to I2C lines (A4/A5), and Buzzer to Digital Pin 8.",
+      "wiringConnections": [
+        {
+          "from": "MQ-9 VCC",
+          "to": "Arduino 5V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "MQ-9 GND",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        },
+        {
+          "from": "MQ-9 AOUT",
+          "to": "Arduino Pin A0",
+          "wire": "Yellow",
+          "type": "analogIn"
+        },
+        {
+          "from": "LCD SDA",
+          "to": "Arduino Pin A4",
+          "wire": "Blue",
+          "type": "i2c"
+        },
+        {
+          "from": "LCD SCL",
+          "to": "Arduino Pin A5",
+          "wire": "Blue",
+          "type": "i2c"
+        },
+        {
+          "from": "LCD VCC",
+          "to": "Arduino 5V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "LCD GND",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        },
+        {
+          "from": "Buzzer (+)",
+          "to": "Arduino Pin 8",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "Buzzer (-)",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        }
+      ],
+      "verificationCheckpoints": [
+        "AOUT on A0",
+        "LCD on A4/A5",
+        "Buzzer on Pin 8"
+      ]
+    },
+    {
+      "phaseNumber": 3,
+      "phaseTitle": "Pre-Flight Heater Inspection",
+      "type": "wiringCheck",
+      "instructions": "IMPORTANT: MQ gas sensors contain an internal micro-heating coil. The metal grill will get noticeably warm to the touch \u2014 this is normal operation! Do not touch metal mesh directly.",
+      "verificationCheckpoints": [
+        "Inspect wiring for short circuits",
+        "Ensure MQ-9 is elevated off flammable surfaces"
+      ]
+    },
+    {
+      "phaseNumber": 4,
+      "phaseTitle": "Code Walkthrough & Threshold Alarm Logic",
+      "type": "codeReview",
+      "instructions": "Examine how analog read values are mapped to air quality PPM safety zones and alert thresholds.",
+      "codeSnippet": "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nconst int MQ_PIN = A0;\nconst int BUZZER_PIN = 8;\nconst int THRESHOLD_ALERT = 350;\n\nvoid setup() {\n  lcd.init();\n  lcd.backlight();\n  pinMode(BUZZER_PIN, OUTPUT);\n}\n\nvoid loop() {\n  int airQuality = analogRead(MQ_PIN);\n  lcd.setCursor(0, 0);\n  lcd.print(\"Gas Level: \");\n  lcd.print(airQuality);\n  lcd.print(\"    \");\n\n  lcd.setCursor(0, 1);\n  if (airQuality > THRESHOLD_ALERT) {\n    lcd.print(\"STATUS: DANGER! \");\n    tone(BUZZER_PIN, 2500, 100);\n  } else {\n    lcd.print(\"STATUS: SAFE    \");\n    noTone(BUZZER_PIN);\n  }\n  delay(250);\n}",
+      "codeExplanation": "- analogRead(MQ_PIN) measures resistance changes across the heated tin dioxide (SnO2) sensing element.\n- Values below 300 represent clean ambient air.\n- Values above 350 trigger the LCD DANGER warning and sound the alarm.",
+      "verificationCheckpoints": [
+        "Understand how SnO2 resistance drops in presence of combustible gas",
+        "Understand hysteresis threshold checking"
+      ]
+    },
+    {
+      "phaseNumber": 5,
+      "phaseTitle": "Upload & Simulation Test",
+      "type": "uploadSketch",
+      "instructions": "Upload the code. Allow sensor 3 minutes to warm up. Simulate gas detection safely using an unlit butane lighter puff under adult supervision.",
+      "verificationCheckpoints": [
+        "Sensor warmup readings stabilize",
+        "Simulated gas puff causes PPM to spike past 350 and sounds alarm"
+      ]
+    },
+    {
+      "phaseNumber": 6,
+      "phaseTitle": "Mission Complete",
+      "type": "missionComplete",
+      "instructions": "Safety mission complete! You built a critical environmental monitor and mastered analog gas telemetry.",
+      "verificationCheckpoints": [
+        "Ready to claim Safety Officer badge"
+      ]
+    }
+  ],
+  "xpReward": 160,
+  "badgeRewardId": "badge_safety_officer",
+  "story": "Build a laboratory environmental safety sentinel! Construct an air quality monitor utilizing the MQ-9 gas sensor, 1602 LCD telemetry readout, and multi-stage audio/visual danger alarms.",
+  "troubleshooting": [
+    {
+      "symptom": "Sensor metal cap feels warm",
+      "cause": "Internal heater coil operating normally",
+      "solution": "This is completely normal and required for chemical reduction measurement. Keep away from bare skin.",
+      "category": "power",
+      "diagnosticSteps": [
+        "This is normal: MQ gas sensors have internal 5V heaters.",
+        "Wait 3 minutes for heater stabilization before testing gas."
+      ]
+    },
+    {
+      "symptom": "Alarm triggers immediately on power up",
+      "cause": "Sensor requires burn-in preheating period after being unpowered",
+      "solution": "Allow the sensor to run for 2-3 minutes until internal chemistry stabilizes.",
+      "category": "logic",
+      "diagnosticSteps": [
+        "Allow 2-3 minutes preheat burn-in cycle in clean air.",
+        "Tune threshold potentiometer until alarm SILENCES in fresh air."
+      ]
+    }
+  ],
+  "variants": [],
+  "extensionMissions": []
+}

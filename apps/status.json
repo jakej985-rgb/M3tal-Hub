@@ -1,11 +1,12 @@
 {
-  "last_updated": "2026-09-30T05:39:23.513506+00:00",
+  "last_updated": "2026-09-30T05:48:52.222284+00:00",
   "releases": {
     "monster-lab": {
       "status": "ready",
-      "version": "1.0.0",
-      "last_released": null,
-      "build_status": "configured"
+      "build_status": "success",
+      "version": "main",
+      "ref": "main",
+      "last_released": "2026-09-30T05:48:52.222270+00:00"
     },
     "android-card-games": {
       "status": "ready",
@@ -33,10 +34,9 @@
     },
     "jellyfin-ui": {
       "status": "ready",
-      "build_status": "success",
-      "version": "feat/netflix-jellyfin-ui-8605598523484562409",
-      "ref": "feat/netflix-jellyfin-ui-8605598523484562409",
-      "last_released": "2026-09-30T05:39:23.513491+00:00"
+      "version": "1.0.0",
+      "last_released": null,
+      "build_status": "configured"
     }
   }
 }

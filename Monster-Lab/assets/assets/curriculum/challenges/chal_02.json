@@ -1,0 +1,26 @@
+{
+  "id": "chal_02",
+  "title": "Potentiometer Midpoint Reading",
+  "type": "predictOutput",
+  "difficulty": "rookie",
+  "prompt": "A 10k potentiometer is wired between 5V and GND with its wiper connected to analog pin A0. If turned exactly halfway, what integer does analogRead(A0) return?",
+  "circuitSnippet": "5V -> Potentiometer Leg 1\nGND -> Potentiometer Leg 3\nA0 -> Potentiometer Wiper (Center)",
+  "challengeData": {
+    "options": [
+      "255",
+      "512",
+      "1023",
+      "2.5"
+    ]
+  },
+  "hint": "Arduino's ADC has 10 bits of precision, mapping 0V-5V to 0-1023.",
+  "hints": [
+    "Arduino's ADC has 10 bits of precision, mapping 0V-5V to 0-1023.",
+    "Half of 1023 is approximately 511-512."
+  ],
+  "explanation": "The 10-bit analog-to-digital converter divides 0\u20135V into 1024 discrete steps (0 to 1023). 2.5V corresponds to 511 or 512.",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 30
+}

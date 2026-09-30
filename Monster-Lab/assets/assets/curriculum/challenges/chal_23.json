@@ -1,0 +1,25 @@
+{
+  "id": "chal_23",
+  "title": "W5100 Ethernet Socket Exhaustion",
+  "type": "debugLogic",
+  "difficulty": "monsterMaster",
+  "prompt": "An Arduino Uno HTTP web server using the W5100 shield responds to 4 browser refreshes, but then permanently stops responding. What is the root cause?",
+  "challengeData": {
+    "options": [
+      "The RJ-45 cable overheated",
+      "The sketch did not call client.stop(), exhausting all 4 available hardware sockets on the W5100",
+      "The Arduino ran out of flash program memory",
+      "The browser sent too many cookies"
+    ]
+  },
+  "hint": "The W5100 hardware has exactly 4 simultaneous socket channels.",
+  "hints": [
+    "The W5100 hardware has exactly 4 simultaneous socket channels.",
+    "Each connection must be explicitly terminated with client.stop() to release its socket."
+  ],
+  "explanation": "The W5100 hardware controller has 4 hardware sockets. If the server code doesn't call client.stop() after sending HTTP headers and body, the sockets remain in CLOSE_WAIT or ESTABLISHED, blocking all subsequent incoming connections.",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 75
+}

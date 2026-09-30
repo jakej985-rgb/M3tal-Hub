@@ -1,0 +1,182 @@
+[
+  {
+    "id": "badge_security_rookie",
+    "name": "Perimeter Guard",
+    "description": "Built and calibrated your first ultrasonic security tripwire alarm!",
+    "iconAsset": "assets/images/badges/badge_security.png",
+    "category": "security",
+    "tier": "rookie",
+    "xpBonus": 100
+  },
+  {
+    "id": "badge_audio_engineer",
+    "name": "Sonic Maestro",
+    "description": "Synthesized acoustic noise waves into dancing light shows.",
+    "iconAsset": "assets/images/badges/badge_audio.png",
+    "category": "acoustics",
+    "tier": "rookie",
+    "xpBonus": 100
+  },
+  {
+    "id": "badge_pixel_artist",
+    "name": "Pixel Picasso",
+    "description": "Animated funny pixel faces over infrared wireless remote control!",
+    "iconAsset": "assets/images/badges/badge_pixel.png",
+    "category": "graphics",
+    "tier": "builder",
+    "xpBonus": 150
+  },
+  {
+    "id": "badge_smart_security",
+    "name": "Vault Breaker",
+    "description": "Constructed a matrix keypad passcode lock with motorized deadbolt.",
+    "iconAsset": "assets/images/badges/badge_keypad.png",
+    "category": "security",
+    "tier": "builder",
+    "xpBonus": 175
+  },
+  {
+    "id": "badge_time_master",
+    "name": "Chronos Engineer",
+    "description": "Synchronized battery-backed hardware time across I2C displays.",
+    "iconAsset": "assets/images/badges/badge_clock.png",
+    "category": "time",
+    "tier": "builder",
+    "xpBonus": 150
+  },
+  {
+    "id": "badge_safety_officer",
+    "name": "Hazmat Detective",
+    "description": "Deployed calibrated chemical gas monitoring with LCD telemetry.",
+    "iconAsset": "assets/images/badges/badge_gas.png",
+    "category": "safety",
+    "tier": "builder",
+    "xpBonus": 160
+  },
+  {
+    "id": "badge_inventor",
+    "name": "Master Dispenser",
+    "description": "Automated a physical vending mechanism with bank authentication.",
+    "iconAsset": "assets/images/badges/badge_dispenser.png",
+    "category": "automation",
+    "tier": "builder",
+    "xpBonus": 180
+  },
+  {
+    "id": "badge_motor_dynamo",
+    "name": "Motion Dynamo",
+    "description": "Tamed high-speed DC motors and precision multi-phase steppers.",
+    "iconAsset": "assets/images/badges/badge_motor.png",
+    "category": "mechanics",
+    "tier": "engineer",
+    "xpBonus": 200
+  },
+  {
+    "id": "badge_rfid_guardian",
+    "name": "Crypto Keymaster",
+    "description": "Authenticated contactless RFID electromagnetic tokens over SPI.",
+    "iconAsset": "assets/images/badges/badge_rfid.png",
+    "category": "security",
+    "tier": "engineer",
+    "xpBonus": 220
+  },
+  {
+    "id": "badge_industrial_chief",
+    "name": "Heavy Industry Chief",
+    "description": "Controlled industrial drill rigs with quadrature rotary encoders.",
+    "iconAsset": "assets/images/badges/badge_drill.png",
+    "category": "industry",
+    "tier": "engineer",
+    "xpBonus": 230
+  },
+  {
+    "id": "badge_turret_commander",
+    "name": "Sentry Commander",
+    "description": "Engineered a motorized dual-servo laser radar tracking turret.",
+    "iconAsset": "assets/images/badges/badge_turret.png",
+    "category": "robotics",
+    "tier": "engineer",
+    "xpBonus": 250
+  },
+  {
+    "id": "badge_earth_scientist",
+    "name": "Hydrologic Guardian",
+    "description": "Built automated flood prevention stations with servo dam gates.",
+    "iconAsset": "assets/images/badges/badge_weather.png",
+    "category": "environment",
+    "tier": "engineer",
+    "xpBonus": 240
+  },
+  {
+    "id": "badge_autopilot_ace",
+    "name": "Autopilot Ace",
+    "description": "Stabilized mechanical robotics gimbals with 6-DOF IMU sensor fusion.",
+    "iconAsset": "assets/images/badges/badge_autopilot.png",
+    "category": "avionics",
+    "tier": "monsterMaster",
+    "xpBonus": 300
+  },
+  {
+    "id": "badge_wireless_wizard",
+    "name": "Wireless Arch-Mage",
+    "description": "Teleoperated distributed robots over 2.4GHz wireless radio packets!",
+    "iconAsset": "assets/images/badges/badge_wireless.png",
+    "category": "telecom",
+    "tier": "monsterMaster",
+    "xpBonus": 350
+  },
+  {
+    "id": "badge_botanist",
+    "name": "Botanical Architect",
+    "description": "Engineered automated greenhouse irrigation and soil telemetry.",
+    "iconAsset": "assets/images/badges/badge_botanist.png",
+    "category": "environment",
+    "tier": "builder",
+    "xpBonus": 180
+  },
+  {
+    "id": "badge_laser_master",
+    "name": "Photon Master",
+    "description": "Constructed invisible laser optical tripwire security grids.",
+    "iconAsset": "assets/images/badges/badge_laser.png",
+    "category": "security",
+    "tier": "builder",
+    "xpBonus": 190
+  },
+  {
+    "id": "badge_rover_commander",
+    "name": "Rover Commander",
+    "description": "Navigated autonomous AGV line-tracking rovers with obstacle reflexes.",
+    "iconAsset": "assets/images/badges/badge_rover.png",
+    "category": "robotics",
+    "tier": "engineer",
+    "xpBonus": 260
+  },
+  {
+    "id": "badge_bluetooth_pioneer",
+    "name": "Bluetooth Pioneer",
+    "description": "Streamed bi-directional wireless telemetry to mobile apps over Bluetooth RF.",
+    "iconAsset": "assets/images/badges/badge_bluetooth.png",
+    "category": "telecom",
+    "tier": "engineer",
+    "xpBonus": 250
+  },
+  {
+    "id": "badge_tachometer_tech",
+    "name": "Tachometer Specialist",
+    "description": "Measured high-speed rotational velocities using hardware interrupts and magnetic hall probes.",
+    "iconAsset": "assets/images/badges/badge_tachometer.png",
+    "category": "instrumentation",
+    "tier": "engineer",
+    "xpBonus": 260
+  },
+  {
+    "id": "badge_iot_architect",
+    "name": "IoT Cloud Architect",
+    "description": "Deployed a standalone HTTP internet web server on bare-metal microcontroller hardware.",
+    "iconAsset": "assets/images/badges/badge_iot.png",
+    "category": "iot",
+    "tier": "monsterMaster",
+    "xpBonus": 380
+  }
+]

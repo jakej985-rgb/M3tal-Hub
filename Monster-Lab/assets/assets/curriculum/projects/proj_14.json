@@ -1,0 +1,175 @@
+{
+  "id": "proj_14",
+  "title": "NRF24L01 Wireless MONSTER",
+  "tagline": "Teleoperation over the airwaves! Send 2.4GHz radio packets between two Arduinos to control robots from across the room.",
+  "tier": "monsterMaster",
+  "estimatedMinutes": 100,
+  "requiredComponents": [
+    "comp_25",
+    "comp_31"
+  ],
+  "prerequisiteLessons": [
+    "lesson_03",
+    "lesson_07"
+  ],
+  "phases": [
+    {
+      "phaseNumber": 1,
+      "phaseTitle": "Gather Radio Transceivers",
+      "type": "gatherParts",
+      "instructions": "Collect 2x Arduino boards, 2x NRF24L01+ 2.4GHz transceivers, 2x 10uF electrolytic capacitors, SG90 servo motor, and joystick.",
+      "verificationCheckpoints": [
+        "2x NRF24L01+ 8-pin wireless modules ready",
+        "2x 10uF filter capacitors ready (vital for RF stability)",
+        "2x Arduino boards ready (e.g. Uno and Nano)"
+      ]
+    },
+    {
+      "phaseNumber": 2,
+      "phaseTitle": "Strict 3.3V RF SPI Wiring",
+      "type": "breadboardWiring",
+      "instructions": "WARNING: NRF24L01 requires strictly 3.3V power (5V destroys chip!). Connect CE to Pin 7, CSN to Pin 8, SCK to Pin 13, MOSI to Pin 11, MISO to Pin 12. Solder or place a 10uF capacitor directly across VCC and GND pins!",
+      "wiringConnections": [
+        {
+          "from": "NRF24 VCC",
+          "to": "Arduino 3.3V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "NRF24 GND",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        },
+        {
+          "from": "NRF24 CE",
+          "to": "Arduino Pin 7",
+          "wire": "Orange",
+          "type": "spi"
+        },
+        {
+          "from": "NRF24 CSN",
+          "to": "Arduino Pin 8",
+          "wire": "Orange",
+          "type": "spi"
+        },
+        {
+          "from": "NRF24 SCK",
+          "to": "Arduino Pin 13",
+          "wire": "Orange",
+          "type": "spi"
+        },
+        {
+          "from": "NRF24 MOSI",
+          "to": "Arduino Pin 11",
+          "wire": "Orange",
+          "type": "spi"
+        },
+        {
+          "from": "NRF24 MISO",
+          "to": "Arduino Pin 12",
+          "wire": "Orange",
+          "type": "spi"
+        },
+        {
+          "from": "Filter Cap (+)",
+          "to": "NRF24 VCC",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "Filter Cap (-)",
+          "to": "NRF24 GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        }
+      ],
+      "verificationCheckpoints": [
+        "VCC connected to 3.3V only",
+        "10uF decoupling capacitor across VCC/GND pins",
+        "SPI lines connected to pins 11, 12, 13"
+      ]
+    },
+    {
+      "phaseNumber": 3,
+      "phaseTitle": "Pre-Flight 3.3V RF Power Verification",
+      "type": "wiringCheck",
+      "instructions": "DOUBLE-CHECK POWER: Check the 3.3V rail. NRF24 draws high-frequency current bursts; without the 10uF capacitor, the radio may fail to initialize.",
+      "verificationCheckpoints": [
+        "Strict 3.3V verification",
+        "Decoupling capacitor polarity correct (stripe is negative)"
+      ]
+    },
+    {
+      "phaseNumber": 4,
+      "phaseTitle": "Code Walkthrough & Radio Pipe Packets",
+      "type": "codeReview",
+      "instructions": "Review the RF24 protocol: opening write/read pipes, packing 32-byte payload structs, and receiving verified ACK packets.",
+      "codeSnippet": "#include <SPI.h>\n#include <nRF24L01.h>\n#include <RF24.h>\n\nRF24 radio(7, 8); // CE, CSN\nconst byte address[6] = \"00001\";\n\nstruct PacketData {\n  int joyX;\n  int joyY;\n  byte button;\n};\n\nvoid setup() {\n  Serial.begin(9600);\n  radio.begin();\n  radio.openWritingPipe(address);\n  radio.setPALevel(RF24_PA_LOW);\n  radio.stopListening();\n}\n\nvoid loop() {\n  PacketData data;\n  data.joyX = analogRead(A0);\n  data.joyY = analogRead(A1);\n  data.button = digitalRead(2);\n\n  radio.write(&data, sizeof(PacketData));\n  delay(20);\n}",
+      "codeExplanation": "- radio.begin() configures Nordic 2.4GHz GFSK transceiver hardware.\n- openWritingPipe sets a 5-byte physical radio frequency address shared between transmitter and receiver.\n- sizeof(PacketData) packs telemetry into an atomic radio frame transmitted at 1 Mbps.\n- Receiver unpacks data and drives servos with sub-5ms latency.",
+      "verificationCheckpoints": [
+        "Understand 2.4GHz wireless pipe address matching",
+        "Understand struct packet serialization and deserialization"
+      ]
+    },
+    {
+      "phaseNumber": 5,
+      "phaseTitle": "Upload & Wireless Flight Range Test",
+      "type": "uploadSketch",
+      "instructions": "Upload transmitter code to Node 1 and receiver code to Node 2. Move 10 meters away and manipulate joystick to watch the remote servo respond instantly!",
+      "verificationCheckpoints": [
+        "Transmitter packet LED confirms delivery",
+        "Remote servo moves in real-time across the room"
+      ]
+    },
+    {
+      "phaseNumber": 6,
+      "phaseTitle": "Mission Complete",
+      "type": "missionComplete",
+      "instructions": "Wireless Mastery! You built a robust 2.4GHz teleoperation radio link for long-range robotics.",
+      "verificationCheckpoints": [
+        "Ready to claim Wireless Wizard badge"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "proj_14_var_1",
+      "title": "Bi-Directional Telemetry Handshake",
+      "description": "Send sensor packets back from receiver to transmitter node to display remote stats.",
+      "alternativeComponents": [
+        "comp_31"
+      ],
+      "wiringDifferences": "No wiring changes required",
+      "codeAdaptation": "Use radio.writeAckPayload() or swap TX/RX roles dynamically"
+    }
+  ],
+  "extensionMissions": [
+    {
+      "id": "proj_14_mis_1",
+      "title": "Long-Range RF Channel Hopping",
+      "objective": "Implement dynamic channel hopping across 2.400GHz-2.525GHz to evade WiFi 2.4GHz interference.",
+      "difficulty": "monsterMaster",
+      "hints": [
+        "Change radio.setChannel() using a shared pseudo-random sequence"
+      ],
+      "xpReward": 90
+    }
+  ],
+  "xpReward": 350,
+  "badgeRewardId": "badge_wireless_wizard",
+  "story": "Master Long-Range Wireless Robot Teleoperation! Establish a 2.4 GHz digital packet radio link between two Arduinos using NRF24L01+ transceivers. Command robotic servos and steering mechanisms over the air from across the room!",
+  "troubleshooting": [
+    {
+      "symptom": "radio.begin() fails or packets drop frequently",
+      "cause": "3.3V rail voltage droop or missing filter capacitor",
+      "solution": "Add a 10uF electrolytic capacitor directly across the NRF24 module's VCC and GND pins.",
+      "category": "power",
+      "diagnosticSteps": [
+        "Add a 10uF capacitor across NRF24L01 VCC and GND pins.",
+        "Ensure VCC is connected to 3.3V only (not 5V)."
+      ]
+    }
+  ]
+}

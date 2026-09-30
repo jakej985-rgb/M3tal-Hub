@@ -1,0 +1,25 @@
+{
+  "id": "chal_14",
+  "title": "NRF24L01 Voltage Killer",
+  "type": "fixWiring",
+  "difficulty": "monsterMaster",
+  "prompt": "An engineer connects an NRF24L01+ 2.4GHz RF module to an Arduino Uno. Why must the VCC pin NEVER be connected to the Arduino 5V header?",
+  "challengeData": {
+    "options": [
+      "5V makes the radio broadcast on illegal frequencies",
+      "The transceiver chip maximum rating is 3.6V; 5V will permanently burn the silicon",
+      "The Arduino 5V regulator cannot deliver more than 1mA",
+      "5V inverts the radio packet bits"
+    ]
+  },
+  "hint": "Check the Nordic Semiconductor silicon datasheet absolute maximum ratings.",
+  "hints": [
+    "Check the Nordic Semiconductor silicon datasheet absolute maximum ratings.",
+    "The maximum operating voltage is 3.6V."
+  ],
+  "explanation": "The NRF24L01+ transceiver chip has an absolute maximum VCC rating of 3.6V. Supplying 5V destroys the radio IC instantly. Note: its SPI I/O pins are 5V-tolerant, but VCC is strictly 3.3V.",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 60
+}

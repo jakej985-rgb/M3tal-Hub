@@ -1,0 +1,53 @@
+{
+  "id": "comp_02",
+  "peripheralNumber": 2,
+  "name": "High-Sensitivity Sound Sensor",
+  "partNumber": "KY-037",
+  "category": "sensor",
+  "description": "Like an ear! Detects acoustic pressure waves with an electret condenser microphone and LM358 amplifier.",
+  "realWorldAnalogy": "Like an ear! Detects acoustic pressure waves with an electret condenser microphone and LM358 amplifier.",
+  "voltage": "dual",
+  "pinout": [
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "Power (3.3V-5V)"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "D0",
+      "type": "digitalIn",
+      "description": "Digital trigger output"
+    },
+    {
+      "pinName": "A0",
+      "type": "analogIn",
+      "description": "Raw analog acoustic waveform"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_02"
+  ],
+  "datasheetRef": "Arduino KY-037 Sensitive microphone sensor module.pdf",
+  "wiringGuidance": "Connect VCC (Red wire) to 5V, GND (Dark Slate wire) to GND. Connect A0 (Yellow wire) to analog pin A0 and D0 (Green wire) to digital pin 2.",
+  "commonMistakes": [
+    "Leaving the onboard blue potentiometer unadjusted\u2014turn it until the onboard LED just turns off in quiet room noise.",
+    "Using digital pin D0 instead of analog pin A0 when trying to measure gradual acoustic volume."
+  ],
+  "miniExperiment": {
+    "title": "Clap & Noise Visualizer",
+    "circuit": "VCC to 5V, GND to GND, A0 to Analog Pin A0.",
+    "code": "void setup() {\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  int soundLevel = analogRead(A0);\n  Serial.print(\"Sound Level: \");\n  Serial.println(soundLevel);\n  delay(50);\n}",
+    "expectedOutput": "A steady stream of values around 500-600. Clapping near the mic causes sharp spikes above 750."
+  }
+}

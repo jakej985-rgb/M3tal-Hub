@@ -1,0 +1,48 @@
+{
+  "id": "comp_35",
+  "peripheralNumber": 35,
+  "name": "10-Trace Resistive Depth Probe",
+  "partNumber": "WL-10",
+  "category": "sensor",
+  "description": "Like a water dipstick! Ten parallel copper traces detect liquid immersion depth by electrical resistance.",
+  "realWorldAnalogy": "Like a water dipstick! Ten parallel copper traces detect liquid immersion depth by electrical resistance.",
+  "voltage": "dual",
+  "pinout": [
+    {
+      "pinName": "+",
+      "type": "power",
+      "description": "Power rail"
+    },
+    {
+      "pinName": "-",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "S",
+      "type": "analogIn",
+      "description": "Analog depth level (A0)"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_12"
+  ],
+  "datasheetRef": "Water Level Sensor.pdf",
+  "wiringGuidance": "Connect + (Red) to 5V, - (Dark Slate) to GND, and S (Yellow) to analog pin A0.",
+  "commonMistakes": [
+    "Submerging past the maximum level line and wetting the top wire pins.",
+    "Powering constantly in water, accelerating copper electrolysis corrosion."
+  ],
+  "miniExperiment": {
+    "title": "Water Immersion Gauge",
+    "circuit": "+ to 5V, - to GND, S to Analog Pin A0.",
+    "code": "void setup() {\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  int depth = analogRead(A0);\n  Serial.print(\"Water Depth: \");\n  Serial.println(depth);\n  delay(250);\n}",
+    "expectedOutput": "Reads 0 when dry; dipping into water increases value proportionally up to ~650."
+  }
+}

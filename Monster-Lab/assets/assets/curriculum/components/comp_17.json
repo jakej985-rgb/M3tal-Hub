@@ -1,0 +1,55 @@
+{
+  "id": "comp_17",
+  "peripheralNumber": 17,
+  "name": "Combustible Gas & CO Sensor",
+  "partNumber": "MQ-9",
+  "category": "sensor",
+  "description": "Industrial safety nose! Detects carbon monoxide and flammable hydrocarbon gas leaks.",
+  "realWorldAnalogy": "Industrial safety nose! Detects carbon monoxide and flammable hydrocarbon gas leaks.",
+  "voltage": "v5",
+  "pinout": [
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "5V Power (150mA heater)"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "D0",
+      "type": "digitalIn",
+      "description": "Digital trigger threshold"
+    },
+    {
+      "pinName": "A0",
+      "type": "analogIn",
+      "description": "Analog gas concentration"
+    }
+  ],
+  "safety": {
+    "level": "restrictedAdultSupervision",
+    "hazards": [
+      "Active internal heating coil",
+      "Testing with live gas sources is strictly prohibited without adults"
+    ],
+    "childSafeAlternative": "Simulate with a potentiometer or test with safe unlit lighter puff under adult eye",
+    "requiresParentUnlock": true
+  },
+  "projectIds": [
+    "proj_06"
+  ],
+  "wiringGuidance": "Connect VCC (Red) to 5V, GND (Dark Slate) to GND, and A0 (Yellow) to analog pin A1.",
+  "commonMistakes": [
+    "Attempting to test with real open gas sources without adult supervision.",
+    "Testing before the heating element has completed warm-up."
+  ],
+  "miniExperiment": {
+    "title": "Combustible Gas Sniffer",
+    "circuit": "VCC to 5V, GND to GND, A0 to Analog Pin A1.",
+    "code": "void setup() {\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  int gasVal = analogRead(A1);\n  Serial.print(\"Gas Reading: \");\n  Serial.println(gasVal);\n  delay(500);\n}",
+    "expectedOutput": "Steady baseline readings in clean ambient air (~80-140)."
+  }
+}

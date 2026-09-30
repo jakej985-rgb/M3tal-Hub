@@ -1,0 +1,49 @@
+{
+  "id": "lesson_05",
+  "title": "Blink: Your First Physical Circuit",
+  "summary": "Take control of physical photons! Toggle digital outputs with digitalWrite() and master delay() timing.",
+  "tier": "rookie",
+  "estimatedMinutes": 25,
+  "prerequisites": [
+    "lesson_04"
+  ],
+  "componentIds": [
+    "comp_34"
+  ],
+  "steps": [
+    {
+      "stepId": "l05_s01",
+      "title": "Digital HIGH vs LOW",
+      "type": "story",
+      "markdownContent": "A digital pin has two states:\n- `HIGH` = 5 Volts (ON)\n- `LOW` = 0 Volts (OFF)\nThis is binary 1 and 0 in the physical world!"
+    },
+    {
+      "stepId": "l05_s02",
+      "title": "The Built-In LED (Pin 13)",
+      "type": "physicalTask",
+      "markdownContent": "Look closely at your Arduino board. Near pin 13 is a tiny amber LED marked with the letter `L`. We can control it without any external wires!"
+    },
+    {
+      "stepId": "l05_s03",
+      "title": "The Blink Code",
+      "type": "codeExperiment",
+      "markdownContent": "```cpp\nvoid setup() {\n  pinMode(13, OUTPUT);\n}\nvoid loop() {\n  digitalWrite(13, HIGH);\n  delay(1000);\n  digitalWrite(13, LOW);\n  delay(1000);\n}\n```\nUpload this code and watch the light blink every second!"
+    },
+    {
+      "stepId": "l05_s04",
+      "title": "Timing Challenge",
+      "type": "quizCheckpoint",
+      "markdownContent": "What does delay(500) do?",
+      "interactiveConfig": {
+        "question": "What is delay(500)?",
+        "options": [
+          "Waits for half a second (500 milliseconds)",
+          "Waits for 500 seconds",
+          "Increases voltage by 500 millivolts"
+        ],
+        "correctIndex": 0
+      }
+    }
+  ],
+  "xpReward": 75
+}

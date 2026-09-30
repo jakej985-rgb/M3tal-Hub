@@ -1,0 +1,25 @@
+{
+  "id": "chal_07",
+  "title": "RGB Color Synthesis",
+  "type": "combineComponents",
+  "difficulty": "builder",
+  "prompt": "You want to produce a warm Yellow glow using a Common Cathode RGB LED connected to PWM pins 9 (Red), 10 (Green), and 11 (Blue). What analogWrite values should you send?",
+  "challengeData": {
+    "options": [
+      "Red: 255, Green: 0, Blue: 255",
+      "Red: 255, Green: 255, Blue: 0",
+      "Red: 0, Green: 255, Blue: 255",
+      "Red: 128, Green: 128, Blue: 128"
+    ]
+  },
+  "hint": "Yellow light in additive color mixing is made of Red and Green.",
+  "hints": [
+    "Yellow light in additive color mixing is made of Red and Green.",
+    "Blue should be turned completely off (0)."
+  ],
+  "explanation": "Additive color synthesis mixes Red light and Green light to create Yellow. Blue is set to 0.",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 40
+}

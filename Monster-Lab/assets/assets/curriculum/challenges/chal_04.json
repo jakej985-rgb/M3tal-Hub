@@ -1,0 +1,26 @@
+{
+  "id": "chal_04",
+  "title": "Double the Blinking Speed",
+  "type": "changeCode",
+  "difficulty": "rookie",
+  "prompt": "The following code blinks an LED once every 2 seconds (1 second ON, 1 second OFF). How should you change it so it blinks twice as fast (twice per second)?",
+  "codeSnippet": "void loop() {\n  digitalWrite(13, HIGH);\n  delay(1000);\n  digitalWrite(13, LOW);\n  delay(1000);\n}",
+  "challengeData": {
+    "options": [
+      "Change delay(1000) to delay(2000)",
+      "Change delay(1000) to delay(500)",
+      "Change digitalWrite(13, HIGH) to digitalWrite(13, 200)",
+      "Add a second loop() function"
+    ]
+  },
+  "hint": "Blinking twice as fast means the total period is cut in half.",
+  "hints": [
+    "Blinking twice as fast means the total period is cut in half.",
+    "Halving 1000ms delay gives 500ms delay for each phase."
+  ],
+  "explanation": "Changing delay(1000) to delay(500) makes the LED stay HIGH for 0.5s and LOW for 0.5s, completing a full cycle every 1.0 second (twice as fast).",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 35
+}

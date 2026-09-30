@@ -1,0 +1,25 @@
+{
+  "id": "chal_13",
+  "title": "Automated Sump Pump Threshold",
+  "type": "buildFromGoal",
+  "difficulty": "engineer",
+  "prompt": "Design the logic condition for a sump pump controller: The pump (relay on Pin 4) should turn ON when water level exceeds 700 AND temperature is above freezing (0\u00b0C). It should turn OFF otherwise.",
+  "challengeData": {
+    "options": [
+      "if (waterLevel > 700 || temperature > 0)",
+      "if (waterLevel > 700 && temperature > 0)",
+      "if (waterLevel < 700 && temperature < 0)",
+      "if (waterLevel == 700 && temperature == 0)"
+    ]
+  },
+  "hint": "Use logical AND (&&) to combine both sensor conditions.",
+  "hints": [
+    "Use logical AND (&&) to combine both sensor conditions.",
+    "Check that both water > 700 and temp > 0."
+  ],
+  "explanation": "The compound boolean expression `waterLevel > 700 && temperature > 0` ensures the pump activates only when water is dangerously high and not frozen.",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 50
+}

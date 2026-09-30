@@ -1,0 +1,26 @@
+{
+  "id": "chal_05",
+  "title": "I2C Bus Address Collision",
+  "type": "debugLogic",
+  "difficulty": "builder",
+  "prompt": "An engineer wired an LCD1602 display and an RTC clock to pins A4 (SDA) and A5 (SCL). The LCD fails to initialize while the clock works erratically. What is the most likely cause?",
+  "circuitSnippet": "A4 (SDA) -> LCD SDA & RTC SDA\nA5 (SCL) -> LCD SCL & RTC SCL\n5V & GND shared",
+  "challengeData": {
+    "options": [
+      "I2C only supports a single peripheral at a time",
+      "Both devices might have conflicting I2C addresses or improper bus pull-ups",
+      "The clock must be connected to digital pins 0 and 1",
+      "SDA and SCL must be swapped on the LCD"
+    ]
+  },
+  "hint": "I2C devices share the bus wires, but each device must have a unique identifier.",
+  "hints": [
+    "I2C devices share the bus wires, but each device must have a unique identifier.",
+    "Run an I2C scanner sketch to verify unique hex bus addresses."
+  ],
+  "explanation": "I2C allows multiple peripherals on SDA/SCL, but each must have a unique hex address. If two modules share an address (or have missing pull-ups), bus collision occurs.",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 40
+}

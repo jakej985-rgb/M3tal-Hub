@@ -1,0 +1,58 @@
+{
+  "id": "comp_21",
+  "peripheralNumber": 21,
+  "name": "Dual-Axis Analog Joystick Module",
+  "partNumber": "KY-023",
+  "category": "sensor",
+  "description": "Like a gaming controller thumbstick! Contains two potentiometers (X and Y) and a tactile push button.",
+  "realWorldAnalogy": "Like a gaming controller thumbstick! Contains two potentiometers (X and Y) and a tactile push button.",
+  "voltage": "v5",
+  "pinout": [
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "+5V",
+      "type": "power",
+      "description": "5V Power"
+    },
+    {
+      "pinName": "VRx",
+      "type": "analogIn",
+      "description": "Horizontal X-Axis (0-1023)"
+    },
+    {
+      "pinName": "VRy",
+      "type": "analogIn",
+      "description": "Vertical Y-Axis (0-1023)"
+    },
+    {
+      "pinName": "SW",
+      "type": "digitalIn",
+      "description": "Pushbutton switch"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_08"
+  ],
+  "datasheetRef": "JOYSTICK MODULE.pdf",
+  "wiringGuidance": "Connect GND (Dark Slate) to GND, +5V (Red) to 5V, VRx (Yellow) to A0, VRy (Yellow) to A1, and SW (Green) to digital pin 2.",
+  "commonMistakes": [
+    "Leaving the switch pin SW floating without INPUT_PULLUP.",
+    "Expecting exact 512 center values without accounting for mechanical potentiometer tolerances."
+  ],
+  "miniExperiment": {
+    "title": "Arcade Joystick Coordinates",
+    "circuit": "GND to GND, 5V to 5V, VRx to A0, VRy to A1, SW to Pin 2.",
+    "code": "void setup() {\n  Serial.begin(9600);\n  pinMode(2, INPUT_PULLUP);\n}\n\nvoid loop() {\n  int x = analogRead(A0);\n  int y = analogRead(A1);\n  int btn = digitalRead(2);\n  Serial.print(\"X: \"); Serial.print(x);\n  Serial.print(\" | Y: \"); Serial.print(y);\n  Serial.print(\" | Click: \"); Serial.println(btn == LOW ? \"YES\" : \"NO\");\n  delay(100);\n}",
+    "expectedOutput": "Serial Monitor streams live 2-axis stick coordinates and button click states."
+  }
+}

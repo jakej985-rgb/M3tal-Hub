@@ -1,0 +1,134 @@
+{
+  "id": "proj_02",
+  "title": "Beat Detector MONSTER",
+  "tagline": "Turn sound waves into light shows that pulse with your favorite music!",
+  "tier": "rookie",
+  "estimatedMinutes": 30,
+  "requiredComponents": [
+    "comp_02"
+  ],
+  "prerequisiteLessons": [
+    "lesson_06"
+  ],
+  "phases": [
+    {
+      "phaseNumber": 1,
+      "phaseTitle": "Gather Acoustic Hardware",
+      "type": "gatherParts",
+      "instructions": "Collect the KY-037 Sound Sensor module, 3x LEDs (Red, Green, Blue), 3x 220-ohm resistors, and jumpers.",
+      "verificationCheckpoints": [
+        "KY-037 microphone sensor with electret capsule ready",
+        "3x 220-ohm resistors ready",
+        "3x colored LEDs ready"
+      ]
+    },
+    {
+      "phaseNumber": 2,
+      "phaseTitle": "Breadboard Wiring",
+      "type": "breadboardWiring",
+      "instructions": "Wire KY-037 power and analog output A0. Wire the 3 LEDs to digital pins 9, 10, 11 with 220-ohm current-limiting resistors.",
+      "wiringConnections": [
+        {
+          "from": "KY-037 VCC",
+          "to": "Arduino 5V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "KY-037 GND",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        },
+        {
+          "from": "KY-037 A0",
+          "to": "Arduino Pin A0",
+          "wire": "Yellow",
+          "type": "analogIn"
+        },
+        {
+          "from": "LED 1 Anode",
+          "to": "Arduino Pin 9",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "LED 2 Anode",
+          "to": "Arduino Pin 10",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "LED 3 Anode",
+          "to": "Arduino Pin 11",
+          "wire": "Green",
+          "type": "digitalOut"
+        }
+      ],
+      "verificationCheckpoints": [
+        "KY-037 A0 connected to Arduino Analog Pin A0",
+        "LED cathodes all tied to GND rail"
+      ]
+    },
+    {
+      "phaseNumber": 3,
+      "phaseTitle": "Microphone Calibration Check",
+      "type": "wiringCheck",
+      "instructions": "Check that the trimmer screw on the blue box on KY-037 is tuned so the onboard LED stays off in quiet room noise.",
+      "verificationCheckpoints": [
+        "No short between 5V and GND",
+        "Analog wire in A0",
+        "Turn potentiometer screw until onboard LED is just off"
+      ]
+    },
+    {
+      "phaseNumber": 4,
+      "phaseTitle": "Code Walkthrough & Waveform Analysis",
+      "type": "codeReview",
+      "instructions": "Examine the sketch. We take high-speed analog samples, calculate acoustic deviations from baseline 512, and light up LEDs proportionally to loudness.",
+      "codeSnippet": "const int micPin = A0;\nconst int ledPins[3] = {9, 10, 11};\n\nvoid setup() {\n  Serial.begin(9600);\n  for (int i = 0; i < 3; i++) pinMode(ledPins[i], OUTPUT);\n}\n\nvoid loop() {\n  int raw = analogRead(micPin);\n  int amplitude = abs(raw - 512);\n\n  digitalWrite(ledPins[0], amplitude > 20 ? HIGH : LOW);\n  digitalWrite(ledPins[1], amplitude > 60 ? HIGH : LOW);\n  digitalWrite(ledPins[2], amplitude > 120 ? HIGH : LOW);\n\n  delay(20);\n}",
+      "codeExplanation": "- abs(raw - 512) measures how far sound pressure waves swing away from silence midpoint (512).\n- Moderate sounds (>20) light LED 1.\n- Louder claps (>60) light LED 2.\n- Peak beats (>120) light all 3 LEDs simultaneously.",
+      "verificationCheckpoints": [
+        "Understand acoustic amplitude calculation",
+        "Understand tiered threshold activation"
+      ]
+    },
+    {
+      "phaseNumber": 5,
+      "phaseTitle": "Upload & Beat Test",
+      "type": "uploadSketch",
+      "instructions": "Upload the code, open Serial Plotter, play music near the mic or clap hands, and watch the LEDs pulse with the rhythm!",
+      "verificationCheckpoints": [
+        "LEDs pulse in sync with claps",
+        "Quiet room leaves all LEDs off"
+      ]
+    },
+    {
+      "phaseNumber": 6,
+      "phaseTitle": "Mission Complete",
+      "type": "missionComplete",
+      "instructions": "Groovy! You built an acoustic sound visualizer and mastered ADC signal processing.",
+      "verificationCheckpoints": [
+        "System responds accurately to rhythm",
+        "Ready to claim Audio Engineer badge"
+      ]
+    }
+  ],
+  "troubleshooting": [
+    {
+      "symptom": "LEDs are permanently ON even when quiet",
+      "cause": "Sensitivity screw tuned too sensitive",
+      "solution": "Rotate the brass screw on the blue potentiometer counter-clockwise until LEDs turn off.",
+      "category": "logic",
+      "diagnosticSteps": [
+        "Use a small screwdriver to turn the blue potentiometer on the microphone module.",
+        "Open Serial Monitor to observe live acoustic baseline numbers."
+      ]
+    }
+  ],
+  "xpReward": 100,
+  "badgeRewardId": "badge_audio_engineer",
+  "story": "Your robot wants to dance! Build an acoustic Beat Detector that samples acoustic pressure waves through a microphone and creates a pulsing light show synced to your clapping or music.",
+  "variants": [],
+  "extensionMissions": []
+}

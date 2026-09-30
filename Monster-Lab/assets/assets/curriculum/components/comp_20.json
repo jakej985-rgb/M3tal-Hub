@@ -1,0 +1,49 @@
+{
+  "id": "comp_20",
+  "peripheralNumber": 20,
+  "name": "10k Rotary Potentiometer",
+  "partNumber": "WH148",
+  "category": "passive",
+  "description": "Like a physical volume knob! Creates a smooth voltage divider from 0 to 5 volts as you turn it.",
+  "realWorldAnalogy": "Like a physical volume knob! Creates a smooth voltage divider from 0 to 5 volts as you turn it.",
+  "voltage": "dual",
+  "pinout": [
+    {
+      "pinName": "1",
+      "type": "passive",
+      "description": "5V End terminal"
+    },
+    {
+      "pinName": "2",
+      "type": "analogIn",
+      "description": "Center Wiper (Variable voltage)"
+    },
+    {
+      "pinName": "3",
+      "type": "passive",
+      "description": "Ground End terminal"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_08",
+    "proj_18"
+  ],
+  "datasheetRef": "Potentiometers.pdf",
+  "wiringGuidance": "Connect left pin 1 to 5V (Red), right pin 3 to GND (Dark Slate), and center wiper pin 2 to analog pin A0 (Yellow).",
+  "commonMistakes": [
+    "Connecting center wiper to 5V and outer pins to GND (creates a direct dead short when turned fully!).",
+    "Forcing the shaft beyond its ~270 degree mechanical limits."
+  ],
+  "miniExperiment": {
+    "title": "Rotary Voltage Gauge",
+    "circuit": "Pin 1 to 5V, Pin 2 to A0, Pin 3 to GND.",
+    "code": "void setup() {\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  int raw = analogRead(A0);\n  float volts = raw * (5.0 / 1023.0);\n  Serial.print(\"Raw: \"); Serial.print(raw);\n  Serial.print(\" | Voltage: \"); Serial.print(volts);\n  Serial.println(\" V\");\n  delay(100);\n}",
+    "expectedOutput": "Rotating the knob smoothly shifts readings from 0 (0.00V) to 1023 (5.00V)."
+  }
+}

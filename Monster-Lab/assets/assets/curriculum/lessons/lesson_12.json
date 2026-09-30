@@ -1,0 +1,51 @@
+{
+  "id": "lesson_12",
+  "title": "PWM & Motor Physics",
+  "summary": "Harness high-power inductors! Control motor speed with pulse width modulation and protect pins with flyback diodes.",
+  "tier": "engineer",
+  "estimatedMinutes": 35,
+  "prerequisites": [
+    "lesson_06",
+    "lesson_07"
+  ],
+  "componentIds": [
+    "comp_33",
+    "comp_36"
+  ],
+  "steps": [
+    {
+      "stepId": "l12_s01",
+      "title": "Inductive Coils & Magnetic Fields",
+      "type": "story",
+      "markdownContent": "Motors and relays contain coils of wire that build magnetic fields. When power is suddenly cut, the collapsing field generates a high-voltage spike called **inductive kickback**!"
+    },
+    {
+      "stepId": "l12_s02",
+      "title": "The Flyback Diode Protector",
+      "type": "visualExplanation",
+      "markdownContent": "A 1N4007 diode wired across the motor in reverse safely absorbs these 50V+ voltage spikes, protecting your Arduino's sensitive transistors from destruction."
+    },
+    {
+      "stepId": "l12_s03",
+      "title": "H-Bridge Drivers (L293D)",
+      "type": "codeExperiment",
+      "markdownContent": "Microcontroller pins can only supply 20mA. To spin high-current 500mA motors forward and backward, we command an **H-Bridge** driver chip like the L293D!"
+    },
+    {
+      "stepId": "l12_s04",
+      "title": "Flyback Checkpoint",
+      "type": "quizCheckpoint",
+      "markdownContent": "Why do engineers install a flyback diode across DC motor and relay coils?",
+      "interactiveConfig": {
+        "question": "What is the purpose of a flyback diode?",
+        "options": [
+          "To absorb high-voltage inductive kickback spikes when the coil shuts off",
+          "To make the motor spin backwards",
+          "To turn battery power into AC wall electricity"
+        ],
+        "correctIndex": 0
+      }
+    }
+  ],
+  "xpReward": 100
+}

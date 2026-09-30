@@ -1,0 +1,26 @@
+{
+  "id": "chal_09",
+  "title": "Active Buzzer Reversed Polarity",
+  "type": "fixWiring",
+  "difficulty": "builder",
+  "prompt": "An active buzzer is wired to Pin 8 and GND, but it produces a faint, muted clicking instead of a loud 2.5kHz beep. The long leg is connected to GND and short leg to Pin 8. What is wrong?",
+  "circuitSnippet": "Pin 8 -> Short Leg (-)\nGND -> Long Leg (+)",
+  "challengeData": {
+    "options": [
+      "Buzzers only work on analog pins",
+      "The buzzer is backwards: the longer positive lead must go to Pin 8 and shorter lead to GND",
+      "A 10k resistor is required in series",
+      "The buzzer needs an AC alternating current"
+    ]
+  },
+  "hint": "Like LEDs and electrolytic capacitors, buzzers are polarized components.",
+  "hints": [
+    "Like LEDs and electrolytic capacitors, buzzers are polarized components.",
+    "The longer lead indicates positive anode (+)."
+  ],
+  "explanation": "Piezo buzzers and active sounders are polarized. The longer lead (+) must connect to the signal pin (Pin 8) and the shorter lead (-) to GND.",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 40
+}

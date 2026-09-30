@@ -1,0 +1,46 @@
+{
+  "id": "comp_37",
+  "peripheralNumber": 37,
+  "name": "650nm Red Laser Diode Module",
+  "partNumber": "KY-008",
+  "category": "actuator",
+  "description": "Like a sci-fi targeting beam! Concentrated 650nm red optical laser diode for security tripwires.",
+  "realWorldAnalogy": "Like a sci-fi targeting beam! Concentrated 650nm red optical laser diode for security tripwires.",
+  "voltage": "v5",
+  "pinout": [
+    {
+      "pinName": "Signal",
+      "type": "digitalOut",
+      "description": "Laser toggle (HIGH = On)"
+    },
+    {
+      "pinName": "-",
+      "type": "ground",
+      "description": "Ground"
+    }
+  ],
+  "safety": {
+    "level": "caution",
+    "hazards": [
+      "Direct eye exposure to laser beam can cause retinal injury"
+    ],
+    "childSafeAlternative": "Never look directly into laser aperture; use target reflective paper only",
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_11",
+    "proj_16"
+  ],
+  "datasheetRef": "Button.pdf",
+  "wiringGuidance": "Connect Signal (Green wire) to digital pin 8 and - (Dark Slate wire) to GND.",
+  "commonMistakes": [
+    "Pointing the laser beam at eyes, faces, or reflective surfaces (serious eye safety hazard).",
+    "Leaving the laser diode powered continuously without heat dissipation."
+  ],
+  "miniExperiment": {
+    "title": "Laser Pulse Blaster",
+    "circuit": "Signal to Pin 8, (-) to GND.",
+    "code": "const int laserPin = 8;\n\nvoid setup() {\n  pinMode(laserPin, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(laserPin, HIGH);\n  delay(500);\n  digitalWrite(laserPin, LOW);\n  delay(500);\n}",
+    "expectedOutput": "A bright red 650nm laser beam pulses on and off every half second onto a safe target sheet."
+  }
+}

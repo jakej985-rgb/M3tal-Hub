@@ -1,0 +1,45 @@
+{
+  "id": "lesson_01",
+  "title": "What is Arduino & How Does It Work?",
+  "summary": "Discover the brain of your robot! Learn what microcontrollers do, explore the pins, and understand how power flows.",
+  "tier": "rookie",
+  "estimatedMinutes": 15,
+  "prerequisites": [],
+  "componentIds": [],
+  "steps": [
+    {
+      "stepId": "l01_s01",
+      "title": "Meet the Monster Brain",
+      "type": "story",
+      "markdownContent": "Welcome to Monster Lab! Inside your kit is an **Arduino Uno**\u2014a tiny computer designed to control sensors, lights, and motors in the real world."
+    },
+    {
+      "stepId": "l01_s02",
+      "title": "Inputs vs Outputs",
+      "type": "visualExplanation",
+      "markdownContent": "A microcontroller reads **Inputs** (eyes and ears like distance and sound sensors) and commands **Outputs** (hands and voice like motors and buzzers)."
+    },
+    {
+      "stepId": "l01_s03",
+      "title": "Pin Tour: Power and Ground",
+      "type": "physicalTask",
+      "markdownContent": "Locate the `5V` (Power) and `GND` (Ground) pins on your board. Electricity flows from 5V through your circuit and returns to GND!"
+    },
+    {
+      "stepId": "l01_s04",
+      "title": "Knowledge Check",
+      "type": "quizCheckpoint",
+      "markdownContent": "What role does Ground (GND) play in an electrical circuit?",
+      "interactiveConfig": {
+        "question": "What is Ground (GND)?",
+        "options": [
+          "A battery that provides unlimited power",
+          "The return path for electric current to complete the circuit",
+          "A sensor that measures dirt depth"
+        ],
+        "correctIndex": 1
+      }
+    }
+  ],
+  "xpReward": 50
+}

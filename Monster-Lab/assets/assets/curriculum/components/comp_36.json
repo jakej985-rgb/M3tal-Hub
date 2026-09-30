@@ -1,0 +1,51 @@
+{
+  "id": "comp_36",
+  "peripheralNumber": 36,
+  "name": "1-Channel Optocoupled 5V Relay",
+  "partNumber": "SRD-05VDC",
+  "category": "actuator",
+  "description": "Like a heavy-duty electric light switch! Uses an electromagnet to safely switch external high-current circuits.",
+  "realWorldAnalogy": "Like a heavy-duty electric light switch! Uses an electromagnet to safely switch external high-current circuits.",
+  "voltage": "v5",
+  "pinout": [
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "5V Power"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "IN",
+      "type": "digitalOut",
+      "description": "Optocoupled control trigger"
+    }
+  ],
+  "safety": {
+    "level": "restrictedAdultSupervision",
+    "hazards": [
+      "High voltage switching hazard if connected to mains AC",
+      "Adult supervision required"
+    ],
+    "childSafeAlternative": "Use only with low voltage DC (batteries under 12V); NEVER connect to 120V/240V wall outlets",
+    "requiresParentUnlock": true
+  },
+  "projectIds": [
+    "proj_15"
+  ],
+  "datasheetRef": "5V Relay.pdf",
+  "wiringGuidance": "Connect VCC (Red) to 5V, GND (Dark Slate) to GND, and IN (Green) to digital pin 7. Use only with low-voltage DC loads (under 12V).",
+  "commonMistakes": [
+    "Attempting to wire 120V/240V mains household voltage (strictly forbidden without adult supervision).",
+    "Not accounting for active-LOW relay triggering."
+  ],
+  "miniExperiment": {
+    "title": "Relay Click Switcher",
+    "circuit": "VCC to 5V, GND to GND, IN to Pin 7.",
+    "code": "const int relayPin = 7;\n\nvoid setup() {\n  pinMode(relayPin, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(relayPin, LOW);\n  delay(2000);\n  digitalWrite(relayPin, HIGH);\n  delay(2000);\n}",
+    "expectedOutput": "The mechanical relay audibly clicks every two seconds and toggles its indicator LED."
+  }
+}

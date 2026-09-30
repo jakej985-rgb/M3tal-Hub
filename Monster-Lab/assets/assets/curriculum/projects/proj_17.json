@@ -1,0 +1,163 @@
+{
+  "id": "proj_17",
+  "title": "Autonomous Line Tracking Rover",
+  "tagline": "Deploy autonomous warehouse logistics! Guide an AGV robot over complex black electrical tape race tracks.",
+  "tier": "engineer",
+  "estimatedMinutes": 80,
+  "requiredComponents": [
+    "comp_14",
+    "comp_33",
+    "comp_04"
+  ],
+  "prerequisiteLessons": [
+    "lesson_12"
+  ],
+  "phases": [
+    {
+      "phaseNumber": 1,
+      "phaseTitle": "Gather Robotic Hardware",
+      "type": "gatherParts",
+      "instructions": "Locate from your kit: Arduino Uno, TCRT5000 Dual Line Trackers (comp_14), 130 DC Motor (comp_33), L293D Motor Driver IC, Crash Switch (comp_04), Battery clip, Breadboard, and wires.",
+      "verificationCheckpoints": [
+        "Two TCRT5000 IR reflectance sensors ready",
+        "L293D H-bridge IC notch orientation identified",
+        "Dual DC drive motors wired"
+      ]
+    },
+    {
+      "phaseNumber": 2,
+      "phaseTitle": "H-Bridge & Sensor Breadboard Wiring",
+      "type": "breadboardWiring",
+      "instructions": "Mount L293D across center breadboard trough. Connect motor controls to Pins 5, 6, 9, 10. Connect Left Line Sensor to Pin 2, Right Line Sensor to Pin 3, and Crash Switch to Pin 4.",
+      "wiringConnections": [
+        {
+          "from": "Left Line D0",
+          "to": "Arduino Pin 2",
+          "wire": "Green",
+          "type": "digitalIn"
+        },
+        {
+          "from": "Right Line D0",
+          "to": "Arduino Pin 3",
+          "wire": "Yellow",
+          "type": "digitalIn"
+        },
+        {
+          "from": "Crash Switch OUT",
+          "to": "Arduino Pin 4",
+          "wire": "Orange",
+          "type": "digitalIn"
+        },
+        {
+          "from": "L293D IN1",
+          "to": "Arduino Pin 5",
+          "wire": "Blue",
+          "type": "digitalOut"
+        },
+        {
+          "from": "L293D IN2",
+          "to": "Arduino Pin 6",
+          "wire": "Blue",
+          "type": "digitalOut"
+        },
+        {
+          "from": "L293D IN3",
+          "to": "Arduino Pin 9",
+          "wire": "Purple",
+          "type": "digitalOut"
+        },
+        {
+          "from": "L293D IN4",
+          "to": "Arduino Pin 10",
+          "wire": "Purple",
+          "type": "digitalOut"
+        }
+      ],
+      "verificationCheckpoints": [
+        "L293D pin 16 (VCC1) to 5V, pin 8 (VCC2) to battery power",
+        "Common ground linked between battery and Arduino"
+      ]
+    },
+    {
+      "phaseNumber": 3,
+      "phaseTitle": "Ground Sensor Calibration",
+      "type": "wiringCheck",
+      "instructions": "Adjust the tiny trimmer potentiometers on the TCRT5000 boards so the indicator LED turns ON over white paper and OFF over black tape.",
+      "verificationCheckpoints": [
+        "Sensors differentiate black tape from white floor at 5mm distance",
+        "Crash switch triggers cleanly upon bumper contact"
+      ]
+    },
+    {
+      "phaseNumber": 4,
+      "phaseTitle": "Code Walkthrough & Differential Steering",
+      "type": "codeReview",
+      "instructions": "Review differential robot steering: both sensors on white = drive forward; left sensor on black line = pivot left; right on black line = pivot right; crash switch active = full emergency stop!",
+      "codeSnippet": "const int LEFT_SENSOR = 2;\nconst int RIGHT_SENSOR = 3;\nconst int BUMPER_PIN = 4;\n\nvoid setup() {\n  pinMode(LEFT_SENSOR, INPUT);\n  pinMode(RIGHT_SENSOR, INPUT);\n  pinMode(BUMPER_PIN, INPUT_PULLUP);\n  pinMode(5, OUTPUT); pinMode(6, OUTPUT);\n  pinMode(9, OUTPUT); pinMode(10, OUTPUT);\n}\n\nvoid driveForward() {\n  digitalWrite(5, HIGH); digitalWrite(6, LOW);\n  digitalWrite(9, HIGH); digitalWrite(10, LOW);\n}\nvoid turnLeft() {\n  digitalWrite(5, LOW); digitalWrite(6, LOW);\n  digitalWrite(9, HIGH); digitalWrite(10, LOW);\n}\nvoid turnRight() {\n  digitalWrite(5, HIGH); digitalWrite(6, LOW);\n  digitalWrite(9, LOW); digitalWrite(10, LOW);\n}\nvoid stopMotors() {\n  digitalWrite(5, LOW); digitalWrite(6, LOW);\n  digitalWrite(9, LOW); digitalWrite(10, LOW);\n}\n\nvoid loop() {\n  if (digitalRead(BUMPER_PIN) == LOW) {\n    stopMotors(); return;\n  }\n  int left = digitalRead(LEFT_SENSOR);\n  int right = digitalRead(RIGHT_SENSOR);\n  if (left == HIGH && right == HIGH) driveForward();\n  else if (left == LOW && right == HIGH) turnLeft();\n  else if (left == HIGH && right == LOW) turnRight();\n  else stopMotors();\n}",
+      "codeExplanation": "- Digital inputs 2 and 3 evaluate optical infrared reflectance in real time.\n- Dual H-Bridge channels control wheel motor velocity independently to correct heading.\n- Bumper collision switch immediately halts motors to prevent damage.",
+      "verificationCheckpoints": [
+        "Understand bang-bang differential steering",
+        "Verify fail-safe bumper priority override"
+      ]
+    },
+    {
+      "phaseNumber": 5,
+      "phaseTitle": "Upload & Track Navigation Run",
+      "type": "uploadSketch",
+      "instructions": "Place rover on a black tape loop track. Power on battery switch: the rover tracks the line smoothly around corners and stops when bumping a wall!",
+      "verificationCheckpoints": [
+        "Rover follows closed-loop tape path without leaving line",
+        "Collision bumper immediately cuts motor drive"
+      ]
+    },
+    {
+      "phaseNumber": 6,
+      "phaseTitle": "Mission Complete",
+      "type": "missionComplete",
+      "instructions": "Autonomous Vehicle Engineer! You deployed differential robotics navigation and real-time obstacle avoidance.",
+      "verificationCheckpoints": [
+        "Ready to claim Rover Commander badge"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "proj_17_var_1",
+      "title": "3-Sensor PID Tracking",
+      "description": "Add a third TCRT5000 sensor in center to implement proportional steering corrections.",
+      "alternativeComponents": [
+        "comp_14"
+      ],
+      "wiringDifferences": "Add Center IR sensor to Pin A0",
+      "codeAdaptation": "Compute error offset (-1, 0, 1) and calculate proportional PWM differential steering"
+    }
+  ],
+  "extensionMissions": [
+    {
+      "id": "proj_17_mis_1",
+      "title": "Autonomous Obstacle Braking",
+      "objective": "Mount an ultrasonic sensor (comp_01) on the front bumper to stop rover 15cm before collisions.",
+      "difficulty": "engineer",
+      "hints": [
+        "Call pingDistance() each loop",
+        "If distance < 15, immediately brake motors and sound warning beep"
+      ],
+      "xpReward": 85
+    }
+  ],
+  "xpReward": 260,
+  "badgeRewardId": "badge_rover_commander",
+  "story": "The Monster Lab logistics rover needs to deliver supplies around the facility without human drivers! Program dual TCRT5000 infrared reflection sensors and an L293D dual motor driver to follow floor lines autonomously.",
+  "troubleshooting": [
+    {
+      "symptom": "Rover spins in circles instead of following line",
+      "cause": "Motor wiring polarity reversed on one channel",
+      "solution": "Swap motor terminals on L293D pins 3 and 6 (or 11 and 14).",
+      "category": "wiring",
+      "diagnosticSteps": [
+        "Elevate rover wheels off ground",
+        "Verify both wheels spin forward during driveForward()"
+      ]
+    }
+  ]
+}

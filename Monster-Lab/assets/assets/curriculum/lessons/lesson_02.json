@@ -1,0 +1,47 @@
+{
+  "id": "lesson_02",
+  "title": "Setting Up Your Monster Lab Station",
+  "summary": "Install the Arduino IDE, connect your board via USB, and verify serial communication link.",
+  "tier": "rookie",
+  "estimatedMinutes": 20,
+  "prerequisites": [
+    "lesson_01"
+  ],
+  "componentIds": [],
+  "steps": [
+    {
+      "stepId": "l02_s01",
+      "title": "The Arduino IDE Workbench",
+      "type": "story",
+      "markdownContent": "To give commands to your Monster, you write code in the **Arduino IDE** (Integrated Development Environment) on your computer."
+    },
+    {
+      "stepId": "l02_s02",
+      "title": "USB Cable Connection",
+      "type": "physicalTask",
+      "markdownContent": "Plug the blue USB cable into your Arduino and your computer. Watch for the green `ON` LED illuminating on the board."
+    },
+    {
+      "stepId": "l02_s03",
+      "title": "Select Board and Port",
+      "type": "visualExplanation",
+      "markdownContent": "Go to **Tools > Board > Arduino Uno**, then select the active COM / Serial port for your device."
+    },
+    {
+      "stepId": "l02_s04",
+      "title": "Connection Checkpoint",
+      "type": "quizCheckpoint",
+      "markdownContent": "Which menu in the IDE lets you choose your Arduino board model?",
+      "interactiveConfig": {
+        "question": "Where do you select your board?",
+        "options": [
+          "Edit > Cut",
+          "Tools > Board",
+          "Help > About"
+        ],
+        "correctIndex": 1
+      }
+    }
+  ],
+  "xpReward": 50
+}

@@ -1,0 +1,48 @@
+{
+  "id": "comp_05",
+  "peripheralNumber": 5,
+  "name": "Photo Interrupter Sensor",
+  "partNumber": "ITR9608",
+  "category": "sensor",
+  "description": "Like an invisible tripwire! Infrared beam between two posts detects when an object breaks the beam.",
+  "realWorldAnalogy": "Like an invisible tripwire! Infrared beam between two posts detects when an object breaks the beam.",
+  "voltage": "dual",
+  "pinout": [
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "Power rail"
+    },
+    {
+      "pinName": "OUT",
+      "type": "digitalIn",
+      "description": "Optical break trigger"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_19"
+  ],
+  "datasheetRef": "CDS-55 Photoresistor.pdf",
+  "wiringGuidance": "Connect VCC (Red) to 5V, GND (Dark Slate) to GND, and OUT (Green) to digital pin 2.",
+  "commonMistakes": [
+    "Placing transparent objects in the slit that do not sufficiently block infrared light.",
+    "Confusing active-HIGH or active-LOW trigger conditions."
+  ],
+  "miniExperiment": {
+    "title": "Optical Speed Gate",
+    "circuit": "VCC to 5V, GND to GND, OUT to Digital Pin 2.",
+    "code": "const int gatePin = 2;\n\nvoid setup() {\n  pinMode(gatePin, INPUT);\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  if (digitalRead(gatePin) == HIGH) {\n    Serial.println(\"Beam Interrupted!\");\n    delay(150);\n  }\n}",
+    "expectedOutput": "Serial Monitor announces 'Beam Interrupted!' the instant an opaque card or toothpick enters the optical slot."
+  }
+}

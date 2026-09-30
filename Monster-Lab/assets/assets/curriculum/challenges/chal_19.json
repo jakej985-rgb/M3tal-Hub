@@ -1,0 +1,25 @@
+{
+  "id": "chal_19",
+  "title": "SPI Chip Select Protocol",
+  "type": "debugLogic",
+  "difficulty": "builder",
+  "prompt": "When multiple SPI peripherals (e.g., SD Card and Ethernet W5100) share the MOSI, MISO, and SCK lines, how does the master communicate with only one device at a time?",
+  "challengeData": {
+    "options": [
+      "By broadcasting device addresses in the first byte of every transaction",
+      "By driving the target slave's dedicated Chip Select (CS/SS) pin LOW while keeping all other CS pins HIGH",
+      "By switching the SPI clock speed between 1MHz and 10MHz",
+      "By disconnecting the MISO wire physically with a relay"
+    ]
+  },
+  "hint": "SPI slave select lines are active-low.",
+  "hints": [
+    "SPI slave select lines are active-low.",
+    "Slaves keep their MISO output in high-impedance (tri-state) unless their CS pin is pulled LOW."
+  ],
+  "explanation": "SPI uses dedicated Chip Select (CS) pins per device. Pulling a device's CS line LOW enables its SPI transceiver and MISO bus driver, while keeping inactive devices HIGH prevents bus contention.",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 50
+}

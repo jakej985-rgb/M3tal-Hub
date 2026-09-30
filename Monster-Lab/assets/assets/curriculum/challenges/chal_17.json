@@ -1,0 +1,25 @@
+{
+  "id": "chal_17",
+  "title": "Internal Pull-Up Inversion",
+  "type": "debugLogic",
+  "difficulty": "rookie",
+  "prompt": "When configuring a pushbutton input with pinMode(2, INPUT_PULLUP), what logic state does digitalRead(2) return when the button is actively pressed down connecting Pin 2 to GND?",
+  "challengeData": {
+    "options": [
+      "HIGH (1) because pressing creates power",
+      "LOW (0) because pressing connects the pin to Ground",
+      "Floating (random 0 or 1)",
+      "An analog voltage between 2V and 3V"
+    ]
+  },
+  "hint": "Think about which rail the button connects the input pin to when closed.",
+  "hints": [
+    "Think about which rail the button connects the input pin to when closed.",
+    "INPUT_PULLUP holds the pin HIGH until grounded."
+  ],
+  "explanation": "The internal pull-up resistor holds the pin at 5V (HIGH) when idle. Pressing the button pulls the pin directly to GND, making digitalRead() return LOW (0). This is active-LOW logic.",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 40
+}

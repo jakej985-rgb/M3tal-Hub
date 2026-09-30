@@ -1,0 +1,53 @@
+{
+  "id": "comp_22",
+  "peripheralNumber": 22,
+  "name": "Raindrop Detection Plate",
+  "partNumber": "FC-37",
+  "category": "sensor",
+  "description": "Like an umbrella sensor! Interleaved copper traces short together when raindrops fall on the plate.",
+  "realWorldAnalogy": "Like an umbrella sensor! Interleaved copper traces short together when raindrops fall on the plate.",
+  "voltage": "dual",
+  "pinout": [
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "Power rail"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "D0",
+      "type": "digitalIn",
+      "description": "Digital rain threshold"
+    },
+    {
+      "pinName": "A0",
+      "type": "analogIn",
+      "description": "Analog water coverage"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_12"
+  ],
+  "datasheetRef": "Water Level Sensor.pdf",
+  "wiringGuidance": "Connect sensing plate to amplifier board. Connect amplifier VCC (Red) to 5V, GND (Dark Slate) to GND, and A0 (Yellow) to analog pin A0.",
+  "commonMistakes": [
+    "Submerging the electronic comparator module instead of only the probe plate.",
+    "Leaving water droplet residue on the probe tracks between tests."
+  ],
+  "miniExperiment": {
+    "title": "Storm Raindrop Alarm",
+    "circuit": "VCC to 5V, GND to GND, A0 to Analog Pin A0.",
+    "code": "void setup() {\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  int rainLevel = analogRead(A0);\n  Serial.print(\"Rain Intensity: \");\n  Serial.println(1023 - rainLevel);\n  delay(200);\n}",
+    "expectedOutput": "Outputs near 0 when dry; a single raindrop placed on the plate jumps the value to 700+."
+  }
+}

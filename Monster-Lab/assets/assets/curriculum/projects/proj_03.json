@@ -1,0 +1,149 @@
+{
+  "id": "proj_03",
+  "title": "Remote Control Funny Faces",
+  "tagline": "Animate happy, silly, and surprised monster expressions on an 8x8 LED matrix!",
+  "tier": "builder",
+  "estimatedMinutes": 45,
+  "requiredComponents": [
+    "comp_13",
+    "comp_15"
+  ],
+  "prerequisiteLessons": [
+    "lesson_03",
+    "lesson_05"
+  ],
+  "phases": [
+    {
+      "phaseNumber": 1,
+      "phaseTitle": "Gather Remote & Display",
+      "type": "gatherParts",
+      "instructions": "Locate the AX-1838HS IR receiver, IR transmitter remote controller, and MAX7219 8x8 dot matrix display module.",
+      "verificationCheckpoints": [
+        "MAX7219 8x8 dot matrix module ready",
+        "AX-1838HS IR sensor ready",
+        "Pull clear plastic battery pull-tab out of IR remote"
+      ]
+    },
+    {
+      "phaseNumber": 2,
+      "phaseTitle": "SPI Display & IR Sensor Wiring",
+      "type": "breadboardWiring",
+      "instructions": "Connect the MAX7219 SPI display lines (DIN, CS, CLK) and IR receiver data pin to Arduino.",
+      "wiringConnections": [
+        {
+          "from": "MAX7219 VCC",
+          "to": "Arduino 5V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "MAX7219 GND",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        },
+        {
+          "from": "MAX7219 DIN",
+          "to": "Arduino Pin 12",
+          "wire": "Orange",
+          "type": "spi"
+        },
+        {
+          "from": "MAX7219 CS",
+          "to": "Arduino Pin 10",
+          "wire": "Orange",
+          "type": "spi"
+        },
+        {
+          "from": "MAX7219 CLK",
+          "to": "Arduino Pin 11",
+          "wire": "Orange",
+          "type": "spi"
+        },
+        {
+          "from": "IR Sensor OUT",
+          "to": "Arduino Pin 2",
+          "wire": "Green",
+          "type": "digitalIn"
+        },
+        {
+          "from": "IR Sensor VCC",
+          "to": "Arduino 5V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "IR Sensor GND",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        }
+      ],
+      "verificationCheckpoints": [
+        "DIN to Pin 12, CS to Pin 10, CLK to Pin 11",
+        "IR receiver signal to Pin 2 (hardware interrupt)",
+        "Shared 5V and GND rail connections intact"
+      ]
+    },
+    {
+      "phaseNumber": 3,
+      "phaseTitle": "SPI Bus Pre-Flight Check",
+      "type": "wiringCheck",
+      "instructions": "Inspect SPI bus wiring carefully. Double-check that DIN, CS, and CLK pins are not swapped.",
+      "verificationCheckpoints": [
+        "5V and GND not reversed on IR sensor (reversing burns IR chip)",
+        "SPI wires firmly inserted"
+      ]
+    },
+    {
+      "phaseNumber": 4,
+      "phaseTitle": "Code Walkthrough & Face Bitmaps",
+      "type": "codeReview",
+      "instructions": "Review how 8x8 bitmap arrays represent monster expressions (Happy, Surprised, Angry, Sleeping) and how IR hex codes swap expressions.",
+      "codeSnippet": "#include <IRremote.hpp>\n#include <LedControl.h>\n\nLedControl lc = LedControl(12, 11, 10, 1); // DIN, CLK, CS\nconst int IR_PIN = 2;\n\nconst byte happyFace[8] = {\n  B00111100, B01000010, B10100101, B10000001,\n  B10100101, B10011001, B01000010, B00111100\n};\n\nvoid setup() {\n  IrReceiver.begin(IR_PIN);\n  lc.shutdown(0, false);\n  lc.setIntensity(0, 8);\n  lc.clearDisplay(0);\n}\n\nvoid loop() {\n  if (IrReceiver.decode()) {\n    unsigned long cmd = IrReceiver.decodedIRData.command;\n    // Switch expression based on remote key command\n    IrReceiver.resume();\n  }\n}",
+      "codeExplanation": "- LedControl initializes the MAX7219 driver over SPI pins.\n- byte happyFace[8] stores an 8x8 pixel bitmap where 1 turns an LED on and 0 turns it off.\n- IrReceiver.decode() parses 38kHz infrared pulse bursts into clean command numbers.\n- Pressing remote buttons selects and displays different emotional bitmap arrays.",
+      "verificationCheckpoints": [
+        "Understand how 8 bytes map to 64 display pixels",
+        "Understand IrReceiver.resume() to listen for next click"
+      ]
+    },
+    {
+      "phaseNumber": 5,
+      "phaseTitle": "Upload & Remote Control Test",
+      "type": "uploadSketch",
+      "instructions": "Upload sketch, point the handheld remote at the sensor, and press buttons 1 to 4 to animate hilarious monster faces!",
+      "verificationCheckpoints": [
+        "Button 1 displays Happy monster face",
+        "Button 2 displays Surprised monster face",
+        "Button 3 displays Silly monster face"
+      ]
+    },
+    {
+      "phaseNumber": 6,
+      "phaseTitle": "Mission Complete",
+      "type": "missionComplete",
+      "instructions": "Fantastic! You constructed an animated interactive display and mastered SPI and IR decoding.",
+      "verificationCheckpoints": [
+        "All facial expressions toggle reliably",
+        "Ready to claim Pixel Artist badge"
+      ]
+    }
+  ],
+  "xpReward": 150,
+  "badgeRewardId": "badge_pixel_artist",
+  "story": "Build an animated emotional monster face on a 64-pixel LED matrix that changes its mood and expression when you press buttons on an infrared handheld remote!",
+  "troubleshooting": [
+    {
+      "symptom": "Remote button presses do nothing",
+      "cause": "Clear plastic battery insulator is still inside remote",
+      "solution": "Pull out the plastic tab from the battery compartment at the base of the remote.",
+      "category": "wiring",
+      "diagnosticSteps": [
+        "Check if the transparent plastic battery tab is pulled from the IR remote.",
+        "Verify IR receiver signal wire is in digital pin 11."
+      ]
+    }
+  ],
+  "variants": [],
+  "extensionMissions": []
+}

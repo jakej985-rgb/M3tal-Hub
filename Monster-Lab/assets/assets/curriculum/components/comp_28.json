@@ -1,0 +1,48 @@
+{
+  "id": "comp_28",
+  "peripheralNumber": 28,
+  "name": "High-Sensitivity Vibration Switch",
+  "partNumber": "SW-420",
+  "category": "sensor",
+  "description": "Like an earthquake detector! A spring contact shakes open when vibration or shock is detected.",
+  "realWorldAnalogy": "Like an earthquake detector! A spring contact shakes open when vibration or shock is detected.",
+  "voltage": "dual",
+  "pinout": [
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "Power rail"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "DO",
+      "type": "digitalIn",
+      "description": "Digital vibration output"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_01"
+  ],
+  "datasheetRef": "Tilt Switch.pdf",
+  "wiringGuidance": "Connect VCC (Red) to 5V, GND (Dark Slate) to GND, and DO (Green) to digital pin 3.",
+  "commonMistakes": [
+    "Leaving the sensor dangling freely without rigid mounting to the monitored chassis.",
+    "Missing rapid transient pulse events by polling too slowly in the sketch."
+  ],
+  "miniExperiment": {
+    "title": "Seismic Quake Alarm",
+    "circuit": "VCC to 5V, GND to GND, DO to Pin 3.",
+    "code": "const int vibPin = 3;\n\nvoid setup() {\n  pinMode(vibPin, INPUT);\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  if (digitalRead(vibPin) == HIGH) {\n    Serial.println(\"VIBRATION DETECTED!\");\n    delay(200);\n  }\n}",
+    "expectedOutput": "Tapping the desk triggers 'VIBRATION DETECTED!' instantly in the Serial Monitor."
+  }
+}

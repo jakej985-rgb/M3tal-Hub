@@ -1,0 +1,25 @@
+{
+  "id": "chal_03",
+  "title": "Relay High-Voltage Safety Rule",
+  "type": "identifyPart",
+  "difficulty": "rookie",
+  "prompt": "You want to use a 5V relay module to turn on an electric desk lamp plugged into the 120V wall socket. What is the Monster Lab safety rule?",
+  "challengeData": {
+    "options": [
+      "It is safe if you wear rubber shoes",
+      "Never connect hobby breadboard wires to wall mains AC; use DC battery circuits only",
+      "Wrap exposed pins in electrical tape and proceed",
+      "Only switch it on for 5 seconds at a time"
+    ]
+  },
+  "hint": "Wall sockets carry mains AC voltage which is lethal.",
+  "hints": [
+    "Wall sockets carry mains AC voltage which is lethal.",
+    "Monster Lab experiments only use safe low-voltage DC."
+  ],
+  "explanation": "Mains AC voltage (120V/240V) carries severe electrocution and fire hazards. Monster Lab is strictly low-voltage DC (5V / 9V battery).",
+  "solutionValidation": {
+    "correctIndex": 1
+  },
+  "xpAward": 35
+}

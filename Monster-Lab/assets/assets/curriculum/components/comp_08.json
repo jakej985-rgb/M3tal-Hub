@@ -1,0 +1,54 @@
+{
+  "id": "comp_08",
+  "peripheralNumber": 8,
+  "name": "Barometric Pressure & Altitude",
+  "partNumber": "GY-68",
+  "category": "sensor",
+  "description": "Like a weather barometer! Senses atmospheric weight and calculates elevation above sea level.",
+  "realWorldAnalogy": "Like a weather barometer! Senses atmospheric weight and calculates elevation above sea level.",
+  "voltage": "dual",
+  "pinout": [
+    {
+      "pinName": "VCC",
+      "type": "power",
+      "description": "Power rail"
+    },
+    {
+      "pinName": "GND",
+      "type": "ground",
+      "description": "Ground"
+    },
+    {
+      "pinName": "SCL",
+      "type": "i2c",
+      "description": "I2C Clock"
+    },
+    {
+      "pinName": "SDA",
+      "type": "i2c",
+      "description": "I2C Data"
+    }
+  ],
+  "safety": {
+    "level": "safe",
+    "hazards": [],
+    "childSafeAlternative": null,
+    "requiresParentUnlock": false
+  },
+  "projectIds": [
+    "proj_12",
+    "proj_20"
+  ],
+  "datasheetRef": "RM-MPU-6050A.pdf",
+  "wiringGuidance": "Connect VCC (Red) to 3.3V or 5V, GND (Dark Slate) to GND, SCL (Blue) to A5, and SDA (Blue) to A4.",
+  "commonMistakes": [
+    "Leaving SCL and SDA unconnected or swapped.",
+    "Failing to let temperature stabilize after touching the sensor with warm fingers."
+  ],
+  "miniExperiment": {
+    "title": "Barometric Weather Station",
+    "circuit": "VCC to 3.3V, GND to GND, SCL to A5, SDA to A4.",
+    "code": "#include <Wire.h>\n#include <Adafruit_BMP085.h>\n\nAdafruit_BMP085 bmp;\n\nvoid setup() {\n  Serial.begin(9600);\n  if (!bmp.begin()) {\n    Serial.println(\"BMP180 not found!\");\n    while (1) {}\n  }\n}\n\nvoid loop() {\n  Serial.print(\"Temp: \");\n  Serial.print(bmp.readTemperature());\n  Serial.print(\" *C | Pressure: \");\n  Serial.print(bmp.readPressure());\n  Serial.println(\" Pa\");\n  delay(1000);\n}",
+    "expectedOutput": "Serial Monitor displays ambient temperature in Celsius and atmospheric pressure in Pascals every second."
+  }
+}

@@ -1,0 +1,196 @@
+{
+  "id": "proj_01",
+  "title": "Intruder Alarm MONSTER",
+  "tagline": "Protect your secret base with an ultrasonic security tripwire and alarm!",
+  "tier": "rookie",
+  "estimatedMinutes": 35,
+  "requiredComponents": [
+    "comp_01",
+    "comp_34"
+  ],
+  "prerequisiteLessons": [
+    "lesson_05"
+  ],
+  "phases": [
+    {
+      "phaseNumber": 1,
+      "phaseTitle": "Gather Components",
+      "type": "gatherParts",
+      "instructions": "Locate these parts from your kit: Arduino Uno, HC-SR04 Ultrasonic Distance Sensor, Piezo Buzzer, Red LED, 220-ohm resistor, and jumper wires.",
+      "verificationCheckpoints": [
+        "Arduino Uno and USB-B cable ready",
+        "HC-SR04 sensor pins are straight and clean",
+        "Peel off yellow paper sticker from top of buzzer",
+        "1x 220-ohm resistor (Red-Red-Brown-Gold bands)"
+      ]
+    },
+    {
+      "phaseNumber": 2,
+      "phaseTitle": "Breadboard Wiring",
+      "type": "breadboardWiring",
+      "instructions": "Mount the HC-SR04 sensor and Buzzer onto your breadboard. Follow the color-coded connections below to hook up power, ground, echo timing, and buzzer triggers.",
+      "wiringConnections": [
+        {
+          "from": "HC-SR04 VCC",
+          "to": "Arduino 5V",
+          "wire": "Red",
+          "type": "power"
+        },
+        {
+          "from": "HC-SR04 GND",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        },
+        {
+          "from": "HC-SR04 TRIG",
+          "to": "Arduino Pin 9",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "HC-SR04 ECHO",
+          "to": "Arduino Pin 10",
+          "wire": "Green",
+          "type": "digitalIn"
+        },
+        {
+          "from": "Buzzer (+)",
+          "to": "Arduino Pin 8",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "Buzzer (-)",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        },
+        {
+          "from": "LED Anode (+)",
+          "to": "Arduino Pin 7 (via 220R)",
+          "wire": "Green",
+          "type": "digitalOut"
+        },
+        {
+          "from": "LED Cathode (-)",
+          "to": "Arduino GND",
+          "wire": "Dark Slate",
+          "type": "ground"
+        }
+      ],
+      "verificationCheckpoints": [
+        "VCC connected to Red 5V rail",
+        "GND wires connected to Dark Slate GND rail",
+        "TRIG is in Pin 9 and ECHO is in Pin 10",
+        "Resistor is in series with LED anode"
+      ]
+    },
+    {
+      "phaseNumber": 3,
+      "phaseTitle": "Wiring Pre-Flight Check",
+      "type": "wiringCheck",
+      "instructions": "SAFETY FIRST! Never plug in your board until you complete this pre-flight verification checklist. A short between 5V and GND can harm your board.",
+      "verificationCheckpoints": [
+        "Unplug USB cable during physical inspection",
+        "Confirm Red wire connects to 5V and Dark Slate wire connects to GND",
+        "Ensure no bare component legs touch each other",
+        "Verify buzzer polarity: (+) pin connects to Pin 8"
+      ]
+    },
+    {
+      "phaseNumber": 4,
+      "phaseTitle": "Code Walkthrough & Logic",
+      "type": "codeReview",
+      "instructions": "Review how the Arduino pulses the ultrasonic speaker and calculates echo roundtrip time into distance in centimeters.",
+      "codeSnippet": "const int TRIG_PIN = 9;\nconst int ECHO_PIN = 10;\nconst int BUZZER_PIN = 8;\nconst int LED_PIN = 7;\n\nvoid setup() {\n  Serial.begin(9600);\n  pinMode(TRIG_PIN, OUTPUT);\n  pinMode(ECHO_PIN, INPUT);\n  pinMode(BUZZER_PIN, OUTPUT);\n  pinMode(LED_PIN, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(TRIG_PIN, LOW);\n  delayMicroseconds(2);\n  digitalWrite(TRIG_PIN, HIGH);\n  delayMicroseconds(10);\n  digitalWrite(TRIG_PIN, LOW);\n\n  long duration = pulseIn(ECHO_PIN, HIGH);\n  float distanceCm = duration * 0.0343 / 2.0;\n\n  if (distanceCm > 0 && distanceCm < 30.0) {\n    digitalWrite(LED_PIN, HIGH);\n    tone(BUZZER_PIN, 2000, 100);\n  } else {\n    digitalWrite(LED_PIN, LOW);\n    noTone(BUZZER_PIN);\n  }\n  delay(60);\n}",
+      "codeExplanation": "- TRIG_PIN emits a 10-microsecond ultrasonic chirp at 40 kHz.\n- pulseIn(ECHO_PIN, HIGH) measures how many microseconds elapsed before the echo bounced back.\n- Multiplying by sound speed (0.0343 cm/us) and dividing by 2 yields distance to obstacle.\n- If obstacle < 30cm, the alarm sounds tone(2000Hz) and illuminates the LED.",
+      "verificationCheckpoints": [
+        "Understand how pulseIn measures travel time",
+        "Understand why dividing by 2 is necessary (out-and-back trip)"
+      ]
+    },
+    {
+      "phaseNumber": 5,
+      "phaseTitle": "Upload & Physical Radar Test",
+      "type": "uploadSketch",
+      "instructions": "Connect USB cable to your computer, compile and upload the sketch. Wave your hand toward the sensor to verify perimeter tripwire triggering.",
+      "verificationCheckpoints": [
+        "Hand at 50cm: buzzer quiet, LED dark",
+        "Hand moves closer than 30cm: buzzer chirps, LED flashes",
+        "Serial monitor displays live distance readings in cm"
+      ]
+    },
+    {
+      "phaseNumber": 6,
+      "phaseTitle": "Mission Complete & Reflection",
+      "type": "missionComplete",
+      "instructions": "Awesome job! You successfully built and tested an active ultrasonic perimeter detector. Position it near your bedroom door or desk to guard against intruders!",
+      "verificationCheckpoints": [
+        "Perimeter detection confirmed working",
+        "Ready to claim Security Rookie badge"
+      ]
+    }
+  ],
+  "troubleshooting": [
+    {
+      "symptom": "Distance always reads 0 or 3000 cm",
+      "cause": "TRIG and ECHO pins are swapped",
+      "solution": "Swap pins 9 and 10 on your breadboard or verify wires.",
+      "category": "logic",
+      "diagnosticSteps": [
+        "Check TRIG on Pin 9 and ECHO on Pin 10.",
+        "Ensure VCC is connected to 5V (not 3.3V).",
+        "Verify acoustic line of sight is clear."
+      ]
+    },
+    {
+      "symptom": "Buzzer clicks faintly but makes no siren",
+      "cause": "Buzzer protective sticker not removed or negative pin on wrong rail",
+      "solution": "Peel off the round yellow label and ensure (-) pin is in the GND rail.",
+      "category": "wiring",
+      "diagnosticSteps": [
+        "Peel off the yellow protective sticker on top.",
+        "Ensure longer (+) pin is connected to Pin 8 and (-) to GND."
+      ]
+    },
+    {
+      "symptom": "LED does not illuminate",
+      "cause": "LED inserted backwards (polarity error)",
+      "solution": "Unplug LED and rotate 180 degrees. The longer leg (anode) must connect toward Pin 7.",
+      "category": "wiring",
+      "diagnosticSteps": [
+        "Rotate LED 180 degrees to verify polarity.",
+        "Check that 220\u03a9 resistor connects cathode to GND."
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "proj_01_var_1",
+      "title": "Dual Piezo Stereo Siren",
+      "description": "Use two piezos on separate pins with alternating frequencies to create an authentic European police siren effect.",
+      "alternativeComponents": [
+        "comp_34"
+      ],
+      "wiringDifferences": "Connect second buzzer to Pin 6 and GND",
+      "codeAdaptation": "Alternate tone(8, 800) and tone(6, 600) with 250ms intervals"
+    }
+  ],
+  "extensionMissions": [
+    {
+      "id": "proj_01_mis_1",
+      "title": "Stealth Silent Alarm",
+      "objective": "Silence the loud piezo and replace it with an invisible infrared beacon or silent strobe warning to catch intruders unawares.",
+      "difficulty": "rookie",
+      "hints": [
+        "Replace tone() with digitalWrite() pulsing on an LED or IR LED pin",
+        "Ensure the loop still calculates distance accurately"
+      ],
+      "xpReward": 50
+    }
+  ],
+  "xpReward": 100,
+  "badgeRewardId": "badge_security_rookie",
+  "story": "A pesky shadow monster is sneaking into your laboratory while you sleep! Build an automated ultrasonic radar sentry tripwire that monitors room distance and sounds a loud piezo siren whenever an intruder breaches the 30cm perimeter."
+}
