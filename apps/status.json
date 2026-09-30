@@ -1,12 +1,11 @@
 {
-  "last_updated": "2026-09-30T05:48:52.222284+00:00",
+  "last_updated": "2026-09-29T15:30:00Z",
   "releases": {
     "monster-lab": {
       "status": "ready",
-      "build_status": "success",
-      "version": "main",
-      "ref": "main",
-      "last_released": "2026-09-30T05:48:52.222270+00:00"
+      "version": "1.0.0",
+      "last_released": null,
+      "build_status": "configured"
     },
     "android-card-games": {
       "status": "ready",
@@ -33,6 +32,12 @@
       "build_status": "configured"
     },
     "jellyfin-ui": {
+      "status": "ready",
+      "version": "1.0.0",
+      "last_released": null,
+      "build_status": "configured"
+    },
+    "red-music-locker": {
       "status": "ready",
       "version": "1.0.0",
       "last_released": null,

@@ -36,9 +36,9 @@ apps:
     name: Red Music Locker
     repo: red-music-locker
     path: red-music-locker
-    type: web
+    type: flutter-web
     enabled: true
-    status: planned
+    status: ready
     description: Self-hosted music locker frontend.
     base_href: /red-music-locker/
 
