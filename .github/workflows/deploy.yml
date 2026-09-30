@@ -208,10 +208,20 @@ jobs:
         if: steps.target.outputs.app_id != 'none' && steps.meta.outputs.type == 'static'
         run: |
           cd build_target
+          BASE_HREF="${{ steps.meta.outputs.base_href }}"
+
+          # If repository lacks build script and is m3tal-plugin-page, bootstrap release tooling from hub
+          if [ "${{ steps.target.outputs.app_id }}" = "m3tal-plugin-page" ] && [ ! -f "scripts/build_web_release.sh" ]; then
+            echo "Bootstrapping m3tal-plugin-page release assets and build scripts from hub..."
+            if [ -f "../hub/scripts/setup_plugin_page_release.sh" ]; then
+              bash ../hub/scripts/setup_plugin_page_release.sh "$PWD"
+            fi
+          fi
+
           if [ -f "scripts/build_web_release.sh" ]; then
             chmod +x scripts/build_web_release.sh
             echo "Executing repository custom build script..."
-            ./scripts/build_web_release.sh "${{ steps.meta.outputs.base_href }}"
+            ./scripts/build_web_release.sh "$BASE_HREF"
           fi
 
           OUT_DIR="dist"
@@ -221,6 +231,14 @@ jobs:
             OUT_DIR="."
           fi
           test -f "$OUT_DIR/index.html" || { echo "Build failed: $OUT_DIR/index.html not found"; exit 1; }
+
+          # Ensure m3tal-plugin-page output bundle is complete and sanitized
+          if [ "${{ steps.target.outputs.app_id }}" = "m3tal-plugin-page" ]; then
+            echo "Validating m3tal-plugin-page output artifacts..."
+            if [ -f "../hub/scripts/setup_plugin_page_release.sh" ]; then
+              bash ../hub/scripts/setup_plugin_page_release.sh "$PWD/$OUT_DIR"
+            fi
+          fi
           cd ..
 
           echo "Publishing application release to _site/${{ steps.meta.outputs.path }}..."
