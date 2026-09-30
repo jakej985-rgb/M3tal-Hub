@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-29T15:30:00Z",
+  "last_updated": "2026-09-30T16:50:51.152781+00:00",
   "releases": {
     "monster-lab": {
       "status": "ready",
@@ -39,9 +39,10 @@
     },
     "red-music-locker": {
       "status": "ready",
-      "version": "1.0.0",
-      "last_released": null,
-      "build_status": "configured"
+      "build_status": "success",
+      "version": "main",
+      "ref": "main",
+      "last_released": "2026-09-30T16:50:51.152770+00:00"
     }
   }
 }
