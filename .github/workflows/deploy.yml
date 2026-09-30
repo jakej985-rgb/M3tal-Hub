@@ -19,7 +19,6 @@ on:
           - red-music-locker
           - subaru-specs-n-parts
           - infernal-web
-          - gps-speedometer
           - jellyfin-ui
           - m3tal-plugin-page
           - munchkin-companion-app
@@ -92,6 +91,12 @@ jobs:
               sys.exit(1)
           if not target.get('enabled', False):
               print(f"Error: app_id '{app_id}' is marked enabled: false", file=sys.stderr)
+              sys.exit(1)
+
+          category = target.get('category', 'apps')
+          app_type = target.get('type', 'web')
+          if category in ['infrastructure', 'libraries', 'tooling'] or app_type in ['service', 'library', 'infrastructure', 'tooling', 'docs', 'container', 'package', 'template']:
+              print(f"Error: app_id '{app_id}' is an infrastructure/library component ({category}/{app_type}) and cannot be deployed to GitHub Pages.", file=sys.stderr)
               sys.exit(1)
 
           repo = target.get('repo', '')

@@ -2,6 +2,7 @@
 """
 M3tal-Hub Dynamic Landing Page Generator
 Reads apps/manifest.yml and apps/status.json, generating index.html and 404.html.
+Supports application releases, infrastructure services, libraries, and tooling.
 """
 
 import os
@@ -9,6 +10,29 @@ import sys
 import json
 import yaml
 from datetime import datetime, timezone
+
+CATEGORIES = [
+    {
+        "id": "apps",
+        "title": "Applications & Frontends",
+        "description": "Interactive web applications and client releases hosted on GitHub Pages.",
+    },
+    {
+        "id": "infrastructure",
+        "title": "Infrastructure & Backend Services",
+        "description": "Core infrastructure, backend services, container environments, and deployment stacks.",
+    },
+    {
+        "id": "libraries",
+        "title": "Libraries, SDKs & Templates",
+        "description": "Shared component libraries, UI kits, API wrappers, and module scaffolding templates.",
+    },
+    {
+        "id": "tooling",
+        "title": "Tooling & Documentation",
+        "description": "Developer tooling, package repositories, automation utilities, and architecture specs.",
+    },
+]
 
 def load_manifest(manifest_path):
     with open(manifest_path, 'r', encoding='utf-8') as f:
@@ -26,21 +50,81 @@ def load_status(status_path):
 def get_badge(app, release_info):
     status = app.get("status", "planned")
     enabled = app.get("enabled", False)
+    category = app.get("category", "apps")
     
     if release_info and release_info.get("build_status") == "success":
         return ("Live", "badge-live")
     
     if status == "ready":
         return ("Release Ready", "badge-ready")
+    elif status == "active":
+        return ("Active", "badge-active")
+    elif status == "stable":
+        return ("Stable", "badge-stable")
     elif status == "planned":
         return ("Release Planned", "badge-planned")
-    elif status in ["review", "infrastructure-review"]:
-        label = "In Review" if status == "review" else "Infra Review"
-        return (label, "badge-review")
-    elif status == "placeholder" or not enabled:
+    elif status == "review":
+        return ("In Review", "badge-review")
+    elif status == "infrastructure-review":
+        return ("Infra Review", "badge-review")
+    elif status == "placeholder":
+        return ("Placeholder", "badge-placeholder")
+    elif not enabled and category == "apps":
         return ("Placeholder", "badge-placeholder")
     
-    return (status.title(), "badge-planned")
+    return (status.title(), "badge-active" if category != "apps" else "badge-planned")
+
+def render_card(app, release_info):
+    name = app.get("name")
+    desc = app.get("description", "")
+    repo = app.get("repo", "")
+    path = app.get("path", "")
+    enabled = app.get("enabled", False)
+    category = app.get("category", "apps")
+    
+    badge_text, badge_class = get_badge(app, release_info)
+
+    meta_info = []
+    if app.get("type"):
+        meta_info.append(f'<span class="app-type">{app["type"]}</span>')
+    
+    version = release_info.get("version") or app.get("version")
+    if version:
+        meta_info.append(f'<span class="app-version">v{version}</span>')
+    
+    last_released = release_info.get("last_released") or app.get("last_released")
+    if last_released:
+        meta_info.append(f'<span class="app-date">{str(last_released)[:10]}</span>')
+    
+    pkg_status = release_info.get("package_status") or app.get("package")
+    if pkg_status:
+        meta_info.append(f'<span class="app-pkg">{pkg_status}</span>')
+    
+    meta_html = f'<div class="meta-row">{" ".join(meta_info)}</div>' if meta_info else ""
+
+    if enabled:
+        href = f"./{path}/"
+        card_class = "card"
+        is_external = False
+    else:
+        href = app.get("docs_url") or app.get("repo_url") or app.get("url") or (f"https://github.com/jakej985-rgb/{repo}" if repo else "#")
+        is_external = href.startswith("http://") or href.startswith("https://")
+        if category == "apps" and app.get("status") in ["placeholder", "review", None]:
+            card_class = "card placeholder"
+        else:
+            card_class = "card info-card"
+
+    target_attr = ' target="_blank" rel="noopener noreferrer"' if is_external else ''
+    icon_html = '<span class="ext-icon" aria-hidden="true">↗</span>' if is_external else ''
+
+    return f"""        <a class="{card_class}" href="{href}"{target_attr}>
+            <div class="card-header">
+                <h2>{name} {icon_html}</h2>
+                <span class="badge {badge_class}">{badge_text}</span>
+            </div>
+            <p>{desc}</p>
+            {meta_html}
+        </a>"""
 
 def generate_hub(manifest_path, status_path, output_dir):
     data = load_manifest(manifest_path)
@@ -49,46 +133,47 @@ def generate_hub(manifest_path, status_path, output_dir):
 
     apps = data.get("apps", [])
 
-    cards_html = []
+    # Group apps by category
+    category_map = {c["id"]: [] for c in CATEGORIES}
     for app in apps:
-        app_id = app.get("id")
-        name = app.get("name")
-        desc = app.get("description", "")
-        repo = app.get("repo", "")
-        path = app.get("path", "")
-        enabled = app.get("enabled", False)
-        release_info = releases.get(app_id, {})
+        cat = app.get("category", "apps")
+        if cat not in category_map:
+            cat = "apps"
+        category_map[cat].append(app)
+
+    sections_html = []
+    for cat_def in CATEGORIES:
+        cat_id = cat_def["id"]
+        cat_apps = category_map[cat_id]
+        if not cat_apps:
+            continue
         
-        badge_text, badge_class = get_badge(app, release_info)
-
-        meta_info = []
-        if app.get("type"):
-            meta_info.append(f"<span class=\"app-type\">{app['type']}</span>")
-        if release_info.get("version"):
-            meta_info.append(f"<span class=\"app-version\">v{release_info['version']}</span>")
-        if release_info.get("last_released"):
-            meta_info.append(f"<span class=\"app-date\">{release_info['last_released'][:10]}</span>")
+        cards = []
+        for app in cat_apps:
+            app_id = app.get("id")
+            release_info = releases.get(app_id, {})
+            cards.append(render_card(app, release_info))
         
-        meta_html = f"<div class=\"meta-row\">{' '.join(meta_info)}</div>" if meta_info else ""
+        rendered_grid = "\n".join(cards)
+        section = f"""    <section class="section-group">
+        <div class="section-header">
+            <h2 class="section-title">{cat_def['title']}</h2>
+            <p class="section-desc">{cat_def['description']}</p>
+        </div>
+        <div class="grid">
+{rendered_grid}
+        </div>
+    </section>"""
+        sections_html.append(section)
 
-        if enabled:
-            href = f"./{path}/"
-            card_class = "card"
-        else:
-            href = f"https://github.com/jakej985-rgb/{repo}" if repo else "#"
-            card_class = "card placeholder"
+    all_sections = "\n\n".join(sections_html)
 
-        card = f"""        <a class="{card_class}" href="{href}">
-            <div class="card-header">
-                <h2>{name}</h2>
-                <span class="badge {badge_class}">{badge_text}</span>
-            </div>
-            <p>{desc}</p>
-            {meta_html}
-        </a>"""
-        cards_html.append(card)
+    # Calculate ecosystem stats
+    app_count = len(category_map.get("apps", []))
+    infra_count = len(category_map.get("infrastructure", []))
+    lib_count = len(category_map.get("libraries", []))
+    tool_count = len(category_map.get("tooling", []))
 
-    rendered_cards = "\n".join(cards_html)
     generated_time = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 
     index_html = f"""<!DOCTYPE html>
@@ -96,8 +181,8 @@ def generate_hub(manifest_path, status_path, output_dir):
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M3tal Hub | Unified Application Release Front</title>
-    <meta name="description" content="Central GitHub Pages release front for the M3tal software ecosystem.">
+    <title>M3tal Hub | Unified Application & Ecosystem Release Front</title>
+    <meta name="description" content="Central GitHub Pages release front and ecosystem directory for M3tal applications, services, and libraries.">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
     <style>
         :root {{
@@ -111,13 +196,17 @@ def generate_hub(manifest_path, status_path, output_dir):
             --accent: #58a6ff;
             --ready: #3fb950;
             --live: #2ea043;
+            --active: #58a6ff;
+            --stable: #3fb950;
             --review: #d29922;
             --placeholder: #6e7681;
+            --service: #bc8cff;
+            --tooling: #f0883e;
         }}
         * {{ box-sizing: border-box; }}
         body {{
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
-            max-width: 1080px;
+            max-width: 1120px;
             margin: 0 auto;
             padding: 40px 24px;
             line-height: 1.5;
@@ -125,7 +214,7 @@ def generate_hub(manifest_path, status_path, output_dir):
             color: var(--text-main);
         }}
         header {{
-            margin-bottom: 32px;
+            margin-bottom: 36px;
             border-bottom: 1px solid var(--border);
             padding-bottom: 24px;
         }}
@@ -136,7 +225,7 @@ def generate_hub(manifest_path, status_path, output_dir):
             margin-bottom: 8px;
         }}
         .brand h1 {{
-            font-size: 28px;
+            font-size: 30px;
             font-weight: 700;
             margin: 0;
             letter-spacing: -0.5px;
@@ -144,6 +233,46 @@ def generate_hub(manifest_path, status_path, output_dir):
         .tagline {{
             color: var(--text-sub);
             font-size: 15px;
+            margin: 0;
+        }}
+        .stats-bar {{
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+            font-size: 12px;
+        }}
+        .stat-pill {{
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 999px;
+            color: var(--text-sub);
+        }}
+        .stat-count {{
+            font-weight: 700;
+            color: var(--accent);
+        }}
+        .section-group {{
+            margin-bottom: 44px;
+        }}
+        .section-header {{
+            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 8px;
+        }}
+        .section-title {{
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 0 4px 0;
+            color: var(--text-main);
+        }}
+        .section-desc {{
+            font-size: 13.5px;
+            color: var(--text-sub);
             margin: 0;
         }}
         .grid {{
@@ -168,6 +297,12 @@ def generate_hub(manifest_path, status_path, output_dir):
             background: var(--surface-hover);
             transform: translateY(-2px);
         }}
+        .card.info-card {{
+            border-left: 3px solid rgba(88, 166, 255, 0.5);
+        }}
+        .card.info-card:hover {{
+            border-left-color: var(--accent);
+        }}
         .card.placeholder {{
             opacity: 0.6;
             border-style: dashed;
@@ -188,6 +323,19 @@ def generate_hub(manifest_path, status_path, output_dir):
             font-weight: 600;
             margin: 0;
             color: var(--text-main);
+            display: flex;
+            align-items: center;
+        }}
+        .ext-icon {{
+            font-size: 13px;
+            color: var(--text-sub);
+            opacity: 0.7;
+            margin-left: 5px;
+            font-weight: normal;
+        }}
+        .card:hover .ext-icon {{
+            color: var(--accent);
+            opacity: 1;
         }}
         .card p {{
             margin: 0 0 16px 0;
@@ -218,6 +366,18 @@ def generate_hub(manifest_path, status_path, output_dir):
             padding: 2px 6px;
             border-radius: 4px;
         }}
+        .app-date {{
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }}
+        .app-pkg {{
+            background: rgba(188, 140, 255, 0.1);
+            color: var(--service);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }}
         .badge {{
             display: inline-block;
             font-size: 11px;
@@ -234,6 +394,16 @@ def generate_hub(manifest_path, status_path, output_dir):
         .badge-ready {{
             background: rgba(63, 185, 80, 0.15);
             color: var(--ready);
+            border: 1px solid rgba(63, 185, 80, 0.3);
+        }}
+        .badge-active {{
+            background: rgba(88, 166, 255, 0.15);
+            color: var(--active);
+            border: 1px solid rgba(88, 166, 255, 0.3);
+        }}
+        .badge-stable {{
+            background: rgba(63, 185, 80, 0.15);
+            color: var(--stable);
             border: 1px solid rgba(63, 185, 80, 0.3);
         }}
         .badge-planned {{
@@ -277,11 +447,17 @@ def generate_hub(manifest_path, status_path, output_dir):
         <div class="brand">
             <h1>⚙️ M3tal Hub</h1>
         </div>
-        <p class="tagline">Unified GitHub Pages release front for M3tal application ecosystem.</p>
+        <p class="tagline">Unified GitHub Pages release front & ecosystem directory for M3tal applications, services, and libraries.</p>
+        <div class="stats-bar">
+            <span class="stat-pill"><span class="stat-count">{app_count}</span> Applications</span>
+            <span class="stat-pill"><span class="stat-count">{infra_count}</span> Infrastructure & Services</span>
+            <span class="stat-pill"><span class="stat-count">{lib_count}</span> Libraries & Templates</span>
+            <span class="stat-pill"><span class="stat-count">{tool_count}</span> Tooling & Documentation</span>
+        </div>
     </header>
 
-    <main class="grid">
-{rendered_cards}
+    <main>
+{all_sections}
     </main>
 
     <footer>
