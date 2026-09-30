@@ -1,12 +1,11 @@
 {
-  "last_updated": "2026-09-30T18:11:28.695814+00:00",
+  "last_updated": "2026-09-29T15:30:00Z",
   "releases": {
     "monster-lab": {
       "status": "ready",
-      "build_status": "success",
-      "version": "main",
-      "ref": "main",
-      "last_released": "2026-09-30T18:11:28.695800+00:00"
+      "version": "1.0.0",
+      "last_released": null,
+      "build_status": "configured"
     },
     "android-card-games": {
       "status": "ready",

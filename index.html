@@ -111,7 +111,6 @@
             border-radius: 10px;
             background: var(--surface);
             color: inherit;
-            text-decoration: none;
             transition: border-color 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
         }
         .card:hover {
@@ -133,6 +132,13 @@
             opacity: 0.85;
             border-color: var(--text-sub);
         }
+        .card-main-link {
+            color: inherit;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
         .card-header {
             display: flex;
             justify-content: space-between;
@@ -147,17 +153,6 @@
             color: var(--text-main);
             display: flex;
             align-items: center;
-        }
-        .ext-icon {
-            font-size: 13px;
-            color: var(--text-sub);
-            opacity: 0.7;
-            margin-left: 5px;
-            font-weight: normal;
-        }
-        .card:hover .ext-icon {
-            color: var(--accent);
-            opacity: 1;
         }
         .card p {
             margin: 0 0 16px 0;
@@ -199,6 +194,42 @@
             padding: 2px 6px;
             border-radius: 4px;
             font-family: monospace;
+        }
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .card-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-main);
+            transition: all 0.15s ease;
+        }
+        .card-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(88, 166, 255, 0.1);
+        }
+        .card-btn-primary {
+            background: rgba(46, 160, 67, 0.15);
+            border-color: rgba(46, 160, 67, 0.4);
+            color: #3fb950;
+        }
+        .card-btn-primary:hover {
+            background: rgba(46, 160, 67, 0.25);
+            border-color: #3fb950;
+            color: #56d364;
         }
         .badge {
             display: inline-block;
@@ -285,134 +316,182 @@
             <p class="section-desc">Interactive web applications and client releases hosted on GitHub Pages.</p>
         </div>
         <div class="grid">
-        <a class="card" href="./Monster-Lab/">
-            <div class="card-header">
-                <h2>Monster Lab</h2>
-                <span class="badge badge-live">Live</span>
-            </div>
-            <p>Robotics learning application.</p>
-            <div class="meta-row"><span class="app-type">flutter-web</span> <span class="app-version">vmain</span> <span class="app-date">2026-09-30</span></div>
-        </a>
-        <a class="card" href="./Android-card-games/">
-            <div class="card-header">
-                <h2>Android Card Games</h2>
-                <span class="badge badge-ready">Release Ready</span>
-            </div>
-            <p>Flutter tabletop gaming suite.</p>
-            <div class="meta-row"><span class="app-type">flutter-web</span> <span class="app-version">v0.1.27</span></div>
-        </a>
-        <a class="card" href="./Idle-animals/">
-            <div class="card-header">
-                <h2>Idle Animals</h2>
-                <span class="badge badge-ready">Release Ready</span>
-            </div>
-            <p>Extinct-animal idle game.</p>
-            <div class="meta-row"><span class="app-type">flutter-web</span> <span class="app-version">v1.0.0</span></div>
-        </a>
-        <a class="card" href="./red-music-locker/">
-            <div class="card-header">
-                <h2>Red Music Locker</h2>
-                <span class="badge badge-ready">Release Ready</span>
-            </div>
-            <p>Self-hosted music locker frontend.</p>
-            <div class="meta-row"><span class="app-type">flutter-web</span> <span class="app-version">v1.0.0</span></div>
-        </a>
-        <a class="card placeholder" href="https://github.com/jakej985-rgb/red-music-locker-account-linker" target="_blank" rel="noopener noreferrer">
-            <div class="card-header">
-                <h2>Red Music Locker Account Linker <span class="ext-icon" aria-hidden="true">↗</span></h2>
-                <span class="badge badge-placeholder">Placeholder</span>
-            </div>
-            <p>Browser extension release.</p>
-            <div class="meta-row"><span class="app-type">extension</span></div>
-        </a>
-        <a class="card" href="./subaru-specs-n-parts/">
-            <div class="card-header">
-                <h2>Subaru Specs & Parts</h2>
-                <span class="badge badge-ready">Release Ready</span>
-            </div>
-            <p>Offline-first Subaru reference app.</p>
-            <div class="meta-row"><span class="app-type">flutter-web</span> <span class="app-version">v1.0.0</span></div>
-        </a>
-        <a class="card placeholder" href="https://github.com/jakej985-rgb/Spec-s-N-Part-s" target="_blank" rel="noopener noreferrer">
-            <div class="card-header">
-                <h2>Spec-s-N-Part-s <span class="ext-icon" aria-hidden="true">↗</span></h2>
-                <span class="badge badge-review">In Review</span>
-            </div>
-            <p>Pending duplicate/project review.</p>
-            <div class="meta-row"><span class="app-type">flutter-web</span></div>
-        </a>
-        <a class="card" href="./infernal-web/">
-            <div class="card-header">
-                <h2>Infernal Web</h2>
-                <span class="badge badge-ready">Release Ready</span>
-            </div>
-            <p>Infernal web application.</p>
-            <div class="meta-row"><span class="app-type">flutter-web</span> <span class="app-version">v1.0.2</span></div>
-        </a>
-        <a class="card placeholder" href="https://github.com/jakej985-rgb/GPS-speedometer/releases" target="_blank" rel="noopener noreferrer">
-            <div class="card-header">
-                <h2>GPS Speedometer <span class="ext-icon" aria-hidden="true">↗</span></h2>
-                <span class="badge badge-placeholder">Placeholder</span>
-            </div>
-            <p>Native Android GPS speed display application.</p>
-            <div class="meta-row"><span class="app-type">android-native</span> <span class="app-version">v1.0</span> <span class="app-pkg">apk</span></div>
-        </a>
-        <a class="card" href="./jellyfin-ui/">
-            <div class="card-header">
-                <h2>Jellyfin UI</h2>
-                <span class="badge badge-ready">Release Ready</span>
-            </div>
-            <p>React/Vite Jellyfin interface project.</p>
-            <div class="meta-row"><span class="app-type">vite</span> <span class="app-version">v1.0.0</span></div>
-        </a>
-        <a class="card" href="./m3tal-plugin-page/">
-            <div class="card-header">
-                <h2>M3tal Plugin Page</h2>
-                <span class="badge badge-ready">Release Ready</span>
-            </div>
-            <p>M3tal plugin landing page.</p>
-            <div class="meta-row"><span class="app-type">static</span> <span class="app-version">v1.0.0</span></div>
-        </a>
-        <a class="card info-card" href="https://github.com/jakej985-rgb/Munchkin-Companion-App" target="_blank" rel="noopener noreferrer">
-            <div class="card-header">
-                <h2>Munchkin Companion App <span class="ext-icon" aria-hidden="true">↗</span></h2>
-                <span class="badge badge-planned">Release Planned</span>
-            </div>
-            <p>Flutter rules-aware game companion.</p>
-            <div class="meta-row"><span class="app-type">flutter-web</span></div>
-        </a>
-        <a class="card placeholder" href="https://github.com/jakej985-rgb/Ink-vault" target="_blank" rel="noopener noreferrer">
-            <div class="card-header">
-                <h2>Ink Vault <span class="ext-icon" aria-hidden="true">↗</span></h2>
-                <span class="badge badge-review">In Review</span>
-            </div>
-            <p>Tattoo and studio digital asset vault service.</p>
-            <div class="meta-row"><span class="app-type">backend</span> <span class="app-version">v0.1.0</span> <span class="app-pkg">service</span></div>
-        </a>
-        <a class="card placeholder" href="https://github.com/jakej985-rgb/Shop-manager" target="_blank" rel="noopener noreferrer">
-            <div class="card-header">
-                <h2>Shop Manager <span class="ext-icon" aria-hidden="true">↗</span></h2>
-                <span class="badge badge-review">In Review</span>
-            </div>
-            <p>Studio operations and inventory management system.</p>
-            <div class="meta-row"><span class="app-type">desktop</span> <span class="app-version">v0.1.0</span> <span class="app-pkg">binary</span></div>
-        </a>
-        <a class="card placeholder" href="https://github.com/jakej985-rgb/Tattoo-Shop-manager" target="_blank" rel="noopener noreferrer">
-            <div class="card-header">
-                <h2>Tattoo Shop Manager <span class="ext-icon" aria-hidden="true">↗</span></h2>
-                <span class="badge badge-review">In Review</span>
-            </div>
-            <p>Tattoo shop appointment and inventory backend service.</p>
-            <div class="meta-row"><span class="app-type">backend</span> <span class="app-version">v0.1.0</span> <span class="app-pkg">service</span></div>
-        </a>
-        <a class="card placeholder" href="https://github.com/jakej985-rgb/Infernal-Ink-Steel-Suite" target="_blank" rel="noopener noreferrer">
-            <div class="card-header">
-                <h2>Infernal Ink Steel Suite <span class="ext-icon" aria-hidden="true">↗</span></h2>
-                <span class="badge badge-review">In Review</span>
-            </div>
-            <p>Integrated studio software suite (desktop/backend orchestration).</p>
-            <div class="meta-row"><span class="app-type">suite</span> <span class="app-version">v0.1.0</span> <span class="app-pkg">suite</span></div>
-        </a>
+        <div class="card">
+            <a class="card-main-link" href="./apps/monster-lab.html">
+                <div class="card-header">
+                    <h2>Monster Lab</h2>
+                    <span class="badge badge-live">Live</span>
+                </div>
+                <p>Robotics learning application.</p>
+                <div class="meta-row"><span class="app-type">flutter-web</span> <span class="app-version">vmain</span> <span class="app-date">2026-09-30</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/monster-lab.html">Release & Docs →</a> <a class="card-btn card-btn-primary" href="./Monster-Lab/">Launch ↗</a></div>
+        </div>
+        <div class="card">
+            <a class="card-main-link" href="./apps/android-card-games.html">
+                <div class="card-header">
+                    <h2>Android Card Games</h2>
+                    <span class="badge badge-ready">Release Ready</span>
+                </div>
+                <p>Flutter tabletop gaming suite.</p>
+                <div class="meta-row"><span class="app-type">flutter-web</span> <span class="app-version">v0.1.27</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/android-card-games.html">Release & Docs →</a> <a class="card-btn card-btn-primary" href="./Android-card-games/">Launch ↗</a></div>
+        </div>
+        <div class="card">
+            <a class="card-main-link" href="./apps/idle-animals.html">
+                <div class="card-header">
+                    <h2>Idle Animals</h2>
+                    <span class="badge badge-ready">Release Ready</span>
+                </div>
+                <p>Extinct-animal idle game.</p>
+                <div class="meta-row"><span class="app-type">flutter-web</span> <span class="app-version">v1.0.0</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/idle-animals.html">Release & Docs →</a> <a class="card-btn card-btn-primary" href="./Idle-animals/">Launch ↗</a></div>
+        </div>
+        <div class="card">
+            <a class="card-main-link" href="./apps/red-music-locker.html">
+                <div class="card-header">
+                    <h2>Red Music Locker</h2>
+                    <span class="badge badge-ready">Release Ready</span>
+                </div>
+                <p>Self-hosted music locker frontend.</p>
+                <div class="meta-row"><span class="app-type">flutter-web</span> <span class="app-version">v1.0.0</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/red-music-locker.html">Release & Docs →</a> <a class="card-btn card-btn-primary" href="./red-music-locker/">Launch ↗</a></div>
+        </div>
+        <div class="card placeholder">
+            <a class="card-main-link" href="./apps/red-music-locker-account-linker.html">
+                <div class="card-header">
+                    <h2>Red Music Locker Account Linker</h2>
+                    <span class="badge badge-placeholder">Placeholder</span>
+                </div>
+                <p>Browser extension release.</p>
+                <div class="meta-row"><span class="app-type">extension</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/red-music-locker-account-linker.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/red-music-locker-account-linker" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card">
+            <a class="card-main-link" href="./apps/subaru-specs-n-parts.html">
+                <div class="card-header">
+                    <h2>Subaru Specs & Parts</h2>
+                    <span class="badge badge-ready">Release Ready</span>
+                </div>
+                <p>Offline-first Subaru reference app.</p>
+                <div class="meta-row"><span class="app-type">flutter-web</span> <span class="app-version">v1.0.0</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/subaru-specs-n-parts.html">Release & Docs →</a> <a class="card-btn card-btn-primary" href="./subaru-specs-n-parts/">Launch ↗</a></div>
+        </div>
+        <div class="card placeholder">
+            <a class="card-main-link" href="./apps/specs-n-parts.html">
+                <div class="card-header">
+                    <h2>Spec-s-N-Part-s</h2>
+                    <span class="badge badge-review">In Review</span>
+                </div>
+                <p>Pending duplicate/project review.</p>
+                <div class="meta-row"><span class="app-type">flutter-web</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/specs-n-parts.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/Spec-s-N-Part-s" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card">
+            <a class="card-main-link" href="./apps/infernal-web.html">
+                <div class="card-header">
+                    <h2>Infernal Web</h2>
+                    <span class="badge badge-ready">Release Ready</span>
+                </div>
+                <p>Infernal web application.</p>
+                <div class="meta-row"><span class="app-type">flutter-web</span> <span class="app-version">v1.0.2</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/infernal-web.html">Release & Docs →</a> <a class="card-btn card-btn-primary" href="./infernal-web/">Launch ↗</a></div>
+        </div>
+        <div class="card placeholder">
+            <a class="card-main-link" href="./apps/gps-speedometer.html">
+                <div class="card-header">
+                    <h2>GPS Speedometer</h2>
+                    <span class="badge badge-placeholder">Placeholder</span>
+                </div>
+                <p>Native Android GPS speed display application.</p>
+                <div class="meta-row"><span class="app-type">android-native</span> <span class="app-version">v1.0</span> <span class="app-pkg">apk</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/gps-speedometer.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/GPS-speedometer" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card">
+            <a class="card-main-link" href="./apps/jellyfin-ui.html">
+                <div class="card-header">
+                    <h2>Jellyfin UI</h2>
+                    <span class="badge badge-ready">Release Ready</span>
+                </div>
+                <p>React/Vite Jellyfin interface project.</p>
+                <div class="meta-row"><span class="app-type">vite</span> <span class="app-version">v1.0.0</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/jellyfin-ui.html">Release & Docs →</a> <a class="card-btn card-btn-primary" href="./jellyfin-ui/">Launch ↗</a></div>
+        </div>
+        <div class="card">
+            <a class="card-main-link" href="./apps/m3tal-plugin-page.html">
+                <div class="card-header">
+                    <h2>M3tal Plugin Page</h2>
+                    <span class="badge badge-ready">Release Ready</span>
+                </div>
+                <p>M3tal plugin landing page.</p>
+                <div class="meta-row"><span class="app-type">static</span> <span class="app-version">v1.0.0</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/m3tal-plugin-page.html">Release & Docs →</a> <a class="card-btn card-btn-primary" href="./m3tal-plugin-page/">Launch ↗</a></div>
+        </div>
+        <div class="card">
+            <a class="card-main-link" href="./apps/munchkin-companion-app.html">
+                <div class="card-header">
+                    <h2>Munchkin Companion App</h2>
+                    <span class="badge badge-planned">Release Planned</span>
+                </div>
+                <p>Flutter rules-aware game companion.</p>
+                <div class="meta-row"><span class="app-type">flutter-web</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/munchkin-companion-app.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/Munchkin-Companion-App" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card placeholder">
+            <a class="card-main-link" href="./apps/ink-vault.html">
+                <div class="card-header">
+                    <h2>Ink Vault</h2>
+                    <span class="badge badge-review">In Review</span>
+                </div>
+                <p>Tattoo and studio digital asset vault service.</p>
+                <div class="meta-row"><span class="app-type">backend</span> <span class="app-version">v0.1.0</span> <span class="app-pkg">service</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/ink-vault.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/Ink-vault" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card placeholder">
+            <a class="card-main-link" href="./apps/shop-manager.html">
+                <div class="card-header">
+                    <h2>Shop Manager</h2>
+                    <span class="badge badge-review">In Review</span>
+                </div>
+                <p>Studio operations and inventory management system.</p>
+                <div class="meta-row"><span class="app-type">desktop</span> <span class="app-version">v0.1.0</span> <span class="app-pkg">binary</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/shop-manager.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/Shop-manager" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card placeholder">
+            <a class="card-main-link" href="./apps/tattoo-shop-manager.html">
+                <div class="card-header">
+                    <h2>Tattoo Shop Manager</h2>
+                    <span class="badge badge-review">In Review</span>
+                </div>
+                <p>Tattoo shop appointment and inventory backend service.</p>
+                <div class="meta-row"><span class="app-type">backend</span> <span class="app-version">v0.1.0</span> <span class="app-pkg">service</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/tattoo-shop-manager.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/Tattoo-Shop-manager" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card placeholder">
+            <a class="card-main-link" href="./apps/infernal-ink-steel-suite.html">
+                <div class="card-header">
+                    <h2>Infernal Ink Steel Suite</h2>
+                    <span class="badge badge-review">In Review</span>
+                </div>
+                <p>Integrated studio software suite (desktop/backend orchestration).</p>
+                <div class="meta-row"><span class="app-type">suite</span> <span class="app-version">v0.1.0</span> <span class="app-pkg">suite</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/infernal-ink-steel-suite.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/Infernal-Ink-Steel-Suite" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
         </div>
     </section>
 
@@ -422,54 +501,72 @@
             <p class="section-desc">Core infrastructure, backend services, container environments, and deployment stacks.</p>
         </div>
         <div class="grid">
-        <a class="card info-card" href="https://github.com/jakej985-rgb/m3tal-godash" target="_blank" rel="noopener noreferrer">
-            <div class="card-header">
-                <h2>M3tal GoDash <span class="ext-icon" aria-hidden="true">↗</span></h2>
-                <span class="badge badge-active">Active</span>
-            </div>
-            <p>Go dashboard backend service and operational system metrics.</p>
-            <div class="meta-row"><span class="app-type">service</span> <span class="app-version">v0.2.0</span> <span class="app-pkg">service</span></div>
-        </a>
-        <a class="card info-card" href="https://github.com/jakej985-rgb/m3tal-core" target="_blank" rel="noopener noreferrer">
-            <div class="card-header">
-                <h2>M3tal Core <span class="ext-icon" aria-hidden="true">↗</span></h2>
-                <span class="badge badge-active">Active</span>
-            </div>
-            <p>Foundation backend libraries, utilities, and common service primitives.</p>
-            <div class="meta-row"><span class="app-type">library</span> <span class="app-version">v0.1.0</span> <span class="app-pkg">library</span></div>
-        </a>
-        <a class="card info-card" href="https://github.com/jakej985-rgb/m3tal-api" target="_blank" rel="noopener noreferrer">
-            <div class="card-header">
-                <h2>M3tal API <span class="ext-icon" aria-hidden="true">↗</span></h2>
-                <span class="badge badge-active">Active</span>
-            </div>
-            <p>Central backend routing API and service gateway.</p>
-            <div class="meta-row"><span class="app-type">service</span> <span class="app-version">v0.1.0</span> <span class="app-pkg">service</span></div>
-        </a>
-        <a class="card info-card" href="https://github.com/jakej985-rgb/m3tal-stack" target="_blank" rel="noopener noreferrer">
-            <div class="card-header">
-                <h2>M3tal Stack <span class="ext-icon" aria-hidden="true">↗</span></h2>
-                <span class="badge badge-active">Active</span>
-            </div>
-            <p>Docker Compose infrastructure orchestration and stack topologies.</p>
-            <div class="meta-row"><span class="app-type">infrastructure</span> <span class="app-version">v1.0.0</span> <span class="app-pkg">docker-compose</span></div>
-        </a>
-        <a class="card info-card" href="https://github.com/jakej985-rgb/antigravity-remote-docker" target="_blank" rel="noopener noreferrer">
-            <div class="card-header">
-                <h2>Antigravity Remote Docker <span class="ext-icon" aria-hidden="true">↗</span></h2>
-                <span class="badge badge-active">Active</span>
-            </div>
-            <p>Containerized remote development environment and Docker workspace.</p>
-            <div class="meta-row"><span class="app-type">container</span> <span class="app-version">v1.0.0</span> <span class="app-pkg">container</span></div>
-        </a>
-        <a class="card info-card" href="https://github.com/jakej985-rgb/m3tal-apt-key" target="_blank" rel="noopener noreferrer">
-            <div class="card-header">
-                <h2>M3tal APT Keyring <span class="ext-icon" aria-hidden="true">↗</span></h2>
-                <span class="badge badge-active">Active</span>
-            </div>
-            <p>Package signing key and Debian/Ubuntu distribution repository configuration.</p>
-            <div class="meta-row"><span class="app-type">package</span> <span class="app-version">v1.0.0</span> <span class="app-pkg">gpg-keyring</span></div>
-        </a>
+        <div class="card info-card">
+            <a class="card-main-link" href="./apps/m3tal-godash.html">
+                <div class="card-header">
+                    <h2>M3tal GoDash</h2>
+                    <span class="badge badge-active">Active</span>
+                </div>
+                <p>Go dashboard backend service and operational system metrics.</p>
+                <div class="meta-row"><span class="app-type">service</span> <span class="app-version">v0.2.0</span> <span class="app-pkg">service</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/m3tal-godash.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/m3tal-godash" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card info-card">
+            <a class="card-main-link" href="./apps/m3tal-core.html">
+                <div class="card-header">
+                    <h2>M3tal Core</h2>
+                    <span class="badge badge-active">Active</span>
+                </div>
+                <p>Foundation backend libraries, utilities, and common service primitives.</p>
+                <div class="meta-row"><span class="app-type">library</span> <span class="app-version">v0.1.0</span> <span class="app-pkg">library</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/m3tal-core.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/m3tal-core" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card info-card">
+            <a class="card-main-link" href="./apps/m3tal-api.html">
+                <div class="card-header">
+                    <h2>M3tal API</h2>
+                    <span class="badge badge-active">Active</span>
+                </div>
+                <p>Central backend routing API and service gateway.</p>
+                <div class="meta-row"><span class="app-type">service</span> <span class="app-version">v0.1.0</span> <span class="app-pkg">service</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/m3tal-api.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/m3tal-api" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card info-card">
+            <a class="card-main-link" href="./apps/m3tal-stack.html">
+                <div class="card-header">
+                    <h2>M3tal Stack</h2>
+                    <span class="badge badge-active">Active</span>
+                </div>
+                <p>Docker Compose infrastructure orchestration and stack topologies.</p>
+                <div class="meta-row"><span class="app-type">infrastructure</span> <span class="app-version">v1.0.0</span> <span class="app-pkg">docker-compose</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/m3tal-stack.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/m3tal-stack" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card info-card">
+            <a class="card-main-link" href="./apps/antigravity-remote-docker.html">
+                <div class="card-header">
+                    <h2>Antigravity Remote Docker</h2>
+                    <span class="badge badge-active">Active</span>
+                </div>
+                <p>Containerized remote development environment and Docker workspace.</p>
+                <div class="meta-row"><span class="app-type">container</span> <span class="app-version">v1.0.0</span> <span class="app-pkg">container</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/antigravity-remote-docker.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/antigravity-remote-docker" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card info-card">
+            <a class="card-main-link" href="./apps/m3tal-apt-key.html">
+                <div class="card-header">
+                    <h2>M3tal APT Keyring</h2>
+                    <span class="badge badge-active">Active</span>
+                </div>
+                <p>Package signing key and Debian/Ubuntu distribution repository configuration.</p>
+                <div class="meta-row"><span class="app-type">package</span> <span class="app-version">v1.0.0</span> <span class="app-pkg">gpg-keyring</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/m3tal-apt-key.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/m3tal-apt-key" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
         </div>
     </section>
 
@@ -479,30 +576,39 @@
             <p class="section-desc">Shared component libraries, UI kits, API wrappers, and module scaffolding templates.</p>
         </div>
         <div class="grid">
-        <a class="card info-card" href="https://github.com/jakej985-rgb/m3tal-ui-kit" target="_blank" rel="noopener noreferrer">
-            <div class="card-header">
-                <h2>M3tal UI Kit <span class="ext-icon" aria-hidden="true">↗</span></h2>
-                <span class="badge badge-active">Active</span>
-            </div>
-            <p>Shared Flutter and web design system, theme tokens, and component kit.</p>
-            <div class="meta-row"><span class="app-type">library</span> <span class="app-version">v0.1.0</span> <span class="app-pkg">dart-pkg</span></div>
-        </a>
-        <a class="card info-card" href="https://github.com/jakej985-rgb/m3tal-hub-template" target="_blank" rel="noopener noreferrer">
-            <div class="card-header">
-                <h2>M3tal Hub Template <span class="ext-icon" aria-hidden="true">↗</span></h2>
-                <span class="badge badge-active">Active</span>
-            </div>
-            <p>Scaffolding and template repository for creating M3tal-Hub compatible web modules.</p>
-            <div class="meta-row"><span class="app-type">template</span> <span class="app-version">v1.0.0</span> <span class="app-pkg">template</span></div>
-        </a>
-        <a class="card info-card" href="https://github.com/jakej985-rgb/ytmusicapi" target="_blank" rel="noopener noreferrer">
-            <div class="card-header">
-                <h2>YTMusicAPI Bridge <span class="ext-icon" aria-hidden="true">↗</span></h2>
-                <span class="badge badge-active">Active</span>
-            </div>
-            <p>Python YouTube Music API bridge and streaming metadata library.</p>
-            <div class="meta-row"><span class="app-type">library</span> <span class="app-version">v0.25.0</span> <span class="app-pkg">pypi</span></div>
-        </a>
+        <div class="card info-card">
+            <a class="card-main-link" href="./apps/m3tal-ui-kit.html">
+                <div class="card-header">
+                    <h2>M3tal UI Kit</h2>
+                    <span class="badge badge-active">Active</span>
+                </div>
+                <p>Shared Flutter and web design system, theme tokens, and component kit.</p>
+                <div class="meta-row"><span class="app-type">library</span> <span class="app-version">v0.1.0</span> <span class="app-pkg">dart-pkg</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/m3tal-ui-kit.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/m3tal-ui-kit" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card info-card">
+            <a class="card-main-link" href="./apps/m3tal-hub-template.html">
+                <div class="card-header">
+                    <h2>M3tal Hub Template</h2>
+                    <span class="badge badge-active">Active</span>
+                </div>
+                <p>Scaffolding and template repository for creating M3tal-Hub compatible web modules.</p>
+                <div class="meta-row"><span class="app-type">template</span> <span class="app-version">v1.0.0</span> <span class="app-pkg">template</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/m3tal-hub-template.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/m3tal-hub-template" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card info-card">
+            <a class="card-main-link" href="./apps/ytmusicapi.html">
+                <div class="card-header">
+                    <h2>YTMusicAPI Bridge</h2>
+                    <span class="badge badge-active">Active</span>
+                </div>
+                <p>Python YouTube Music API bridge and streaming metadata library.</p>
+                <div class="meta-row"><span class="app-type">library</span> <span class="app-version">v0.25.0</span> <span class="app-pkg">pypi</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/ytmusicapi.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/ytmusicapi" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
         </div>
     </section>
 
@@ -512,37 +618,46 @@
             <p class="section-desc">Developer tooling, package repositories, automation utilities, and architecture specs.</p>
         </div>
         <div class="grid">
-        <a class="card info-card" href="https://github.com/jakej985-rgb/m3tal-docs" target="_blank" rel="noopener noreferrer">
-            <div class="card-header">
-                <h2>M3tal Docs <span class="ext-icon" aria-hidden="true">↗</span></h2>
-                <span class="badge badge-active">Active</span>
-            </div>
-            <p>Architecture specifications, engineering guides, and ecosystem documentation.</p>
-            <div class="meta-row"><span class="app-type">docs</span> <span class="app-version">v1.0.0</span> <span class="app-pkg">docs</span></div>
-        </a>
-        <a class="card info-card" href="https://github.com/jakej985-rgb/comicinfo-generator" target="_blank" rel="noopener noreferrer">
-            <div class="card-header">
-                <h2>ComicInfo Generator <span class="ext-icon" aria-hidden="true">↗</span></h2>
-                <span class="badge badge-active">Active</span>
-            </div>
-            <p>Comic metadata enrichment engine and ComicInfo.xml batch generator.</p>
-            <div class="meta-row"><span class="app-type">tooling</span> <span class="app-version">v1.1.0</span> <span class="app-pkg">cli-tool</span></div>
-        </a>
-        <a class="card info-card" href="https://github.com/jakej985-rgb/vscode" target="_blank" rel="noopener noreferrer">
-            <div class="card-header">
-                <h2>M3tal VS Code Config <span class="ext-icon" aria-hidden="true">↗</span></h2>
-                <span class="badge badge-active">Active</span>
-            </div>
-            <p>Workspace configurations, recommended extensions, and development profiles.</p>
-            <div class="meta-row"><span class="app-type">tooling</span> <span class="app-version">v1.0.0</span> <span class="app-pkg">dev-config</span></div>
-        </a>
+        <div class="card info-card">
+            <a class="card-main-link" href="./apps/m3tal-docs.html">
+                <div class="card-header">
+                    <h2>M3tal Docs</h2>
+                    <span class="badge badge-active">Active</span>
+                </div>
+                <p>Architecture specifications, engineering guides, and ecosystem documentation.</p>
+                <div class="meta-row"><span class="app-type">docs</span> <span class="app-version">v1.0.0</span> <span class="app-pkg">docs</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/m3tal-docs.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/m3tal-docs" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card info-card">
+            <a class="card-main-link" href="./apps/comicinfo-generator.html">
+                <div class="card-header">
+                    <h2>ComicInfo Generator</h2>
+                    <span class="badge badge-active">Active</span>
+                </div>
+                <p>Comic metadata enrichment engine and ComicInfo.xml batch generator.</p>
+                <div class="meta-row"><span class="app-type">tooling</span> <span class="app-version">v1.1.0</span> <span class="app-pkg">cli-tool</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/comicinfo-generator.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/comicinfo-generator" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card info-card">
+            <a class="card-main-link" href="./apps/vscode.html">
+                <div class="card-header">
+                    <h2>M3tal VS Code Config</h2>
+                    <span class="badge badge-active">Active</span>
+                </div>
+                <p>Workspace configurations, recommended extensions, and development profiles.</p>
+                <div class="meta-row"><span class="app-type">tooling</span> <span class="app-version">v1.0.0</span> <span class="app-pkg">dev-config</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/vscode.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/vscode" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
         </div>
     </section>
     </main>
 
     <footer>
         <div>Centralized release front. Source repositories maintain independent releases.</div>
-        <div>Generated: 2026-09-30 18:11:28 UTC</div>
+        <div>Generated: 2026-09-30 18:54:22 UTC</div>
     </footer>
 </body>
 </html>
