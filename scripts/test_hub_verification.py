@@ -87,8 +87,9 @@ def test_deploy_workflow_safeguards():
         
         return True, "Allowed"
 
-    # Infrastructure and libraries must be rejected
+    # Infrastructure, libraries, and disabled/planned apps must be rejected
     rejected_list = [
+        "munchkin-companion-app",
         "m3tal-godash",
         "m3tal-core",
         "m3tal-api",
@@ -266,6 +267,7 @@ def test_plan_13_other_app_repositories():
 def test_plan_12_munchkin_companion_app():
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     manifest_path = os.path.join(base_dir, "apps", "manifest.yml")
+    deploy_path = os.path.join(base_dir, ".github", "workflows", "deploy.yml")
     plan_path = os.path.join(base_dir, "plan", "12-Munchkin-Companion-App.md")
     index_path = os.path.join(base_dir, "index.html")
 
@@ -281,19 +283,106 @@ def test_plan_12_munchkin_companion_app():
     assert entry.get("status") == "planned", "munchkin-companion-app must have status: planned"
     assert entry.get("type") == "flutter-web", "munchkin-companion-app must have type: flutter-web"
     assert entry.get("repo") == "Munchkin-Companion-App", "munchkin-companion-app repo must match Munchkin-Companion-App"
-    print("  [OK Plan 12 Manifest] munchkin-companion-app correctly registered as enabled: false, status: planned")
+    expected_repo_link = "https://github.com/jakej985-rgb/Munchkin-Companion-App"
+    assert entry.get("repo_url") == expected_repo_link, f"munchkin-companion-app repo_url must match {expected_repo_link}"
+    print("  [OK Plan 12 Manifest] munchkin-companion-app correctly registered as enabled: false, status: planned, repo_url configured")
+
+    # Verify deploy.yml does not allow dispatching munchkin-companion-app to Pages while disabled
+    deploy_content = open(deploy_path, 'r', encoding='utf-8').read()
+    assert "- munchkin-companion-app" not in deploy_content, (
+        "munchkin-companion-app must not be an option in deploy.yml workflow_dispatch while disabled/unbuildable"
+    )
+    print("  [OK Plan 12 CI] deploy.yml does not include unbuildable munchkin-companion-app in dispatch options")
 
     # Verify index.html does not point to a broken relative path
     index_content = open(index_path, 'r', encoding='utf-8').read()
     assert 'href="./munchkin-companion-app/"' not in index_content, (
         "Broken relative Pages link found for munchkin-companion-app: ./munchkin-companion-app/"
     )
-    expected_repo_link = "https://github.com/jakej985-rgb/Munchkin-Companion-App"
     assert expected_repo_link in index_content, f"Expected repo link {expected_repo_link} not found in index.html"
     assert "Munchkin Companion App" in index_content, "Munchkin Companion App title not found in index.html"
+    assert "badge-planned" in index_content, "badge-planned class missing from index.html"
     print(f"  [OK Plan 12 Card] Card links safely to {expected_repo_link} without dead relative URLs")
 
     print("Plan 12 Munchkin Companion App checks passed!")
+
+def test_plan_10_jellyfin_ui():
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    manifest_path = os.path.join(base_dir, "apps", "manifest.yml")
+    status_path = os.path.join(base_dir, "apps", "status.json")
+    deploy_path = os.path.join(base_dir, ".github", "workflows", "deploy.yml")
+    plan_path = os.path.join(base_dir, "plan", "10-Jellyfin-UI.md")
+    index_path = os.path.join(base_dir, "index.html")
+
+    assert os.path.exists(plan_path), f"Plan 10 documentation missing: {plan_path}"
+    plan_content = open(plan_path, 'r', encoding='utf-8').read()
+    assert "Goal" in plan_content, "Plan 10 missing Goal"
+    assert "Definition of Done" in plan_content, "Plan 10 missing Definition of Done"
+    for step_num in range(1, 10):
+        assert f"{step_num}. [x]" in plan_content, f"Plan 10 step {step_num} is not marked completed [x]"
+    print("  [OK Plan 10 Doc] plan/10-Jellyfin-UI.md exists with all 9 steps marked completed")
+
+    with open(manifest_path, 'r', encoding='utf-8') as f:
+        manifest = yaml.safe_load(f)
+    apps = {a["id"]: a for a in manifest["apps"]}
+
+    assert "jellyfin-ui" in apps, "jellyfin-ui missing from manifest.yml"
+    entry = apps["jellyfin-ui"]
+    assert entry.get("enabled") is True, "jellyfin-ui must have enabled: true"
+    assert entry.get("status") == "ready", f"jellyfin-ui must have status: ready (got {entry.get('status')})"
+    assert entry.get("type") == "vite", f"jellyfin-ui must have type: vite (got {entry.get('type')})"
+    assert entry.get("repo") == "Jellyfin-ui", "jellyfin-ui repo must match Jellyfin-ui"
+    assert entry.get("path") == "jellyfin-ui", "jellyfin-ui path must match jellyfin-ui"
+    assert entry.get("ref") == "feat/netflix-jellyfin-ui-8605598523484562409", "jellyfin-ui ref mismatch"
+    assert entry.get("base_href") == "/jellyfin-ui/", "base_href must match /jellyfin-ui/"
+    print("  [OK Plan 10 Manifest] jellyfin-ui correctly registered as enabled: true, status: ready, type: vite, ref: feat/netflix-jellyfin-ui-8605598523484562409")
+
+    with open(status_path, 'r', encoding='utf-8') as f:
+        status_data = json.load(f)
+    assert "jellyfin-ui" in status_data.get("releases", {}), "jellyfin-ui missing from status.json releases"
+    status_entry = status_data["releases"]["jellyfin-ui"]
+    assert status_entry.get("status") == "ready", "jellyfin-ui status in status.json must be ready"
+    print("  [OK Plan 10 Status] jellyfin-ui registered in status.json with status: ready")
+
+    # Verify deploy.yml includes vite support, jellyfin-ui dispatch option, and token handling
+    deploy_content = open(deploy_path, 'r', encoding='utf-8').read()
+    assert "- jellyfin-ui" in deploy_content, "jellyfin-ui must be an option in deploy.yml workflow_dispatch"
+    assert "Build Vite / Node Web Release" in deploy_content, "Build Vite / Node Web Release step missing from deploy.yml"
+    assert "steps.meta.outputs.type == 'vite'" in deploy_content, "type == 'vite' condition missing in deploy.yml"
+    assert "HUB_DISPATCH_TOKEN" in deploy_content, "HUB_DISPATCH_TOKEN missing from checkout step in deploy.yml"
+    print("  [OK Plan 10 CI] deploy.yml includes jellyfin-ui dispatch option, Node/Vite build step, and HUB_DISPATCH_TOKEN")
+
+    # Verify index.html contains live card linking to ./jellyfin-ui/
+    index_content = open(index_path, 'r', encoding='utf-8').read()
+    assert 'href="./jellyfin-ui/"' in index_content, "index.html missing link to ./jellyfin-ui/"
+    assert "Jellyfin UI" in index_content, "Jellyfin UI title not found in index.html"
+    assert "badge-ready" in index_content, "badge-ready badge class missing in index.html"
+    print("  [OK Plan 10 Card] Card links to ./jellyfin-ui/ with badge-ready and type vite")
+
+    # Check Jellyfin-ui source repository workflows and scripts if directory exists
+    jellyfin_repo_dir = "/home/m3tal/apps/Jellyfin-ui"
+    if os.path.exists(jellyfin_repo_dir):
+        dispatch_wf = os.path.join(jellyfin_repo_dir, ".github", "workflows", "dispatch-hub.yml")
+        build_script = os.path.join(jellyfin_repo_dir, "scripts", "build_web_release.sh")
+        vite_config = os.path.join(jellyfin_repo_dir, "vite.config.ts")
+
+        assert os.path.exists(dispatch_wf), f"dispatch-hub.yml missing in Jellyfin-ui repo: {dispatch_wf}"
+        wf_content = open(dispatch_wf, 'r', encoding='utf-8').read()
+        assert "jakej985-rgb/M3tal-Hub" in wf_content, "dispatch-hub.yml does not target jakej985-rgb/M3tal-Hub"
+        assert "app-release" in wf_content, "dispatch-hub.yml does not emit app-release event"
+        assert '"app_id": "jellyfin-ui"' in wf_content, "dispatch-hub.yml does not provide app_id: jellyfin-ui"
+
+        assert os.path.exists(build_script), f"build_web_release.sh missing in Jellyfin-ui repo: {build_script}"
+        bs_content = open(build_script, 'r', encoding='utf-8').read()
+        assert "BASE_HREF" in bs_content, "build_web_release.sh does not handle BASE_HREF"
+        assert "npm run build" in bs_content, "build_web_release.sh does not execute npm run build"
+
+        assert os.path.exists(vite_config), f"vite.config.ts missing in Jellyfin-ui repo: {vite_config}"
+        vc_content = open(vite_config, 'r', encoding='utf-8').read()
+        assert "BASE_HREF" in vc_content or "base:" in vc_content, "vite.config.ts does not configure base href"
+        print("  [OK Plan 10 Jellyfin-ui Repo] dispatch-hub.yml, build_web_release.sh, and vite.config.ts verified")
+
+    print("Plan 10 Jellyfin UI checks passed!")
 
 def test_plan_11_m3tal_plugin_page():
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -470,6 +559,8 @@ if __name__ == "__main__":
     test_deploy_workflow_safeguards()
     print("\n=== Testing Hub Generator Output ===")
     test_hub_generator()
+    print("\n=== Testing Plan 10 Jellyfin UI ===")
+    test_plan_10_jellyfin_ui()
     print("\n=== Testing Plan 11 M3tal Plugin Page ===")
     test_plan_11_m3tal_plugin_page()
     print("\n=== Testing Plan 12 Munchkin Companion App ===")
