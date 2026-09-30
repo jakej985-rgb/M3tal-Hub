@@ -93,10 +93,11 @@ apps:
   - id: jellyfin-ui
     name: Jellyfin UI
     repo: Jellyfin-ui
+    ref: feat/netflix-jellyfin-ui-8605598523484562409
     path: jellyfin-ui
     type: vite
     enabled: true
-    status: planned
+    status: ready
     description: React/Vite Jellyfin interface project.
     base_href: /jellyfin-ui/
 
