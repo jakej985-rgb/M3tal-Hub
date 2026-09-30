@@ -24,6 +24,12 @@
       "version": "1.0.0",
       "last_released": null,
       "build_status": "configured"
+    },
+    "infernal-web": {
+      "status": "ready",
+      "version": "1.0.2",
+      "last_released": null,
+      "build_status": "configured"
     }
   }
 }
