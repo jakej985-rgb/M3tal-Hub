@@ -69,9 +69,6 @@ jobs:
             REF=""
             VERSION=""
           fi
-          [ -z "$REF" ] && REF="main"
-          [ -z "$VERSION" ] && VERSION="$REF"
-
           echo "app_id=$APP_ID" >> $GITHUB_OUTPUT
           echo "ref=$REF" >> $GITHUB_OUTPUT
           echo "version=$VERSION" >> $GITHUB_OUTPUT
@@ -101,12 +98,15 @@ jobs:
           path = target.get('path', app_id)
           app_type = target.get('type', 'web')
           base_href = target.get('base_href', f"/{path}/")
+          target_ref = "${{ steps.target.outputs.ref }}"
+          final_ref = target_ref or target.get('ref', '')
 
           with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
               out.write(f"repo={repo}\n")
               out.write(f"path={path}\n")
               out.write(f"type={app_type}\n")
               out.write(f"base_href={base_href}\n")
+              out.write(f"ref={final_ref}\n")
           EOF
 
       - name: Fetch Deployed Site Cache from gh-pages
@@ -128,7 +128,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: "${{ github.repository_owner }}/${{ steps.meta.outputs.repo }}"
-          ref: "${{ steps.target.outputs.ref }}"
+          ref: "${{ steps.meta.outputs.ref }}"
           path: build_target
 
       - name: Set up Flutter (for flutter-web applications)
@@ -161,6 +161,41 @@ jobs:
           rm -rf "_site/${{ steps.meta.outputs.path }}"
           mkdir -p "_site/${{ steps.meta.outputs.path }}"
           cp -r build_target/build/web/* "_site/${{ steps.meta.outputs.path }}/"
+          echo "Application release published successfully."
+
+      - name: Set up Node.js (for vite and web applications)
+        if: steps.target.outputs.app_id != 'none' && (steps.meta.outputs.type == 'vite' || steps.meta.outputs.type == 'web')
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: build_target/package-lock.json
+
+      - name: Build Vite / Node Web Release
+        if: steps.target.outputs.app_id != 'none' && (steps.meta.outputs.type == 'vite' || steps.meta.outputs.type == 'web')
+        run: |
+          cd build_target
+          if [ -f "scripts/build_web_release.sh" ]; then
+            chmod +x scripts/build_web_release.sh
+            echo "Executing repository custom build script..."
+            ./scripts/build_web_release.sh "${{ steps.meta.outputs.base_href }}"
+          else
+            npm ci
+            echo "Building Vite application for base path: ${{ steps.meta.outputs.base_href }}"
+            BASE_HREF="${{ steps.meta.outputs.base_href }}" npm run build
+          fi
+
+          OUT_DIR="dist"
+          if [ ! -d "$OUT_DIR" ] && [ -d "build/web" ]; then
+            OUT_DIR="build/web"
+          fi
+          test -f "$OUT_DIR/index.html" || { echo "Build failed: $OUT_DIR/index.html not found"; exit 1; }
+          cd ..
+
+          echo "Publishing application release to _site/${{ steps.meta.outputs.path }}..."
+          rm -rf "_site/${{ steps.meta.outputs.path }}"
+          mkdir -p "_site/${{ steps.meta.outputs.path }}"
+          cp -r build_target/"$OUT_DIR"/* "_site/${{ steps.meta.outputs.path }}/"
           echo "Application release published successfully."
 
       - name: Update Status & Release Metadata

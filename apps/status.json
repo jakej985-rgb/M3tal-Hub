@@ -30,6 +30,12 @@
       "version": "1.0.2",
       "last_released": null,
       "build_status": "configured"
+    },
+    "jellyfin-ui": {
+      "status": "ready",
+      "version": "1.0.0",
+      "last_released": null,
+      "build_status": "configured"
     }
   }
 }
