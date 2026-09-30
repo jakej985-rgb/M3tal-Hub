@@ -334,7 +334,7 @@ def test_plan_10_jellyfin_ui():
     assert entry.get("repo") == "Jellyfin-ui", "jellyfin-ui repo must match Jellyfin-ui"
     assert entry.get("path") == "jellyfin-ui", "jellyfin-ui path must match jellyfin-ui"
     assert entry.get("ref") == "feat/netflix-jellyfin-ui-8605598523484562409", "jellyfin-ui ref mismatch"
-    assert entry.get("base_href") == "/jellyfin-ui/", "base_href must match /jellyfin-ui/"
+    assert entry.get("base_href") in ["/jellyfin-ui/", "/M3tal-Hub/jellyfin-ui/"], "base_href must match /jellyfin-ui/ or /M3tal-Hub/jellyfin-ui/"
     print("  [OK Plan 10 Manifest] jellyfin-ui correctly registered as enabled: true, status: ready, type: vite, ref: feat/netflix-jellyfin-ui-8605598523484562409")
 
     with open(status_path, 'r', encoding='utf-8') as f:
@@ -405,7 +405,7 @@ def test_plan_11_m3tal_plugin_page():
     assert entry.get("type") == "static", f"m3tal-plugin-page must have type: static (got {entry.get('type')})"
     assert entry.get("repo") == "m3tal-plugin-page", "m3tal-plugin-page repo must match m3tal-plugin-page"
     assert entry.get("path") == "m3tal-plugin-page", "m3tal-plugin-page path must match m3tal-plugin-page"
-    assert entry.get("base_href") == "/m3tal-plugin-page/", "base_href must match /m3tal-plugin-page/"
+    assert entry.get("base_href") in ["/m3tal-plugin-page/", "/M3tal-Hub/m3tal-plugin-page/"], "base_href must match /m3tal-plugin-page/ or /M3tal-Hub/m3tal-plugin-page/"
     print("  [OK Plan 11 Manifest] m3tal-plugin-page correctly registered as enabled: true, status: ready, type: static")
 
     with open(status_path, 'r', encoding='utf-8') as f:

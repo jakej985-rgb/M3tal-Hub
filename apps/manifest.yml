@@ -10,7 +10,7 @@ apps:
     enabled: true
     status: ready
     description: Robotics learning application.
-    base_href: /Monster-Lab/
+    base_href: /M3tal-Hub/Monster-Lab/
 
   - id: android-card-games
     name: Android Card Games
@@ -20,7 +20,7 @@ apps:
     enabled: true
     status: ready
     description: Flutter tabletop gaming suite.
-    base_href: /Android-card-games/
+    base_href: /M3tal-Hub/Android-card-games/
 
   - id: idle-animals
     name: Idle Animals
@@ -30,7 +30,7 @@ apps:
     enabled: true
     status: ready
     description: Extinct-animal idle game.
-    base_href: /Idle-animals/
+    base_href: /M3tal-Hub/Idle-animals/
 
   - id: red-music-locker
     name: Red Music Locker
@@ -40,7 +40,7 @@ apps:
     enabled: true
     status: ready
     description: Self-hosted music locker frontend.
-    base_href: /red-music-locker/
+    base_href: /M3tal-Hub/red-music-locker/
 
   - id: red-music-locker-account-linker
     name: Red Music Locker Account Linker
@@ -59,7 +59,7 @@ apps:
     enabled: true
     status: ready
     description: Offline-first Subaru reference app.
-    base_href: /subaru-specs-n-parts/
+    base_href: /M3tal-Hub/subaru-specs-n-parts/
 
   - id: specs-n-parts
     name: Spec-s-N-Part-s
@@ -78,7 +78,7 @@ apps:
     enabled: true
     status: ready
     description: Infernal web application.
-    base_href: /infernal-web/
+    base_href: /M3tal-Hub/infernal-web/
 
   - id: gps-speedometer
     name: GPS Speedometer
@@ -100,7 +100,7 @@ apps:
     enabled: true
     status: ready
     description: React/Vite Jellyfin interface project.
-    base_href: /jellyfin-ui/
+    base_href: /M3tal-Hub/jellyfin-ui/
 
 
   - id: m3tal-plugin-page
@@ -111,7 +111,7 @@ apps:
     enabled: true
     status: ready
     description: M3tal plugin landing page.
-    base_href: /m3tal-plugin-page/
+    base_href: /M3tal-Hub/m3tal-plugin-page/
 
   - id: munchkin-companion-app
     name: Munchkin Companion App
@@ -121,7 +121,7 @@ apps:
     enabled: false
     status: planned
     description: Flutter rules-aware game companion.
-    base_href: /munchkin-companion-app/
+    base_href: /M3tal-Hub/munchkin-companion-app/
     repo_url: https://github.com/jakej985-rgb/Munchkin-Companion-App
 
   - id: ink-vault

@@ -102,7 +102,17 @@ jobs:
           repo = target.get('repo', '')
           path = target.get('path', app_id)
           app_type = target.get('type', 'web')
-          base_href = target.get('base_href', f"/{path}/")
+
+          hub_prefix = "/M3tal-Hub"
+          raw_base = target.get('base_href', f"/{path}/")
+          if raw_base.startswith('.'):
+              base_href = raw_base
+          elif raw_base.startswith(f"{hub_prefix}/"):
+              base_href = raw_base
+          else:
+              cleaned = raw_base.strip('/')
+              base_href = f"{hub_prefix}/{cleaned}/"
+
           target_ref = "${{ steps.target.outputs.ref }}"
           final_ref = target_ref or target.get('ref', '')
 
