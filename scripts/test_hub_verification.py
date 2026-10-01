@@ -676,7 +676,7 @@ def test_multi_platform_badges():
 
     # 2. Verify key multi-platform applications
     key_expectations = {
-        "android-card-games": ["os-android", "os-roku", "os-web", "os-docker"],
+        "android-card-games": ["os-android", "os-roku", "os-web", "os-docker", "os-server"],
         "monster-lab": ["os-web", "os-android", "os-windows", "os-linux", "os-docker"],
         "idle-animals": ["os-android", "os-web"],
         "red-music-locker": ["os-web", "os-docker"],
@@ -713,6 +713,45 @@ def test_multi_platform_badges():
         app_id = app["id"]
         content = open(os.path.join(apps_dir, f"{app_id}.html"), 'r', encoding='utf-8').read()
         assert "Target OS / Platforms" in content, f"{app_id}.html missing 'Target OS / Platforms' header"
+
+    # 4. Verify PLATFORM_INFO dictionary in build_hub.py
+    import importlib.util
+    build_hub_path = os.path.join(base_dir, "scripts", "build_hub.py")
+    spec = importlib.util.spec_from_file_location("build_hub", build_hub_path)
+    build_hub_mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(build_hub_mod)
+
+    assert hasattr(build_hub_mod, "PLATFORM_INFO"), "build_hub.py missing PLATFORM_INFO"
+    platform_info = build_hub_mod.PLATFORM_INFO
+    required_keys = [
+        "android", "roku", "web", "docker", "server", "linux", "windows", "macos",
+        "desktop", "chrome", "firefox", "extension", "python", "dart", "template", "docs", "cli"
+    ]
+    for k in required_keys:
+        assert k in platform_info, f"PLATFORM_INFO missing required key '{k}'"
+        val = platform_info[k]
+        assert isinstance(val, tuple) and len(val) == 3, f"PLATFORM_INFO['{k}'] must be a 3-tuple (icon, label, css_class)"
+        icon, label, css_class = val
+        assert isinstance(icon, str) and len(icon) > 0, f"Invalid icon for '{k}'"
+        assert isinstance(label, str) and len(label) > 0, f"Invalid label for '{k}'"
+        assert isinstance(css_class, str) and css_class.startswith("os-"), f"Invalid css_class for '{k}': {css_class}"
+
+    # Verify get_platforms returns tuples
+    sample_platforms = build_hub_mod.get_platforms({"platforms": ["android", "roku", "docker", "server", "web"]})
+    assert isinstance(sample_platforms, list) and len(sample_platforms) == 5, "get_platforms should return list of 5 tuples"
+    for item in sample_platforms:
+        assert isinstance(item, tuple) and len(item) == 3, f"Expected tuple from get_platforms, got {type(item)}"
+
+    # 5. Verify CSS styling contains all key classes in index.html and detail pages
+    expected_css_classes = [
+        ".os-android", ".os-roku", ".os-web", ".os-docker", ".os-server",
+        ".os-linux", ".os-windows", ".os-macos", ".os-desktop",
+        ".os-chrome", ".os-firefox", ".os-ext", ".os-tool"
+    ]
+    for css_cls in expected_css_classes:
+        assert css_cls in index_content, f"index.html missing CSS rule for '{css_cls}'"
+        sample_page = open(os.path.join(apps_dir, "android-card-games.html"), 'r', encoding='utf-8').read()
+        assert css_cls in sample_page, f"android-card-games.html missing CSS rule for '{css_cls}'"
 
     print("Multi-platform badge verification passed!")
 

@@ -215,6 +215,8 @@ def get_changelog(app, release_info):
     if app_type == "flutter-web":
         notes.append("Progressive Web App (PWA) manifest and responsive CanvasKit/HTML rendering.")
         notes.append("Optimized base-href asset routing for GitHub Pages hosting.")
+        if app.get("apk_url") or (isinstance(app.get("platforms"), list) and "android" in app.get("platforms")):
+            notes.append("Standalone native Android APK distribution available from GitHub Releases.")
     elif app_type == "vite":
         notes.append("React & Vite optimized modern bundle export.")
         notes.append("Automated Node.js deployment pipeline with environment asset base path injection.")
@@ -255,7 +257,34 @@ def get_install_guide(app):
         "steps": []
     }
 
-    if app_id == "android-card-games":
+    if app_id == "idle-animals":
+        return {
+            "summary": "Idle Animals (Extinction Sanctuary) is available across both Android and modern Web browsers, offering instant Progressive Web App (PWA) gameplay with offline persistence alongside a standalone native Android APK release.",
+            "prerequisites": [
+                "🌐 Web / PWA: Modern browser (Google Chrome, Mozilla Firefox, Microsoft Edge, Safari)",
+                "🤖 Android: Mobile device running Android 8.0 (API 26 / Oreo) or higher",
+                "Android setting: 'Install unknown apps' enabled for your browser or file manager",
+                "🛠️ Developer: Flutter SDK >= 3.22 and Dart SDK >= 3.4"
+            ],
+            "steps": [
+                {
+                    "title": "🌐 Web / PWA Browser Gameplay",
+                    "content": "1. Play immediately in your browser via M3tal Hub (or visit /M3tal-Hub/Idle-animals/).\n2. No installer or download required for direct browser gameplay.\n3. To install locally as a standalone Progressive Web App (PWA), tap 'Install App' in your browser address bar or select 'Add to Home Screen' from the browser menu.\n4. Service workers automatically cache game assets for complete offline progression.",
+                    "code": "# Live Web App URL:\nhttps://jakej985-rgb.github.io/M3tal-Hub/Idle-animals/"
+                },
+                {
+                    "title": "🤖 Android APK Installation",
+                    "content": "1. Download the release package extinction-sanctuary-v1.0.0+1.2.apk from GitHub Releases.\n2. On your Android device, navigate to Settings > Security / Apps > Special App Access and enable 'Install unknown apps' for your browser or file manager.\n3. Open the downloaded extinction-sanctuary-v1.0.0+1.2.apk file and tap 'Install'.\n4. Once installed, launch 'Extinction Sanctuary' from your app drawer and enjoy native gameplay.",
+                    "code": "# Direct APK Download URL:\nhttps://github.com/jakej985-rgb/Idle-animals/releases/download/v1.0.0+1.2/extinction-sanctuary-v1.0.0+1.2.apk\n\n# Or sideload directly via ADB:\nadb install -r extinction-sanctuary-v1.0.0+1.2.apk"
+                },
+                {
+                    "title": "🛠️ Local Development & Build",
+                    "content": "Developers can clone the source code to build and test both the Web and Android APK targets locally.",
+                    "code": "# Clone source repository\ngit clone https://github.com/jakej985-rgb/Idle-animals.git\ncd Idle-animals\nflutter pub get\n\n# Run locally in Chrome\nflutter run -d chrome\n\n# Run on Android device or emulator\nflutter run -d android\n\n# Build production releases\nflutter build web --release --base-href /M3tal-Hub/Idle-animals/\nflutter build apk --release"
+                }
+            ]
+        }
+    elif app_id == "android-card-games":
         return {
             "summary": "Android Card Games is a multi-platform tabletop gaming suite with support for Android APK, Roku TV sideloading, self-hosted Docker container & server binaries, and Progressive Web App (PWA).",
             "prerequisites": [
