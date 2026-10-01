@@ -35,14 +35,12 @@ def test_manifest_and_status():
         "m3tal-core",
         "m3tal-api",
         "m3tal-stack",
-        "antigravity-remote-docker",
         "m3tal-apt-key",
         "m3tal-ui-kit",
         "m3tal-hub-template",
         "ytmusicapi",
         "m3tal-docs",
         "comicinfo-generator",
-        "vscode",
     ]
 
     found_ids = {a["id"]: a for a in apps}
@@ -94,14 +92,12 @@ def test_deploy_workflow_safeguards():
         "m3tal-core",
         "m3tal-api",
         "m3tal-stack",
-        "antigravity-remote-docker",
         "m3tal-apt-key",
         "m3tal-ui-kit",
         "m3tal-hub-template",
         "ytmusicapi",
         "m3tal-docs",
         "comicinfo-generator",
-        "vscode",
     ]
     for app_id in rejected_list:
         allowed, msg = simulate_deploy_meta(app_id)
@@ -111,9 +107,7 @@ def test_deploy_workflow_safeguards():
     # Ensure Plan 13 non-web app types are rejected by deploy guard even if enabled: true were set
     plan_13_non_web = [
         "gps-speedometer",
-        "ink-vault",
         "shop-manager",
-        "tattoo-shop-manager",
         "infernal-ink-steel-suite",
     ]
     for app_id in plan_13_non_web:
@@ -168,14 +162,12 @@ def test_hub_generator():
         "M3tal Core",
         "M3tal API",
         "M3tal Stack",
-        "Antigravity Remote Docker",
         "M3tal APT Keyring",
         "M3tal UI Kit",
         "M3tal Hub Template",
         "YTMusicAPI Bridge",
         "M3tal Docs",
         "ComicInfo Generator",
-        "M3tal VS Code Config",
     ]
     for proj in expected_projects:
         assert proj in content, f"Project '{proj}' missing in generated index.html"
@@ -206,14 +198,6 @@ def test_plan_13_other_app_repositories():
             "status": "placeholder",
             "expected_url": "https://github.com/jakej985-rgb/GPS-speedometer",
         },
-        "ink-vault": {
-            "name": "Ink Vault",
-            "repo": "Ink-vault",
-            "type": "backend",
-            "enabled": False,
-            "status": "review",
-            "expected_url": "https://github.com/jakej985-rgb/Ink-vault",
-        },
         "shop-manager": {
             "name": "Shop Manager",
             "repo": "Shop-manager",
@@ -221,14 +205,6 @@ def test_plan_13_other_app_repositories():
             "enabled": False,
             "status": "review",
             "expected_url": "https://github.com/jakej985-rgb/Shop-manager",
-        },
-        "tattoo-shop-manager": {
-            "name": "Tattoo Shop Manager",
-            "repo": "Tattoo-Shop-manager",
-            "type": "backend",
-            "enabled": False,
-            "status": "review",
-            "expected_url": "https://github.com/jakej985-rgb/Tattoo-Shop-manager",
         },
         "infernal-ink-steel-suite": {
             "name": "Infernal Ink Steel Suite",
@@ -514,20 +490,18 @@ def test_plan_14_infrastructure_and_libraries():
     with open(status_path, 'r', encoding='utf-8') as f:
         status_data = json.load(f)
 
-    # 1. Exhaustive check of all 12 Plan 14 components
+    # 1. Exhaustive check of Plan 14 components
     infra_library_specs = {
         "m3tal-godash": {"category": "infrastructure", "type": "service", "version": "0.2.0", "package": "service"},
         "m3tal-core": {"category": "infrastructure", "type": "library", "version": "0.1.0", "package": "library"},
         "m3tal-api": {"category": "infrastructure", "type": "service", "version": "0.1.0", "package": "service"},
         "m3tal-stack": {"category": "infrastructure", "type": "infrastructure", "version": "1.0.0", "package": "docker-compose"},
-        "antigravity-remote-docker": {"category": "infrastructure", "type": "container", "version": "1.0.0", "package": "container"},
         "m3tal-apt-key": {"category": "infrastructure", "type": "package", "version": "1.0.0", "package": "gpg-keyring"},
         "m3tal-ui-kit": {"category": "libraries", "type": "library", "version": "0.1.0", "package": "dart-pkg"},
         "m3tal-hub-template": {"category": "libraries", "type": "template", "version": "1.0.0", "package": "template"},
         "ytmusicapi": {"category": "libraries", "type": "library", "version": "0.25.0", "package": "pypi"},
         "m3tal-docs": {"category": "tooling", "type": "docs", "version": "1.0.0", "package": "docs"},
         "comicinfo-generator": {"category": "tooling", "type": "tooling", "version": "1.1.0", "package": "cli-tool"},
-        "vscode": {"category": "tooling", "type": "tooling", "version": "1.0.0", "package": "dev-config"},
     }
 
     for app_id, expected in infra_library_specs.items():

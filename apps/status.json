@@ -56,26 +56,12 @@
       "build_status": "native-apk",
       "package_status": "apk"
     },
-    "ink-vault": {
-      "status": "review",
-      "version": "0.1.0",
-      "last_released": null,
-      "build_status": "backend",
-      "package_status": "service"
-    },
     "shop-manager": {
       "status": "review",
       "version": "0.1.0",
       "last_released": null,
       "build_status": "desktop",
       "package_status": "binary"
-    },
-    "tattoo-shop-manager": {
-      "status": "review",
-      "version": "0.1.0",
-      "last_released": null,
-      "build_status": "backend",
-      "package_status": "service"
     },
     "infernal-ink-steel-suite": {
       "status": "review",
@@ -111,13 +97,6 @@
       "last_released": null,
       "build_status": "infrastructure",
       "package_status": "docker-compose"
-    },
-    "antigravity-remote-docker": {
-      "status": "active",
-      "version": "1.0.0",
-      "last_released": null,
-      "build_status": "container",
-      "package_status": "container"
     },
     "m3tal-apt-key": {
       "status": "active",
@@ -160,13 +139,6 @@
       "last_released": null,
       "build_status": "tooling",
       "package_status": "cli-tool"
-    },
-    "vscode": {
-      "status": "active",
-      "version": "1.0.0",
-      "last_released": null,
-      "build_status": "tooling",
-      "package_status": "dev-config"
     }
   }
 }

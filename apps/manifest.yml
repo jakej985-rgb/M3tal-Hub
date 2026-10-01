@@ -203,16 +203,6 @@ apps:
     base_href: /M3tal-Hub/munchkin-companion-app/
     repo_url: https://github.com/jakej985-rgb/Munchkin-Companion-App
 
-  - id: ink-vault
-    name: Ink Vault
-    repo: Ink-vault
-    path: ink-vault
-    type: backend
-    enabled: false
-    status: review
-    description: Tattoo and studio digital asset vault service.
-    repo_url: https://github.com/jakej985-rgb/Ink-vault
-
   - id: shop-manager
     name: Shop Manager
     repo: Shop-manager
@@ -222,16 +212,6 @@ apps:
     status: review
     description: Studio operations and inventory management system.
     repo_url: https://github.com/jakej985-rgb/Shop-manager
-
-  - id: tattoo-shop-manager
-    name: Tattoo Shop Manager
-    repo: Tattoo-Shop-manager
-    path: tattoo-shop-manager
-    type: backend
-    enabled: false
-    status: review
-    description: Tattoo shop appointment and inventory backend service.
-    repo_url: https://github.com/jakej985-rgb/Tattoo-Shop-manager
 
   - id: infernal-ink-steel-suite
     name: Infernal Ink Steel Suite
@@ -291,18 +271,6 @@ apps:
     package: docker-compose
     description: Docker Compose infrastructure orchestration and stack topologies.
     repo_url: https://github.com/jakej985-rgb/m3tal-stack
-
-  - id: antigravity-remote-docker
-    name: Antigravity Remote Docker
-    repo: antigravity-remote-docker
-    type: container
-    category: infrastructure
-    enabled: false
-    status: active
-    version: 1.0.0
-    package: container
-    description: Containerized remote development environment and Docker workspace.
-    repo_url: https://github.com/jakej985-rgb/antigravity-remote-docker
 
   - id: m3tal-apt-key
     name: M3tal APT Keyring
@@ -377,15 +345,3 @@ apps:
     package: cli-tool
     description: Comic metadata enrichment engine and ComicInfo.xml batch generator.
     repo_url: https://github.com/jakej985-rgb/comicinfo-generator
-
-  - id: vscode
-    name: M3tal VS Code Config
-    repo: vscode
-    type: tooling
-    category: tooling
-    enabled: false
-    status: active
-    version: 1.0.0
-    package: dev-config
-    description: Workspace configurations, recommended extensions, and development profiles.
-    repo_url: https://github.com/jakej985-rgb/vscode
