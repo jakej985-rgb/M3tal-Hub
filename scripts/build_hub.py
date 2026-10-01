@@ -728,6 +728,8 @@ def generate_app_page(app, release_info, category_map):
         action_buttons.append(f'<a href="{app["apk_url"]}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">🤖 Download Android APK ↗</a>')
     elif app_type == "android-native" and release_url:
         action_buttons.append(f'<a href="{release_url}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">📦 Download Release / APK ↗</a>')
+    elif app_type in ["desktop", "suite"] and release_url:
+        action_buttons.append(f'<a href="{release_url}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">📦 GitHub Releases ↗</a>')
 
     if repo_url:
         action_buttons.append(f'<a href="{repo_url}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">🐙 GitHub Repository ↗</a>')

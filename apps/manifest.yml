@@ -475,8 +475,11 @@ apps:
     platforms: [web]
     enabled: true
     status: ready
+    version: "1.0.0"
+    package: spa
     description: React/Vite Jellyfin interface project.
     base_href: /M3tal-Hub/jellyfin-ui/
+    release_url: https://github.com/jakej985-rgb/Jellyfin-ui/releases
     changelog:
       - version: 1.0.0
         date: "2026-09-30"
@@ -518,8 +521,11 @@ apps:
     platforms: [web]
     enabled: true
     status: ready
+    version: "1.0.0"
+    package: static
     description: M3tal plugin landing page.
     base_href: /M3tal-Hub/m3tal-plugin-page/
+    release_url: https://github.com/jakej985-rgb/m3tal-plugin-page/releases
     changelog:
       - version: 1.0.0
         date: "2026-09-30"
@@ -573,8 +579,11 @@ apps:
     platforms: [desktop, linux, windows]
     enabled: false
     status: review
+    version: "0.1.0"
+    package: binary
     description: Studio operations and inventory management system.
     repo_url: https://github.com/jakej985-rgb/Shop-manager
+    release_url: https://github.com/jakej985-rgb/Shop-manager/releases
     changelog:
       - version: "0.1.0"
         date: "2026-09-30"
@@ -640,8 +649,11 @@ apps:
     platforms: [desktop, linux, windows]
     enabled: false
     status: review
+    version: "0.1.0"
+    package: suite
     description: Integrated studio software suite (desktop/backend orchestration).
     repo_url: https://github.com/jakej985-rgb/Infernal-Ink-Steel-Suite
+    release_url: https://github.com/jakej985-rgb/Infernal-Ink-Steel-Suite/releases
     changelog:
       - version: "0.1.0"
         date: "2026-09-30"
