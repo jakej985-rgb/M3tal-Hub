@@ -286,34 +286,39 @@ def get_install_guide(app):
         }
     elif app_id == "android-card-games":
         return {
-            "summary": "Android Card Games is a multi-platform tabletop gaming suite with support for Android APK, Roku TV sideloading, self-hosted Docker container & server binaries, and Progressive Web App (PWA).",
+            "summary": "Android Card Games can be enjoyed across multiple platforms: on mobile via Android APK, on television screens via Roku TV sideloading, self-hosted via Docker container or standalone server binaries, or played directly in the browser via instant Web PWA.",
             "prerequisites": [
-                "Web / PWA: Modern browser (Chrome, Edge, Firefox, Safari)",
-                "Android: Android device running Android 8.0+ (Oreo / API 26) or higher",
-                "Roku: Roku streaming player or Roku TV with Developer Mode enabled",
-                "Docker / Server: Docker Engine >= 24.0 or host environment for server binary"
+                "Android device running Android 8.0 (API 26) or higher for mobile play",
+                "Roku Streaming Player or Roku TV with Developer Mode enabled",
+                "Docker Engine >= 24.0 or Docker Compose v2 for containerized party server",
+                "Linux, macOS, or Windows for standalone server binaries",
+                "Modern web browser (Chrome, Firefox, Safari, Edge) for instant Web / PWA"
             ],
             "steps": [
                 {
-                    "title": "Progressive Web App (PWA) Direct Play",
-                    "content": "Launch the game directly in any browser. To install for offline play, select 'Install' or 'Add to Home Screen' in your browser's navigation bar."
+                    "title": "📱 Android APK Installation",
+                    "content": "1. Download AndroidCardGames-v0.1.28.apk from the GitHub Releases page.\n2. On your Android device, enable 'Install unknown apps' in Settings > Apps & notifications > Special app access.\n3. Open the downloaded APK file and tap Install.\n4. Launch Android Card Games and enjoy local or room-connected card gameplay.",
+                    "code": "# Or install via ADB to a connected device:\nadb install -r AndroidCardGames-v0.1.28.apk"
                 },
                 {
-                    "title": "Android APK Installation",
-                    "content": "1. Download the latest `android-card-games.apk` from GitHub Releases.\n2. On your Android device, enable 'Install unknown apps' in Settings for your browser or file manager.\n3. Tap the downloaded APK to install and launch."
+                    "title": "📺 Roku TV Developer Mode Sideloading",
+                    "content": "1. Enable Developer Mode on your Roku device using the remote: press Home 3 times, Up 2 times, Right, Left, Right, Left, Right.\n2. Note the device IP address shown on screen and set your developer password.\n3. Open a browser on a device on the same local network and navigate to the Roku web portal (http://<roku-ip>).\n4. Log in with username 'rokudev' and your password.\n5. Upload cardgames-roku-v0.1.28.zip and click Install.\n6. The Android Card Games channel will immediately launch on your TV.",
+                    "code": "curl -u rokudev:YOUR_PASSWORD -F \"mysubmit=Install\" -F \"archive=@cardgames-roku-v0.1.28.zip\" http://<roku-ip>/plugin_install"
                 },
                 {
-                    "title": "Roku TV Sideloading",
-                    "content": "1. Turn on Roku Developer Mode on your device: On the Roku remote, press Home 3x, Up 2x, Right, Left, Right, Left, Right.\n2. Note your Roku device IP address and set an admin password.\n3. Navigate to http://<roku-ip> in a web browser on the same local network.\n4. Upload `roku-channel.zip` from Releases and click 'Install' to sideload directly."
+                    "title": "🐳 Docker Self-Hosted TV Party Server",
+                    "content": "Host a persistent multiplayer room server for living room TVs, mobile players, and web clients using Docker.",
+                    "code": "docker run -d \\\n  --name android-card-games-server \\\n  --restart unless-stopped \\\n  -p 8080:8080 \\\n  -p 8081:8081 \\\n  ghcr.io/jakej985-rgb/android-card-games:v0.1.28"
                 },
                 {
-                    "title": "Docker Backend & Standalone Server",
-                    "content": "Self-host the multiplayer game backend service using Docker or the pre-compiled server binaries (Linux, Windows, macOS):",
-                    "code": "docker run -d --name card-games-backend -p 8080:8080 jakej985/android-card-games:latest\n\n# Or run the standalone server binary:\n./server-linux-amd64 --port 8080"
+                    "title": "💻 Standalone TV Server Binaries",
+                    "content": "Standalone executable binaries are available for Linux, macOS, and Windows from GitHub Releases, requiring no Docker runtime.",
+                    "code": "# Linux / macOS:\nchmod +x cardgames-server-linux\n./cardgames-server-linux --port 8080 --ws-port 8081\n\n# Windows (PowerShell / Command Prompt):\n.\\cardgames-server-windows.exe --port 8080 --ws-port 8081"
                 },
                 {
-                    "title": "Compiling from Source",
-                    "code": f"git clone https://github.com/jakej985-rgb/{repo}.git\ncd {repo}\nflutter pub get\nflutter run -d chrome"
+                    "title": "🌐 Instant Web / PWA",
+                    "content": "Play immediately in your browser on desktop or mobile without downloading any installer. To install as an offline PWA app, select 'Install' or 'Add to Home Screen' in your browser.",
+                    "code": "https://jakej985-rgb.github.io/M3tal-Hub/Android-card-games/"
                 }
             ]
         }

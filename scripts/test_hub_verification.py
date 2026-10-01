@@ -676,7 +676,7 @@ def test_multi_platform_badges():
 
     # 2. Verify key multi-platform applications
     key_expectations = {
-        "android-card-games": ["os-android", "os-roku", "os-web", "os-docker", "os-server"],
+        "android-card-games": ["os-roku", "os-android", "os-web", "os-docker"],
         "monster-lab": ["os-web", "os-android", "os-windows", "os-linux", "os-docker"],
         "idle-animals": ["os-android", "os-web"],
         "red-music-locker": ["os-web", "os-docker"],
@@ -755,6 +755,193 @@ def test_multi_platform_badges():
 
     print("Multi-platform badge verification passed!")
 
+def test_idle_animals_release():
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    manifest_path = os.path.join(base_dir, "apps", "manifest.yml")
+    status_path = os.path.join(base_dir, "apps", "status.json")
+    index_path = os.path.join(base_dir, "index.html")
+    app_page_path = os.path.join(base_dir, "apps", "idle-animals.html")
+
+    # 1. Manifest verification
+    with open(manifest_path, 'r', encoding='utf-8') as f:
+        manifest = yaml.safe_load(f)
+    idle_app = next((a for a in manifest["apps"] if a["id"] == "idle-animals"), None)
+    assert idle_app is not None, "idle-animals entry missing in manifest.yml"
+
+    assert idle_app.get("version") == "1.0.0+1.2", f"Expected version 1.0.0+1.2, got {idle_app.get('version')}"
+    assert idle_app.get("platforms") == ["android", "web"], f"Expected platforms [android, web], got {idle_app.get('platforms')}"
+    
+    expected_apk_url = "https://github.com/jakej985-rgb/Idle-animals/releases/download/v1.0.0+1.2/extinction-sanctuary-v1.0.0+1.2.apk"
+    expected_rel_url = "https://github.com/jakej985-rgb/Idle-animals/releases/tag/v1.0.0+1.2"
+    assert idle_app.get("apk_url") == expected_apk_url, f"Unexpected apk_url: {idle_app.get('apk_url')}"
+    assert idle_app.get("release_url") == expected_rel_url, f"Unexpected release_url: {idle_app.get('release_url')}"
+
+    # Install guide verification
+    guide = idle_app.get("install_guide")
+    assert guide, "idle-animals missing install_guide in manifest.yml"
+    assert "summary" in guide and len(guide["summary"]) > 0
+    assert "prerequisites" in guide and len(guide["prerequisites"]) >= 2
+    
+    steps = guide.get("steps", [])
+    step_titles = [s.get("title", "") for s in steps]
+    assert any("Web" in t for t in step_titles), "Install guide missing Web/PWA step"
+    assert any("Android" in t for t in step_titles), "Install guide missing Android APK step"
+
+    apk_step = next(s for s in steps if "Android" in s.get("title", ""))
+    assert "extinction-sanctuary-v1.0.0+1.2.apk" in apk_step.get("content", "") or "extinction-sanctuary-v1.0.0+1.2.apk" in apk_step.get("code", ""), (
+        "Android APK step must mention extinction-sanctuary-v1.0.0+1.2.apk"
+    )
+
+    # Changelog verification
+    changelog = idle_app.get("changelog", [])
+    assert len(changelog) > 0, "idle-animals missing changelog in manifest.yml"
+    latest_cl = changelog[0]
+    assert latest_cl.get("version") == "1.0.0+1.2", f"Expected changelog version 1.0.0+1.2, got {latest_cl.get('version')}"
+    cl_notes_str = " ".join(latest_cl.get("notes", []))
+    assert "extinction-sanctuary-v1.0.0+1.2.apk" in cl_notes_str, "Changelog must mention extinction-sanctuary-v1.0.0+1.2.apk"
+
+    # 2. Status verification
+    with open(status_path, 'r', encoding='utf-8') as f:
+        status = json.load(f)
+    idle_status = status.get("releases", {}).get("idle-animals", {})
+    assert idle_status.get("version") == "1.0.0+1.2", f"status.json version mismatch: {idle_status.get('version')}"
+    assert idle_status.get("status") == "ready", f"status.json status mismatch: {idle_status.get('status')}"
+
+    # 3. HTML detail page verification
+    assert os.path.exists(app_page_path), f"Missing generated page: {app_page_path}"
+    page_content = open(app_page_path, 'r', encoding='utf-8').read()
+
+    assert "🤖 Download Android APK ↗" in page_content, "Download APK button missing from idle-animals.html"
+    assert expected_apk_url in page_content, "Direct APK download URL missing from idle-animals.html"
+    assert "🚀 Launch Web Application" in page_content, "Web launch button missing from idle-animals.html"
+    assert "extinction-sanctuary-v1.0.0+1.2.apk" in page_content, "APK filename missing from idle-animals.html"
+    assert "os-android" in page_content, "os-android class missing from idle-animals.html"
+    assert "os-web" in page_content, "os-web class missing from idle-animals.html"
+    assert "v1.0.0+1.2" in page_content, "Version 1.0.0+1.2 missing from idle-animals.html"
+
+    # 4. Hub index card verification
+    index_content = open(index_path, 'r', encoding='utf-8').read()
+    assert 'href="./apps/idle-animals.html"' in index_content, "index.html missing link to idle-animals detail page"
+    assert 'href="./Idle-animals/"' in index_content, "index.html missing launch link to Idle-animals"
+
+    # 5. Generator fallback verification
+    import importlib.util
+    build_hub_path = os.path.join(base_dir, "scripts", "build_hub.py")
+    spec = importlib.util.spec_from_file_location("build_hub_mod", build_hub_path)
+    bhm = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(bhm)
+
+    fallback_guide = bhm.get_install_guide({"id": "idle-animals", "type": "flutter-web"})
+    assert fallback_guide is not None, "get_install_guide fallback for idle-animals returned None"
+    fallback_titles = [s["title"] for s in fallback_guide["steps"]]
+    assert any("Web" in t for t in fallback_titles), "Fallback guide missing Web step"
+    assert any("Android" in t for t in fallback_titles), "Fallback guide missing Android step"
+
+    print("Idle-Animals release verification passed!")
+
+def test_android_card_games_release():
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    manifest_path = os.path.join(base_dir, "apps", "manifest.yml")
+    status_path = os.path.join(base_dir, "apps", "status.json")
+    index_path = os.path.join(base_dir, "index.html")
+    app_page_path = os.path.join(base_dir, "apps", "android-card-games.html")
+
+    # 1. Manifest verification
+    with open(manifest_path, 'r', encoding='utf-8') as f:
+        manifest = yaml.safe_load(f)
+    acg_app = next((a for a in manifest["apps"] if a["id"] == "android-card-games"), None)
+    assert acg_app is not None, "android-card-games entry missing in manifest.yml"
+
+    assert acg_app.get("version") == "0.1.28", f"Expected version 0.1.28, got {acg_app.get('version')}"
+    assert acg_app.get("platforms") == ["roku", "android", "web", "docker"], (
+        f"Expected platforms [roku, android, web, docker], got {acg_app.get('platforms')}"
+    )
+
+    expected_apk_url = "https://github.com/jakej985-rgb/Android-card-games/releases/download/v0.1.28/AndroidCardGames-v0.1.28.apk"
+    expected_rel_url = "https://github.com/jakej985-rgb/Android-card-games/releases/tag/v0.1.28"
+    assert acg_app.get("apk_url") == expected_apk_url, f"Unexpected apk_url: {acg_app.get('apk_url')}"
+    assert acg_app.get("release_url") == expected_rel_url, f"Unexpected release_url: {acg_app.get('release_url')}"
+
+    # Install guide verification
+    guide = acg_app.get("install_guide")
+    assert guide, "android-card-games missing install_guide in manifest.yml"
+    assert "summary" in guide and len(guide["summary"]) > 0
+    assert "prerequisites" in guide and len(guide["prerequisites"]) >= 4
+
+    steps = guide.get("steps", [])
+    assert len(steps) == 5, f"Expected 5 install steps, got {len(steps)}"
+    step_titles = [s.get("title", "") for s in steps]
+    assert any("Android APK" in t for t in step_titles), "Missing Android APK install step"
+    assert any("Roku TV" in t for t in step_titles), "Missing Roku TV sideloading step"
+    assert any("Docker" in t for t in step_titles), "Missing Docker server step"
+    assert any("Standalone TV Server" in t for t in step_titles), "Missing Standalone server binaries step"
+    assert any("Web" in t for t in step_titles), "Missing Web / PWA step"
+
+    # Verify key release assets mentioned in install guide
+    guide_text = json.dumps(guide)
+    assert "AndroidCardGames-v0.1.28.apk" in guide_text, "Missing AndroidCardGames-v0.1.28.apk in install guide"
+    assert "cardgames-roku-v0.1.28.zip" in guide_text, "Missing cardgames-roku-v0.1.28.zip in install guide"
+    assert "ghcr.io/jakej985-rgb/android-card-games:v0.1.28" in guide_text, "Missing Docker image tag in install guide"
+    assert "cardgames-server-linux" in guide_text, "Missing cardgames-server-linux in install guide"
+
+    # Changelog verification
+    changelog = acg_app.get("changelog", [])
+    assert len(changelog) > 0, "android-card-games missing changelog in manifest.yml"
+    latest_cl = changelog[0]
+    assert str(latest_cl.get("version")) == "0.1.28", f"Expected changelog version 0.1.28, got {latest_cl.get('version')}"
+    cl_notes_str = " ".join(latest_cl.get("notes", []))
+    assert "AndroidCardGames-v0.1.28.apk" in cl_notes_str, "Changelog must mention AndroidCardGames-v0.1.28.apk"
+    assert "cardgames-roku-v0.1.28.zip" in cl_notes_str, "Changelog must mention cardgames-roku-v0.1.28.zip"
+    assert "ghcr.io/jakej985-rgb/android-card-games:v0.1.28" in cl_notes_str, "Changelog must mention Docker image"
+
+    # 2. Status verification
+    with open(status_path, 'r', encoding='utf-8') as f:
+        status = json.load(f)
+    acg_status = status.get("releases", {}).get("android-card-games", {})
+    assert acg_status.get("version") == "0.1.28", f"status.json version mismatch: {acg_status.get('version')}"
+    assert acg_status.get("status") == "ready", f"status.json status mismatch: {acg_status.get('status')}"
+    assert acg_status.get("last_released") == "2026-09-30", f"status.json last_released mismatch: {acg_status.get('last_released')}"
+
+    # 3. HTML detail page verification
+    assert os.path.exists(app_page_path), f"Missing generated page: {app_page_path}"
+    page_content = open(app_page_path, 'r', encoding='utf-8').read()
+
+    assert "🤖 Download Android APK ↗" in page_content, "Download APK button missing from android-card-games.html"
+    assert expected_apk_url in page_content, "Direct APK download URL missing from android-card-games.html"
+    assert "🚀 Launch Web Application" in page_content, "Web launch button missing from android-card-games.html"
+    assert "AndroidCardGames-v0.1.28.apk" in page_content, "APK filename missing from android-card-games.html"
+    assert "cardgames-roku-v0.1.28.zip" in page_content, "Roku zip missing from android-card-games.html"
+    assert "ghcr.io/jakej985-rgb/android-card-games:v0.1.28" in page_content, "Docker image missing from android-card-games.html"
+    assert "os-roku" in page_content, "os-roku class missing from android-card-games.html"
+    assert "os-android" in page_content, "os-android class missing from android-card-games.html"
+    assert "os-web" in page_content, "os-web class missing from android-card-games.html"
+    assert "os-docker" in page_content, "os-docker class missing from android-card-games.html"
+    assert "v0.1.28" in page_content, "Version 0.1.28 missing from android-card-games.html"
+
+    # 4. Hub index card verification
+    index_content = open(index_path, 'r', encoding='utf-8').read()
+    assert 'href="./apps/android-card-games.html"' in index_content, "index.html missing link to android-card-games detail page"
+    assert 'href="./Android-card-games/"' in index_content, "index.html missing launch link to Android-card-games"
+    assert "v0.1.28" in index_content, "index.html missing v0.1.28"
+
+    # 5. Generator fallback verification
+    import importlib.util
+    build_hub_path = os.path.join(base_dir, "scripts", "build_hub.py")
+    spec = importlib.util.spec_from_file_location("build_hub_mod", build_hub_path)
+    bhm = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(bhm)
+
+    fallback_guide = bhm.get_install_guide({"id": "android-card-games", "type": "flutter-web"})
+    assert fallback_guide is not None, "get_install_guide fallback for android-card-games returned None"
+    fallback_titles = [s["title"] for s in fallback_guide["steps"]]
+    assert any("Android APK" in t for t in fallback_titles), "Fallback guide missing Android APK step"
+    assert any("Roku TV" in t for t in fallback_titles), "Fallback guide missing Roku TV step"
+    assert any("Docker" in t for t in fallback_titles), "Fallback guide missing Docker step"
+    assert any("Standalone TV Server" in t for t in fallback_titles), "Fallback guide missing Standalone server step"
+    assert any("Web" in t for t in fallback_titles), "Fallback guide missing Web / PWA step"
+
+    print("Android-Card-Games release verification passed!")
+
 if __name__ == "__main__":
     print("=== Running M3tal-Hub Verification Suite ===")
     test_manifest_and_status()
@@ -776,6 +963,10 @@ if __name__ == "__main__":
     test_app_detail_pages()
     print("\n=== Testing Multi-Platform Badges ===")
     test_multi_platform_badges()
+    print("\n=== Testing Idle-Animals Release & Multi-Platform ===")
+    test_idle_animals_release()
+    print("\n=== Testing Android-Card-Games Release & Multi-Platform ===")
+    test_android_card_games_release()
     print("\n=== All Tests Passed Successfully ===")
 
 

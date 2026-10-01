@@ -44,16 +44,19 @@ apps:
             adb install -r monster-lab-android.apk
 
             # For Google Play distribution or bundle inspection:
-            # Download monster-lab-android.aab
+            # Download monster-lab-android.aab:
+            wget https://github.com/jakej985-rgb/Monster-Lab/releases/download/v0.0.1/monster-lab-android.aab
+            bundletool build-apks --bundle=monster-lab-android.aab --output=monster-lab.apks --mode=universal
+            bundletool install-apks --apks=monster-lab.apks
         - title: "🪟 Windows Desktop Installer (.exe) & Portable Zip"
           content: "Run natively on Windows 64-bit with direct serial COM port access for Arduino flashing and real-time serial telemetry."
           code: |
             # Setup installer (.exe):
-            # Download monster-lab-windows.exe and run the Inno Setup wizard:
-            monster-lab-windows.exe /VERYSILENT /NORESTART
+            Invoke-WebRequest -Uri "https://github.com/jakej985-rgb/Monster-Lab/releases/download/v0.0.1/monster-lab-windows.exe" -OutFile "monster-lab-windows.exe"
+            .\monster-lab-windows.exe /VERYSILENT /NORESTART
 
             # Portable standalone zip (no installation or administrator privileges required):
-            # Download monster-lab-windows-portable.zip, extract and run:
+            Invoke-WebRequest -Uri "https://github.com/jakej985-rgb/Monster-Lab/releases/download/v0.0.1/monster-lab-windows-portable.zip" -OutFile "monster-lab-windows-portable.zip"
             Expand-Archive -Path monster-lab-windows-portable.zip -DestinationPath .\MonsterLab
             .\MonsterLab\monster_lab.exe
         - title: "🐧 Linux Desktop Debian Package (.deb) & Portable Tarball"
@@ -89,20 +92,14 @@ apps:
         date: "2026-09-30"
         tag: "v0.0.1 Multi-Platform Release"
         notes:
-          - "Multi-platform release packaging across Web PWA, Android, Windows, Linux, and Docker."
+          - "Initial multi-platform release packaging across Web PWA, Android, Windows, Linux, and Docker."
           - "Android release assets (monster-lab-android.apk, monster-lab-android.aab) with USB Host OTG serial support."
           - "Windows desktop Inno Setup installer (monster-lab-windows.exe) and standalone portable bundle (monster-lab-windows-portable.zip)."
           - "Linux desktop Debian package (monster-lab-linux.deb), portable archive (monster-lab-linux-portable.tar.gz), and GPG archive keyring."
           - "Docker Compose simulation stack (docker-compose.yml) running ghcr.io/jakej985-rgb/monster-lab-web container image."
           - "Instant Web simulator and Progressive Web App (PWA) with offline service worker caching on M3tal-Hub."
           - "Full robotics curriculum: 12 lessons, 38 components, 20 guided projects, and interactive breadboard simulator."
-      - version: 1.0.0
-        date: "2026-09-29"
-        tag: "Initial Core Release"
-        notes:
-          - "Production web release with full robotics simulation suite."
           - "Interactive module editor with drag-and-drop circuit simulator."
-          - "Progressive Web App (PWA) offline caching support."
           - "Optimized CanvasKit and HTML rendering pipelines."
 
   - id: android-card-games
@@ -168,6 +165,7 @@ apps:
     path: Idle-animals
     type: flutter-web
     version: "1.0.0+1.2"
+    last_released: "2026-09-30"
     platforms: [android, web]
     enabled: true
     status: ready
