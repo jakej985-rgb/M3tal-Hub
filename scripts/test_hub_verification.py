@@ -1030,6 +1030,112 @@ def test_red_music_locker_releases():
 
     print("Red Music Locker and Account Linker release verification passed!")
 
+def test_assigned_repositories_review():
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    manifest_path = os.path.join(base_dir, "apps", "manifest.yml")
+    apps_dir = os.path.join(base_dir, "apps")
+    index_path = os.path.join(base_dir, "index.html")
+
+    with open(manifest_path, 'r', encoding='utf-8') as f:
+        manifest = yaml.safe_load(f)
+    apps = {a["id"]: a for a in manifest["apps"]}
+    index_content = open(index_path, 'r', encoding='utf-8').read()
+
+    expected_assigned = {
+        "shop-manager": {
+            "platforms": ["desktop", "linux", "windows"],
+            "type": "desktop",
+            "enabled": False,
+            "status": "review",
+            "version": "0.1.0",
+            "package": "binary",
+            "expected_classes": ["os-desktop", "os-linux", "os-windows"],
+            "must_contain": ["Building from Source on Linux", "Building from Source on Windows", "Target OS / Platforms"],
+        },
+        "infernal-ink-steel-suite": {
+            "platforms": ["desktop", "linux", "windows"],
+            "type": "suite",
+            "enabled": False,
+            "status": "review",
+            "version": "0.1.0",
+            "package": "suite",
+            "expected_classes": ["os-desktop", "os-linux", "os-windows"],
+            "must_contain": ["Compiling Desktop Suite on Linux", "Compiling Desktop Suite on Windows", "Docker Compose", "Target OS / Platforms"],
+        },
+        "infernal-web": {
+            "platforms": ["web"],
+            "type": "flutter-web",
+            "enabled": True,
+            "status": "ready",
+            "version": "1.0.2",
+            "package": "pwa",
+            "expected_classes": ["os-web"],
+            "must_contain": ["Instant Web Access & PWA Installation", "Local Development Setup", "flutter pub get", "Target OS / Platforms"],
+        },
+        "jellyfin-ui": {
+            "platforms": ["web"],
+            "type": "vite",
+            "enabled": True,
+            "status": "ready",
+            "version": "1.0.0",
+            "package": "spa",
+            "expected_classes": ["os-web"],
+            "must_contain": ["Instant Web Streaming", "Local Development Setup", "npm install", "Target OS / Platforms"],
+        },
+        "m3tal-plugin-page": {
+            "platforms": ["web"],
+            "type": "static",
+            "enabled": True,
+            "status": "ready",
+            "version": "1.0.0",
+            "package": "static",
+            "expected_classes": ["os-web"],
+            "must_contain": ["Instant Web Access", "Local Testing & Static Serving", "Validating Plugin Signatures & Catalog Schema", "Target OS / Platforms"],
+        },
+    }
+
+    for app_id, spec in expected_assigned.items():
+        assert app_id in apps, f"Assigned repo {app_id} missing from manifest.yml"
+        app = apps[app_id]
+
+        # 1. Platform array verification
+        assert app.get("platforms") == spec["platforms"], (
+            f"Platforms mismatch for {app_id}: got {app.get('platforms')}, expected {spec['platforms']}"
+        )
+
+        # 2. Schema and type verification
+        assert app.get("type") == spec["type"], f"Type mismatch for {app_id}: {app.get('type')} vs {spec['type']}"
+        assert app.get("enabled") == spec["enabled"], f"Enabled mismatch for {app_id}"
+        assert app.get("status") == spec["status"], f"Status mismatch for {app_id}"
+        assert str(app.get("version")) == spec["version"], f"Version mismatch for {app_id}: {app.get('version')}"
+        assert app.get("package") == spec["package"], f"Package mismatch for {app_id}: {app.get('package')}"
+        assert app.get("release_url"), f"release_url missing for {app_id}"
+
+        # 3. Install guide verification
+        guide = app.get("install_guide")
+        assert guide is not None, f"App {app_id} is missing install_guide in manifest.yml"
+        assert guide.get("summary") and len(guide["summary"]) > 20, f"App {app_id} has invalid install_guide summary"
+        assert guide.get("prerequisites") and len(guide["prerequisites"]) > 0, f"App {app_id} missing prerequisites"
+        assert guide.get("steps") and len(guide["steps"]) > 0, f"App {app_id} missing install steps"
+        for s in guide["steps"]:
+            assert s.get("title") and s.get("content"), f"Step in {app_id} missing title or content"
+
+        # 4. Detail page verification
+        page_path = os.path.join(apps_dir, f"{app_id}.html")
+        assert os.path.exists(page_path), f"Detail page missing: {page_path}"
+        page_html = open(page_path, 'r', encoding='utf-8').read()
+
+        for cls in spec["expected_classes"]:
+            assert cls in page_html, f"{app_id}.html missing platform class '{cls}'"
+            assert cls in index_content, f"index.html missing platform class '{cls}'"
+
+        for snippet in spec["must_contain"]:
+            assert snippet in page_html, f"{app_id}.html missing expected snippet '{snippet}'"
+
+        print(f"  [OK Assigned Repo Review] {app_id}: platforms={spec['platforms']}, type={spec['type']}, v{spec['version']} [{spec['package']}] verified")
+
+    print("Assigned repositories review verification passed!")
+
 if __name__ == "__main__":
     print("=== Running M3tal-Hub Verification Suite ===")
     test_manifest_and_status()
@@ -1057,7 +1163,10 @@ if __name__ == "__main__":
     test_android_card_games_release()
     print("\n=== Testing Red Music Locker & Linker Release & Multi-Platform ===")
     test_red_music_locker_releases()
+    print("\n=== Testing Assigned Repositories (Shop-manager, Infernal-Ink-Steel-Suite, etc.) ===")
+    test_assigned_repositories_review()
     print("\n=== All Tests Passed Successfully ===")
+
 
 
 
