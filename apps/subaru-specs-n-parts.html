@@ -382,6 +382,51 @@
             background: rgba(240, 136, 62, 0.12);
             color: #f0883e;
         }
+        .os-roku {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-windows {
+            border-color: rgba(0, 164, 239, 0.35);
+            background: rgba(0, 164, 239, 0.12);
+            color: #4dc9f6;
+        }
+        .os-macos {
+            border-color: rgba(235, 235, 235, 0.35);
+            background: rgba(235, 235, 235, 0.12);
+            color: #e0e0e0;
+        }
+        .os-chrome {
+            border-color: rgba(234, 67, 53, 0.35);
+            background: rgba(234, 67, 53, 0.12);
+            color: #f28b82;
+        }
+        .os-firefox {
+            border-color: rgba(255, 113, 34, 0.35);
+            background: rgba(255, 113, 34, 0.12);
+            color: #ff9436;
+        }
+        .os-python {
+            border-color: rgba(255, 212, 59, 0.35);
+            background: rgba(255, 212, 59, 0.12);
+            color: #ffe873;
+        }
+        .os-dart {
+            border-color: rgba(1, 117, 194, 0.35);
+            background: rgba(1, 117, 194, 0.12);
+            color: #40c4ff;
+        }
+        .os-template {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-docs {
+            border-color: rgba(88, 166, 255, 0.35);
+            background: rgba(88, 166, 255, 0.12);
+            color: #79c0ff;
+        }
         .os-cross {
             border-color: rgba(110, 118, 129, 0.35);
             background: rgba(110, 118, 129, 0.12);
@@ -461,13 +506,13 @@
                 </div>
             </div>
             <div class="badge-group">
-                <span class="badge badge-os os-web">🌐 Web / PWA</span>
+                <span class="badge badge-os os-android">🤖 Android</span> <span class="badge badge-os os-web">🌐 Web</span>
                 <span class="badge badge-ready">Release Ready</span>
             </div>
         </div>
         <p class="hero-desc">Offline-first Subaru reference app.</p>
         <div class="meta-pills">
-            <span class="pill pill-accent">🌐 Web / PWA</span>
+            <span class="pill pill-accent">🤖 Android</span> <span class="pill pill-accent">🌐 Web</span>
             <span class="pill">flutter-web</span>
             <span class="pill">v1.0.0</span>
             <span class="pill">Applications & Frontends</span>
@@ -485,35 +530,44 @@
         <div class="main-column">
             <section class="content-card">
                 <h2 class="card-heading">📖 Installation & Setup Documentation</h2>
-                <p class="guide-summary">This application can be accessed instantly in any modern web browser or installed locally as a Progressive Web App (PWA).</p>
+                <p class="guide-summary">Subaru Specs & Parts is an offline-first technical reference manual and fitment database available as an instant in-browser Progressive Web App (PWA) on M3tal-Hub and as a standalone Android APK package.</p>
                 
         <div class="guide-prereqs">
             <h3>System Prerequisites</h3>
-            <ul><li>Modern web browser (Google Chrome, Mozilla Firefox, Microsoft Edge, Safari)</li><li>For local builds: Flutter SDK >= 3.22 (stable channel)</li><li>Dart SDK >= 3.4</li></ul>
+            <ul><li>Web PWA: Modern web browser (Chrome, Firefox, Safari, Edge) with Service Worker and IndexedDB support</li><li>Android APK: Mobile device running Android 8.0 (Oreo / API 26) or higher</li><li>Developers / Build from Source: Flutter SDK >= 3.24, Java 17, Android Studio / Gradle toolchain</li></ul>
         </div>
         
                 
             <div class="guide-step">
-                <h4>Instant Web & PWA Installation</h4>
-                <p>No installation required for direct use. Open the live web application and choose 'Install' or 'Add to Home Screen' from your browser menu to run offline.</p>
-                
+                <h4>🌐 Instant Web & PWA Installation</h4>
+                <p>1. Open the web application directly from M3tal Hub (https://jakej985-rgb.github.io/M3tal-Hub/subaru-specs-n-parts/).
+2. In Chrome or Chromium-based browsers, tap the 'Install App' prompt in the address bar or choose 'Install Subaru Specs & Parts' from the browser menu.
+3. The PWA caches engine torque specs, fluid capacities, and chassis dimensions for complete roadside functionality without mobile cell service.</p>
+                <pre><code># Web deployment URL:
+https://jakej985-rgb.github.io/M3tal-Hub/subaru-specs-n-parts/</code></pre>
             </div>
         
 
             <div class="guide-step">
-                <h4>Local Development Setup</h4>
-                
+                <h4>📱 Android APK Installation (Alpha Release)</h4>
+                <p>1. Download the Alpha release package 'android-apk.V.A0.1.zip' from the GitHub Releases page.
+2. Extract the archive on your Android device or computer to retrieve the .apk package.
+3. In Android Settings, enable 'Install unknown apps' for your browser or file manager.
+4. Open the extracted APK file to complete installation and launch.</p>
+                <pre><code># Or install directly using ADB on connected device:
+unzip android-apk.V.A0.1.zip
+adb install -r *.apk</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>🛠️ Compiling from Source</h4>
+                <p>To build the Android APK or web bundle directly from source code:</p>
                 <pre><code>git clone https://github.com/jakej985-rgb/Subaru.specs.n.parts.git
 cd Subaru.specs.n.parts
 flutter pub get
-flutter run -d chrome</code></pre>
-            </div>
-        
-
-            <div class="guide-step">
-                <h4>Building Production Web Release</h4>
-                
-                <pre><code>flutter build web --release --base-href /M3tal-Hub/subaru-specs-n-parts/</code></pre>
+flutter test
+flutter build apk --release</code></pre>
             </div>
         
             </section>
@@ -524,11 +578,23 @@ flutter run -d chrome</code></pre>
             <div class="changelog-entry">
                 <div class="changelog-header">
                     <span class="changelog-version">v1.0.0</span>
-                    <span class="changelog-tag">Initial Release</span>
+                    <span class="changelog-tag">Web PWA Release</span>
                     <span class="changelog-date">2026-09-30</span>
                 </div>
                 <ul class="changelog-list">
-                    <li>Offline-first Subaru technical specifications and part cross-reference catalog.</li><li>Engine torque specs, fluid capacities, and chassis dimensions database.</li><li>IndexedDB / SQLite local caching for roadside reference.</li>
+                    <li>Dual-platform distribution: Android APK archive and Progressive Web App (PWA).</li><li>Offline-first Subaru technical specifications and part cross-reference catalog.</li><li>Engine torque specs, fluid capacities, and chassis dimensions database.</li><li>IndexedDB / SQLite local caching for roadside reference.</li><li>Deployed as Progressive Web App (PWA) on M3tal-Hub with offline service worker.</li>
+                </ul>
+            </div>
+        
+
+            <div class="changelog-entry">
+                <div class="changelog-header">
+                    <span class="changelog-version">v0.1-alpha</span>
+                    <span class="changelog-tag">Alpha Release</span>
+                    <span class="changelog-date">2025-12-14</span>
+                </div>
+                <ul class="changelog-list">
+                    <li>Initial Alpha release with standalone Android APK package.</li><li>Release asset: android-apk.V.A0.1.zip</li>
                 </ul>
             </div>
         
@@ -540,8 +606,8 @@ flutter run -d chrome</code></pre>
                 <h2 class="card-heading">⚙️ System Specifications</h2>
                 <div class="spec-list">
                     <div class="spec-item">
-                        <span class="spec-label">Target OS / Platform</span>
-                        <span class="spec-value">🌐 Web / PWA</span>
+                        <span class="spec-label">Target OS / Platforms</span>
+                        <span class="spec-value">🤖 Android, 🌐 Web</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Target Architecture</span>

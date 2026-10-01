@@ -108,39 +108,91 @@ def get_badge(app, release_info):
     
     return (status.title(), "badge-active" if category != "apps" else "badge-planned")
 
-def get_os_info(app):
-    explicit_os = str(app.get("os", "")).lower()
-    app_type = str(app.get("type", "web")).lower()
-    category = str(app.get("category", "apps")).lower()
-    package = str(app.get("package", "")).lower()
+PLATFORM_INFO = {
+    "android": ("🤖", "Android", "os-android"),
+    "roku": ("📺", "Roku", "os-roku"),
+    "web": ("🌐", "Web", "os-web"),
+    "docker": ("🐳", "Docker", "os-docker"),
+    "server": ("🖥️", "Server", "os-server"),
+    "linux": ("🐧", "Linux", "os-linux"),
+    "windows": ("🪟", "Windows", "os-windows"),
+    "macos": ("🍎", "macOS", "os-macos"),
+    "desktop": ("🖥️", "Desktop", "os-desktop"),
+    "chrome": ("🌐", "Chrome", "os-chrome"),
+    "firefox": ("🦊", "Firefox", "os-firefox"),
+    "extension": ("🧩", "Extension", "os-ext"),
+    "python": ("🐍", "Python", "os-python"),
+    "dart": ("🎯", "Dart", "os-dart"),
+    "template": ("📦", "Template", "os-template"),
+    "docs": ("📖", "Docs", "os-docs"),
+    "cli": ("🛠️", "CLI", "os-tool"),
+}
 
-    if explicit_os == "android" or app_type == "android-native":
-        return ("🤖", "Android", "os-android")
-    elif explicit_os == "web" or app_type in VALID_WEB_TYPES:
+# Compatibility alias
+PLATFORMS = PLATFORM_INFO
+
+def get_platforms(app):
+    """
+    Returns a list of platform tuples: (icon, label, css_class) for the given application.
+    Supports multi-platform specifications from manifest.yml.
+    """
+    if "platforms" in app and isinstance(app["platforms"], list) and len(app["platforms"]) > 0:
+        res = []
+        for p in app["platforms"]:
+            pkey = str(p).lower().strip()
+            if pkey in PLATFORM_INFO:
+                res.append(PLATFORM_INFO[pkey])
+            else:
+                res.append(("⚡", str(p).title(), f"os-{pkey}"))
+        return res
+
+    explicit_os = str(app.get("os", "")).lower().strip()
+    app_type = str(app.get("type", "web")).lower().strip()
+    category = str(app.get("category", "apps")).lower().strip()
+    package = str(app.get("package", "")).lower().strip()
+
+    if explicit_os:
+        if explicit_os in PLATFORM_INFO:
+            return [PLATFORM_INFO[explicit_os]]
+        return [("⚡", explicit_os.title(), f"os-{explicit_os}")]
+
+    if app_type == "android-native":
+        return [PLATFORM_INFO["android"]]
+    elif app_type in VALID_WEB_TYPES:
         if app_type == "flutter-web":
-            return ("🌐", "Web / PWA", "os-web")
-        return ("🌐", "Web", "os-web")
-    elif explicit_os == "extension" or app_type == "extension":
-        return ("🧩", "Extension", "os-ext")
-    elif explicit_os in ["desktop", "windows", "linux", "macos"] or app_type in ["desktop", "suite"]:
-        return ("🖥️", "Desktop", "os-desktop")
-    elif explicit_os == "docker" or package == "docker-compose" or app_type in ["container", "infrastructure"]:
-        return ("🐳", "Docker", "os-docker")
-    elif package == "gpg-keyring" or app_type == "package":
-        return ("🐧", "Linux / APT", "os-linux")
+            return [("🌐", "Web / PWA", "os-web")]
+        return [PLATFORM_INFO["web"]]
+    elif app_type == "extension":
+        return [PLATFORM_INFO["extension"]]
+    elif app_type in ["desktop", "suite"]:
+        return [PLATFORM_INFO["desktop"]]
+    elif package == "docker-compose" or app_type in ["container", "infrastructure"]:
+        return [PLATFORM_INFO["docker"]]
+    elif package == "gpg-keyring":
+        return [("🐧", "Linux / APT", "os-linux")]
     elif app_type in ["service", "backend"]:
-        return ("🐧", "Linux", "os-linux")
+        return [PLATFORM_INFO["linux"], PLATFORM_INFO["server"]]
     elif category == "infrastructure":
-        return ("🐧", "Linux", "os-linux")
+        return [PLATFORM_INFO["linux"]]
     elif category == "libraries":
         if package == "pypi":
-            return ("🐍", "Python", "os-lib")
+            return [PLATFORM_INFO["python"]]
         elif package == "dart-pkg":
-            return ("🎯", "Dart", "os-lib")
-        return ("📦", "Library", "os-lib")
+            return [PLATFORM_INFO["dart"]]
+        elif app_type == "template" or package == "template":
+            return [PLATFORM_INFO["template"]]
+        return [("📦", "Library", "os-lib")]
     elif category == "tooling":
-        return ("🛠️", "CLI", "os-tool")
-    
+        if app_type == "docs" or package == "docs":
+            return [PLATFORM_INFO["docs"]]
+        return [PLATFORM_INFO["cli"]]
+
+    return [("⚡", "Universal", "os-cross")]
+
+def get_os_info(app):
+    platforms = get_platforms(app)
+    if platforms:
+        return platforms[0]
     return ("⚡", "Universal", "os-cross")
 
 def get_changelog(app, release_info):
@@ -190,6 +242,7 @@ def get_install_guide(app):
     if "install_guide" in app and app["install_guide"]:
         return app["install_guide"]
     
+    app_id = app.get("id", "")
     app_type = app.get("type", "web")
     repo = app.get("repo", app.get("id", ""))
     path = app.get("path", app.get("id", ""))
@@ -202,7 +255,160 @@ def get_install_guide(app):
         "steps": []
     }
 
-    if app_type == "flutter-web":
+    if app_id == "android-card-games":
+        return {
+            "summary": "Android Card Games is a multi-platform tabletop gaming suite with support for Android APK, Roku TV sideloading, self-hosted Docker container & server binaries, and Progressive Web App (PWA).",
+            "prerequisites": [
+                "Web / PWA: Modern browser (Chrome, Edge, Firefox, Safari)",
+                "Android: Android device running Android 8.0+ (Oreo / API 26) or higher",
+                "Roku: Roku streaming player or Roku TV with Developer Mode enabled",
+                "Docker / Server: Docker Engine >= 24.0 or host environment for server binary"
+            ],
+            "steps": [
+                {
+                    "title": "Progressive Web App (PWA) Direct Play",
+                    "content": "Launch the game directly in any browser. To install for offline play, select 'Install' or 'Add to Home Screen' in your browser's navigation bar."
+                },
+                {
+                    "title": "Android APK Installation",
+                    "content": "1. Download the latest `android-card-games.apk` from GitHub Releases.\n2. On your Android device, enable 'Install unknown apps' in Settings for your browser or file manager.\n3. Tap the downloaded APK to install and launch."
+                },
+                {
+                    "title": "Roku TV Sideloading",
+                    "content": "1. Turn on Roku Developer Mode on your device: On the Roku remote, press Home 3x, Up 2x, Right, Left, Right, Left, Right.\n2. Note your Roku device IP address and set an admin password.\n3. Navigate to http://<roku-ip> in a web browser on the same local network.\n4. Upload `roku-channel.zip` from Releases and click 'Install' to sideload directly."
+                },
+                {
+                    "title": "Docker Backend & Standalone Server",
+                    "content": "Self-host the multiplayer game backend service using Docker or the pre-compiled server binaries (Linux, Windows, macOS):",
+                    "code": "docker run -d --name card-games-backend -p 8080:8080 jakej985/android-card-games:latest\n\n# Or run the standalone server binary:\n./server-linux-amd64 --port 8080"
+                },
+                {
+                    "title": "Compiling from Source",
+                    "code": f"git clone https://github.com/jakej985-rgb/{repo}.git\ncd {repo}\nflutter pub get\nflutter run -d chrome"
+                }
+            ]
+        }
+    elif app_id == "monster-lab":
+        return {
+            "summary": "Monster Lab robotics learning platform supports multi-platform execution: Web PWA, Android APK/AAB, native desktop binaries (Linux deb/tarball and Windows exe/zip), and containerized backend via Docker Compose.",
+            "prerequisites": [
+                "Web: Modern web browser with WebGL and CanvasKit support",
+                "Android: Android 8.0+ device",
+                "Linux: Debian/Ubuntu x86_64 or compatible Linux distribution",
+                "Windows: Windows 10/11 64-bit",
+                "Docker: Docker Engine and Docker Compose v2.x"
+            ],
+            "steps": [
+                {
+                    "title": "Web Browser & PWA",
+                    "content": "Access Monster Lab instantly in your web browser. Install as a PWA for offline robotics simulation."
+                },
+                {
+                    "title": "Android Installation",
+                    "content": "Download the latest `.apk` or `.aab` package from GitHub Releases and install on your Android device."
+                },
+                {
+                    "title": "Desktop Installation (Linux & Windows)",
+                    "content": "Download the Linux Debian package or portable tarball, or the Windows installer / portable zip from Releases:",
+                    "code": "# Linux Debian / Ubuntu:\nsudo dpkg -i monster-lab_*.deb\n\n# Windows PowerShell:\nExpand-Archive monster-lab-win64.zip -DestinationPath C:\\MonsterLab"
+                },
+                {
+                    "title": "Docker Compose Stack",
+                    "code": f"git clone https://github.com/jakej985-rgb/{repo}.git\ncd {repo}\ndocker compose up -d"
+                }
+            ]
+        }
+    elif app_id == "red-music-locker":
+        return {
+            "summary": "Red Music Locker provides a responsive Web frontend for audio streaming on M3tal-Hub, paired with a Docker Compose synchronization backend container (ytsync.yml).",
+            "prerequisites": [
+                "Modern web browser for instant web player access",
+                "Docker Engine >= 24.0 and Docker Compose v2.x",
+                "Host music directory and .env configuration"
+            ],
+            "steps": [
+                {
+                    "title": "Web Application Access",
+                    "content": "Open the live web interface on M3tal-Hub to browse playlists, stream audio, and manage library metadata."
+                },
+                {
+                    "title": "Docker Backend Deployment (ytsync.yml & .env)",
+                    "code": f"curl -fsSL https://raw.githubusercontent.com/jakej985-rgb/{repo}/main/ytsync.yml -o ytsync.yml\ncurl -fsSL https://raw.githubusercontent.com/jakej985-rgb/{repo}/main/.env.example -o .env\n# Configure storage paths in .env\ndocker compose -f ytsync.yml up -d\ndocker compose -f ytsync.yml logs -f ytm-sync"
+                }
+            ]
+        }
+    elif app_id == "red-music-locker-account-linker":
+        return {
+            "summary": "Red Music Locker Account Linker browser extension is available for Google Chrome and Mozilla Firefox.",
+            "prerequisites": [
+                "Google Chrome >= 110 (Chromium browsers) or Mozilla Firefox >= 115",
+                "Active YouTube Music session on music.youtube.com"
+            ],
+            "steps": [
+                {
+                    "title": "Google Chrome / Chromium Installation",
+                    "content": "1. Download `red-music-locker-account-linker-chrome-v1.1.0.zip` from Releases and extract it.\n2. Navigate to chrome://extensions in Chrome.\n3. Enable 'Developer mode' in the top right.\n4. Click 'Load unpacked' and select the unzipped directory containing manifest.json."
+                },
+                {
+                    "title": "Mozilla Firefox Installation",
+                    "content": "1. Download `red-music-locker-account-linker-firefox-v1.1.0.zip` from Releases.\n2. Navigate to about:debugging#/runtime/this-firefox in Firefox.\n3. Click 'Load Temporary Add-on' and select the ZIP package or manifest.json."
+                }
+            ]
+        }
+    elif app_id == "subaru-specs-n-parts":
+        return {
+            "summary": "Subaru Specs & Parts is an offline-first automotive reference application available as a Web PWA and as an Android APK package.",
+            "prerequisites": [
+                "Web: Any modern mobile or desktop browser",
+                "Android: Android 7.0+ device"
+            ],
+            "steps": [
+                {
+                    "title": "Instant Web & Offline PWA",
+                    "content": "Open the application in your browser and choose 'Install' or 'Add to Home Screen' to cache the full automotive catalog for offline roadside reference."
+                },
+                {
+                    "title": "Android APK Installation",
+                    "content": "1. Download the Android APK package zip from Releases.\n2. Extract and open the `.apk` on your Android device to install."
+                }
+            ]
+        }
+    elif app_id == "comicinfo-generator":
+        return {
+            "summary": "ComicInfo Generator provides both a command-line tool (CLI) and an automated Docker container release for batch ComicInfo.xml generation.",
+            "prerequisites": [
+                "Docker Engine >= 24.0 or Python 3.10+ with pip"
+            ],
+            "steps": [
+                {
+                    "title": "Running with Docker",
+                    "code": f"docker run --rm -v /path/to/comics:/comics jakej985/comicinfo-generator:latest /comics"
+                },
+                {
+                    "title": "Running with Python CLI",
+                    "code": f"git clone https://github.com/jakej985-rgb/{repo}.git\ncd {repo}\npip install -e .\ncomicinfo --help"
+                }
+            ]
+        }
+    elif app_id in ["shop-manager", "infernal-ink-steel-suite"]:
+        return {
+            "summary": f"{app.get('name', 'Application')} is a Qt C++ desktop application built for Linux and Windows desktop environments.",
+            "prerequisites": [
+                "Linux (Ubuntu/Debian, Fedora, Arch) or Windows 10/11",
+                "Qt 6.x runtime libraries"
+            ],
+            "steps": [
+                {
+                    "title": "Installation from Releases",
+                    "content": "Download the pre-compiled binary package or installer from the GitHub Releases page for your operating system."
+                },
+                {
+                    "title": "Building from Source",
+                    "code": f"git clone https://github.com/jakej985-rgb/{repo}.git\ncd {repo}\ncmake -B build\ncmake --build build"
+                }
+            ]
+        }
+    elif app_type == "flutter-web":
         guide["summary"] = "This application can be accessed instantly in any modern web browser or installed locally as a Progressive Web App (PWA)."
         guide["prerequisites"] = [
             "Modern web browser (Google Chrome, Mozilla Firefox, Microsoft Edge, Safari)",
@@ -359,11 +565,16 @@ def render_card(app, release_info):
     category = app.get("category", "apps")
     
     badge_text, badge_class = get_badge(app, release_info)
-    os_icon, os_label, os_class = get_os_info(app)
+    platforms = get_platforms(app)
+    platform_badges_html = " ".join([
+        f'<span class="badge badge-os {css}">{icon} {lbl}</span>'
+        for icon, lbl, css in platforms
+    ])
+    primary_icon = platforms[0][0] if platforms else "⚡"
 
     meta_info = []
     if app.get("type"):
-        meta_info.append(f'<span class="app-type">{os_icon} {app["type"]}</span>')
+        meta_info.append(f'<span class="app-type">{primary_icon} {app["type"]}</span>')
     
     version = release_info.get("version") or app.get("version")
     if version:
@@ -409,7 +620,7 @@ def render_card(app, release_info):
                 <div class="card-header">
                     <h2>{name}</h2>
                     <div class="badge-group">
-                        <span class="badge badge-os {os_class}">{os_icon} {os_label}</span>
+                        {platform_badges_html}
                         <span class="badge {badge_class}">{badge_text}</span>
                     </div>
                 </div>
@@ -430,7 +641,17 @@ def generate_app_page(app, release_info, category_map):
     app_type = app.get("type", "web")
     
     badge_text, badge_class = get_badge(app, release_info)
-    os_icon, os_label, os_class = get_os_info(app)
+    platforms = get_platforms(app)
+    platform_badges_html = " ".join([
+        f'<span class="badge badge-os {css}">{icon} {lbl}</span>'
+        for icon, lbl, css in platforms
+    ])
+    platform_pills_html = " ".join([
+        f'<span class="pill pill-accent">{icon} {lbl}</span>'
+        for icon, lbl, css in platforms
+    ])
+    platforms_spec_str = ", ".join([f"{icon} {lbl}" for icon, lbl, css in platforms])
+
     version = release_info.get("version") or app.get("version") or "1.0.0"
     last_released = release_info.get("last_released") or app.get("last_released") or "2026-09-30"
     repo_url = app.get("repo_url") or (f"https://github.com/jakej985-rgb/{repo}" if repo else "")
@@ -446,6 +667,9 @@ def generate_app_page(app, release_info, category_map):
     action_buttons = []
     if enabled and is_web_deployable:
         action_buttons.append(f'<a href="../{path}/" class="btn btn-primary">🚀 Launch Web Application</a>')
+    
+    if app.get("apk_url"):
+        action_buttons.append(f'<a href="{app["apk_url"]}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">🤖 Download Android APK ↗</a>')
     elif app_type == "android-native" and release_url:
         action_buttons.append(f'<a href="{release_url}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">📦 Download Release / APK ↗</a>')
 
@@ -896,6 +1120,56 @@ def generate_app_page(app, release_info, category_map):
             background: rgba(240, 136, 62, 0.12);
             color: #f0883e;
         }}
+        .os-roku {{
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }}
+        .os-server {{
+            border-color: rgba(57, 197, 187, 0.35);
+            background: rgba(57, 197, 187, 0.12);
+            color: #4ee2d4;
+        }}
+        .os-windows {{
+            border-color: rgba(0, 164, 239, 0.35);
+            background: rgba(0, 164, 239, 0.12);
+            color: #4dc9f6;
+        }}
+        .os-macos {{
+            border-color: rgba(235, 235, 235, 0.35);
+            background: rgba(235, 235, 235, 0.12);
+            color: #e0e0e0;
+        }}
+        .os-chrome {{
+            border-color: rgba(234, 67, 53, 0.35);
+            background: rgba(234, 67, 53, 0.12);
+            color: #f28b82;
+        }}
+        .os-firefox {{
+            border-color: rgba(255, 113, 34, 0.35);
+            background: rgba(255, 113, 34, 0.12);
+            color: #ff9436;
+        }}
+        .os-python {{
+            border-color: rgba(255, 212, 59, 0.35);
+            background: rgba(255, 212, 59, 0.12);
+            color: #ffe873;
+        }}
+        .os-dart {{
+            border-color: rgba(1, 117, 194, 0.35);
+            background: rgba(1, 117, 194, 0.12);
+            color: #40c4ff;
+        }}
+        .os-template {{
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }}
+        .os-docs {{
+            border-color: rgba(88, 166, 255, 0.35);
+            background: rgba(88, 166, 255, 0.12);
+            color: #79c0ff;
+        }}
         .os-cross {{
             border-color: rgba(110, 118, 129, 0.35);
             background: rgba(110, 118, 129, 0.12);
@@ -975,13 +1249,13 @@ def generate_app_page(app, release_info, category_map):
                 </div>
             </div>
             <div class="badge-group">
-                <span class="badge badge-os {os_class}">{os_icon} {os_label}</span>
+                {platform_badges_html}
                 <span class="badge {badge_class}">{badge_text}</span>
             </div>
         </div>
         <p class="hero-desc">{desc}</p>
         <div class="meta-pills">
-            <span class="pill pill-accent">{os_icon} {os_label}</span>
+            {platform_pills_html}
             <span class="pill">{app_type}</span>
             <span class="pill">v{version}</span>
             <span class="pill">{cat_meta['title']}</span>
@@ -1013,8 +1287,8 @@ def generate_app_page(app, release_info, category_map):
                 <h2 class="card-heading">⚙️ System Specifications</h2>
                 <div class="spec-list">
                     <div class="spec-item">
-                        <span class="spec-label">Target OS / Platform</span>
-                        <span class="spec-value">{os_icon} {os_label}</span>
+                        <span class="spec-label">Target OS / Platforms</span>
+                        <span class="spec-value">{platforms_spec_str}</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Target Architecture</span>
@@ -1422,6 +1696,56 @@ def generate_hub(manifest_path, status_path, output_dir, site_status_path=None):
             border-color: rgba(240, 136, 62, 0.35);
             background: rgba(240, 136, 62, 0.12);
             color: #f0883e;
+        }}
+        .os-roku {{
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }}
+        .os-server {{
+            border-color: rgba(57, 197, 187, 0.35);
+            background: rgba(57, 197, 187, 0.12);
+            color: #4ee2d4;
+        }}
+        .os-windows {{
+            border-color: rgba(0, 164, 239, 0.35);
+            background: rgba(0, 164, 239, 0.12);
+            color: #4dc9f6;
+        }}
+        .os-macos {{
+            border-color: rgba(235, 235, 235, 0.35);
+            background: rgba(235, 235, 235, 0.12);
+            color: #e0e0e0;
+        }}
+        .os-chrome {{
+            border-color: rgba(234, 67, 53, 0.35);
+            background: rgba(234, 67, 53, 0.12);
+            color: #f28b82;
+        }}
+        .os-firefox {{
+            border-color: rgba(255, 113, 34, 0.35);
+            background: rgba(255, 113, 34, 0.12);
+            color: #ff9436;
+        }}
+        .os-python {{
+            border-color: rgba(255, 212, 59, 0.35);
+            background: rgba(255, 212, 59, 0.12);
+            color: #ffe873;
+        }}
+        .os-dart {{
+            border-color: rgba(1, 117, 194, 0.35);
+            background: rgba(1, 117, 194, 0.12);
+            color: #40c4ff;
+        }}
+        .os-template {{
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }}
+        .os-docs {{
+            border-color: rgba(88, 166, 255, 0.35);
+            background: rgba(88, 166, 255, 0.12);
+            color: #79c0ff;
         }}
         .os-cross {{
             border-color: rgba(110, 118, 129, 0.35);

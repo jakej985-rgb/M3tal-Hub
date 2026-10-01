@@ -382,6 +382,51 @@
             background: rgba(240, 136, 62, 0.12);
             color: #f0883e;
         }
+        .os-roku {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-windows {
+            border-color: rgba(0, 164, 239, 0.35);
+            background: rgba(0, 164, 239, 0.12);
+            color: #4dc9f6;
+        }
+        .os-macos {
+            border-color: rgba(235, 235, 235, 0.35);
+            background: rgba(235, 235, 235, 0.12);
+            color: #e0e0e0;
+        }
+        .os-chrome {
+            border-color: rgba(234, 67, 53, 0.35);
+            background: rgba(234, 67, 53, 0.12);
+            color: #f28b82;
+        }
+        .os-firefox {
+            border-color: rgba(255, 113, 34, 0.35);
+            background: rgba(255, 113, 34, 0.12);
+            color: #ff9436;
+        }
+        .os-python {
+            border-color: rgba(255, 212, 59, 0.35);
+            background: rgba(255, 212, 59, 0.12);
+            color: #ffe873;
+        }
+        .os-dart {
+            border-color: rgba(1, 117, 194, 0.35);
+            background: rgba(1, 117, 194, 0.12);
+            color: #40c4ff;
+        }
+        .os-template {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-docs {
+            border-color: rgba(88, 166, 255, 0.35);
+            background: rgba(88, 166, 255, 0.12);
+            color: #79c0ff;
+        }
         .os-cross {
             border-color: rgba(110, 118, 129, 0.35);
             background: rgba(110, 118, 129, 0.12);
@@ -461,15 +506,15 @@
                 </div>
             </div>
             <div class="badge-group">
-                <span class="badge badge-os os-web">🌐 Web / PWA</span>
+                <span class="badge badge-os os-web">🌐 Web</span> <span class="badge badge-os os-docker">🐳 Docker</span>
                 <span class="badge badge-ready">Release Ready</span>
             </div>
         </div>
-        <p class="hero-desc">Self-hosted music locker frontend.</p>
+        <p class="hero-desc">Self-hosted music locker audio streaming and YouTube Music synchronization service.</p>
         <div class="meta-pills">
-            <span class="pill pill-accent">🌐 Web / PWA</span>
+            <span class="pill pill-accent">🌐 Web</span> <span class="pill pill-accent">🐳 Docker</span>
             <span class="pill">flutter-web</span>
-            <span class="pill">v1.0.0</span>
+            <span class="pill">v0.0.1-beta</span>
             <span class="pill">Applications & Frontends</span>
             <span class="pill">pkg: pwa</span>
             <span class="pill">ref: 2026-09-30</span>
@@ -485,35 +530,44 @@
         <div class="main-column">
             <section class="content-card">
                 <h2 class="card-heading">📖 Installation & Setup Documentation</h2>
-                <p class="guide-summary">This application can be accessed instantly in any modern web browser or installed locally as a Progressive Web App (PWA).</p>
+                <p class="guide-summary">Red Music Locker provides a responsive Web frontend for audio streaming and playlist management on M3tal-Hub, paired with a containerized YouTube Music background synchronization service using Docker Compose.</p>
                 
         <div class="guide-prereqs">
             <h3>System Prerequisites</h3>
-            <ul><li>Modern web browser (Google Chrome, Mozilla Firefox, Microsoft Edge, Safari)</li><li>For local builds: Flutter SDK >= 3.22 (stable channel)</li><li>Dart SDK >= 3.4</li></ul>
+            <ul><li>Modern web browser for instant web player access (Chrome, Firefox, Safari, Edge)</li><li>Docker Engine >= 24.0 and Docker Compose v2.x for background sync container</li><li>Host audio directory containing your music collection (FLAC, MP3, AAC)</li></ul>
         </div>
         
                 
             <div class="guide-step">
-                <h4>Instant Web & PWA Installation</h4>
-                <p>No installation required for direct use. Open the live web application and choose 'Install' or 'Add to Home Screen' from your browser menu to run offline.</p>
-                
+                <h4>Web Frontend Player Access</h4>
+                <p>Access the Flutter web audio player directly on M3tal-Hub. The web player connects to your self-hosted instance or runs with client-side audio caching. It can also be installed as a Progressive Web App (PWA) for offline access.</p>
+                <pre><code># Direct web access:
+https://jakej985-rgb.github.io/M3tal-Hub/red-music-locker/</code></pre>
             </div>
         
 
             <div class="guide-step">
-                <h4>Local Development Setup</h4>
-                
-                <pre><code>git clone https://github.com/jakej985-rgb/red-music-locker.git
-cd red-music-locker
-flutter pub get
-flutter run -d chrome</code></pre>
+                <h4>Docker Sync Container Deployment</h4>
+                <p>Download the release compose specification ytsync.yml and copy default.env.example to .env. Configure your music library mount paths, config directory, and port:</p>
+                <pre><code>curl -fsSL https://raw.githubusercontent.com/jakej985-rgb/red-music-locker/main/ytsync.yml -o ytsync.yml
+curl -fsSL https://raw.githubusercontent.com/jakej985-rgb/red-music-locker/main/.env.example -o .env
+# Edit .env to set your MUSIC_PATH, CONFIG_PATH, and PORT</code></pre>
             </div>
         
 
             <div class="guide-step">
-                <h4>Building Production Web Release</h4>
+                <h4>Launch Background Sync Service</h4>
+                <p>Start the containerized sync service in detached mode. The service runs under an unprivileged user with read-only music directory mounts.</p>
+                <pre><code>docker compose -f ytsync.yml up -d
+docker compose -f ytsync.yml ps
+docker compose -f ytsync.yml logs -f ytm-sync</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>Link YouTube Music Account</h4>
+                <p>Use the Red Music Locker Account Linker browser extension or auto-link utility to pair your YouTube Music library session with the self-hosted sync container.</p>
                 
-                <pre><code>flutter build web --release --base-href /M3tal-Hub/red-music-locker/</code></pre>
             </div>
         
             </section>
@@ -523,12 +577,12 @@ flutter run -d chrome</code></pre>
                 
             <div class="changelog-entry">
                 <div class="changelog-header">
-                    <span class="changelog-version">v1.0.0</span>
-                    <span class="changelog-tag">Initial Release</span>
+                    <span class="changelog-version">v0.0.1-beta</span>
+                    <span class="changelog-tag">Web & Docker Release</span>
                     <span class="changelog-date">2026-09-30</span>
                 </div>
                 <ul class="changelog-list">
-                    <li>Self-hosted music locker audio streaming web interface.</li><li>Persistent playback queue and client-side audio caching.</li><li>Responsive mobile player controls and playlist organizer.</li>
+                    <li>Self-hosted music locker audio streaming web interface deployed on M3tal-Hub.</li><li>Docker container deployment with ytsync.yml and default.env.example configuration.</li><li>Automated YouTube Music library synchronization and upload reconciliation engine.</li><li>Unprivileged container execution with read-only host music storage protection.</li>
                 </ul>
             </div>
         
@@ -540,8 +594,8 @@ flutter run -d chrome</code></pre>
                 <h2 class="card-heading">⚙️ System Specifications</h2>
                 <div class="spec-list">
                     <div class="spec-item">
-                        <span class="spec-label">Target OS / Platform</span>
-                        <span class="spec-value">🌐 Web / PWA</span>
+                        <span class="spec-label">Target OS / Platforms</span>
+                        <span class="spec-value">🌐 Web, 🐳 Docker</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Target Architecture</span>
@@ -561,7 +615,7 @@ flutter run -d chrome</code></pre>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Current Release</span>
-                        <span class="spec-value">v1.0.0</span>
+                        <span class="spec-value">v0.0.1-beta</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Package Format</span>

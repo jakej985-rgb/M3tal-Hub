@@ -382,6 +382,51 @@
             background: rgba(240, 136, 62, 0.12);
             color: #f0883e;
         }
+        .os-roku {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-windows {
+            border-color: rgba(0, 164, 239, 0.35);
+            background: rgba(0, 164, 239, 0.12);
+            color: #4dc9f6;
+        }
+        .os-macos {
+            border-color: rgba(235, 235, 235, 0.35);
+            background: rgba(235, 235, 235, 0.12);
+            color: #e0e0e0;
+        }
+        .os-chrome {
+            border-color: rgba(234, 67, 53, 0.35);
+            background: rgba(234, 67, 53, 0.12);
+            color: #f28b82;
+        }
+        .os-firefox {
+            border-color: rgba(255, 113, 34, 0.35);
+            background: rgba(255, 113, 34, 0.12);
+            color: #ff9436;
+        }
+        .os-python {
+            border-color: rgba(255, 212, 59, 0.35);
+            background: rgba(255, 212, 59, 0.12);
+            color: #ffe873;
+        }
+        .os-dart {
+            border-color: rgba(1, 117, 194, 0.35);
+            background: rgba(1, 117, 194, 0.12);
+            color: #40c4ff;
+        }
+        .os-template {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-docs {
+            border-color: rgba(88, 166, 255, 0.35);
+            background: rgba(88, 166, 255, 0.12);
+            color: #79c0ff;
+        }
         .os-cross {
             border-color: rgba(110, 118, 129, 0.35);
             background: rgba(110, 118, 129, 0.12);
@@ -485,20 +530,38 @@
         <div class="main-column">
             <section class="content-card">
                 <h2 class="card-heading">📖 Installation & Setup Documentation</h2>
-                <p class="guide-summary">Lightweight static web application with zero external runtime dependencies.</p>
+                <p class="guide-summary">M3tal Plugin Page is the official static discovery portal and catalog explorer for M3tal ecosystem plugins, signatures, and project documentation.</p>
                 
         <div class="guide-prereqs">
             <h3>System Prerequisites</h3>
-            <ul><li>Modern web browser</li><li>Python 3.x (optional, for local preview server)</li></ul>
+            <ul><li>Modern web browser (Google Chrome, Mozilla Firefox, Microsoft Edge, Safari)</li><li>Optional: Python 3.x or lightweight HTTP static file server for local preview</li></ul>
         </div>
         
                 
             <div class="guide-step">
-                <h4>Local Testing & Preview</h4>
-                
+                <h4>🌐 Instant Web Access</h4>
+                <p>Browse the live plugin directory and cryptographic catalog directly on M3tal Hub with zero setup required.</p>
+                <pre><code># Official catalog portal:
+https://jakej985-rgb.github.io/M3tal-Hub/m3tal-plugin-page/</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>💻 Local Testing & Static Serving</h4>
+                <p>Clone the static repository and serve locally using any standard static web server.</p>
                 <pre><code>git clone https://github.com/jakej985-rgb/m3tal-plugin-page.git
 cd m3tal-plugin-page
-python3 -m http.server 8080</code></pre>
+python3 -m http.server 8080
+# Open the local server port in your browser</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>🔍 Validating Plugin Signatures & Catalog Schema</h4>
+                <p>Verify ecosystem plugin catalog JSON files and cryptographic signatures.</p>
+                <pre><code># Verify JSON syntax:
+python3 -m json.tool catalog.json > /dev/null && echo "Catalog JSON is valid"
+python3 -m json.tool plugins.json > /dev/null && echo "Plugins JSON is valid"</code></pre>
             </div>
         
             </section>
@@ -525,7 +588,7 @@ python3 -m http.server 8080</code></pre>
                 <h2 class="card-heading">⚙️ System Specifications</h2>
                 <div class="spec-list">
                     <div class="spec-item">
-                        <span class="spec-label">Target OS / Platform</span>
+                        <span class="spec-label">Target OS / Platforms</span>
                         <span class="spec-value">🌐 Web</span>
                     </div>
                     <div class="spec-item">

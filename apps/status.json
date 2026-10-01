@@ -1,21 +1,21 @@
 {
-  "last_updated": "2026-09-29T15:30:00Z",
+  "last_updated": "2026-09-30T23:45:00Z",
   "releases": {
     "monster-lab": {
       "status": "ready",
-      "version": "1.0.0",
-      "last_released": null,
+      "version": "0.0.1",
+      "last_released": "2026-09-30",
       "build_status": "configured"
     },
     "android-card-games": {
       "status": "ready",
-      "version": "0.1.27",
+      "version": "0.1.28",
       "last_released": null,
       "build_status": "configured"
     },
     "idle-animals": {
       "status": "ready",
-      "version": "1.0.0",
+      "version": "1.0.0+1.2",
       "last_released": null,
       "build_status": "configured"
     },
@@ -39,9 +39,16 @@
     },
     "red-music-locker": {
       "status": "ready",
-      "version": "1.0.0",
+      "version": "0.0.1-beta",
       "last_released": null,
       "build_status": "configured"
+    },
+    "red-music-locker-account-linker": {
+      "status": "placeholder",
+      "version": "1.1.0",
+      "last_released": null,
+      "build_status": "extension",
+      "package_status": "extension"
     },
     "m3tal-plugin-page": {
       "status": "ready",

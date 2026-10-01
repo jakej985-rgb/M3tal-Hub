@@ -382,6 +382,51 @@
             background: rgba(240, 136, 62, 0.12);
             color: #f0883e;
         }
+        .os-roku {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-windows {
+            border-color: rgba(0, 164, 239, 0.35);
+            background: rgba(0, 164, 239, 0.12);
+            color: #4dc9f6;
+        }
+        .os-macos {
+            border-color: rgba(235, 235, 235, 0.35);
+            background: rgba(235, 235, 235, 0.12);
+            color: #e0e0e0;
+        }
+        .os-chrome {
+            border-color: rgba(234, 67, 53, 0.35);
+            background: rgba(234, 67, 53, 0.12);
+            color: #f28b82;
+        }
+        .os-firefox {
+            border-color: rgba(255, 113, 34, 0.35);
+            background: rgba(255, 113, 34, 0.12);
+            color: #ff9436;
+        }
+        .os-python {
+            border-color: rgba(255, 212, 59, 0.35);
+            background: rgba(255, 212, 59, 0.12);
+            color: #ffe873;
+        }
+        .os-dart {
+            border-color: rgba(1, 117, 194, 0.35);
+            background: rgba(1, 117, 194, 0.12);
+            color: #40c4ff;
+        }
+        .os-template {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-docs {
+            border-color: rgba(88, 166, 255, 0.35);
+            background: rgba(88, 166, 255, 0.12);
+            color: #79c0ff;
+        }
         .os-cross {
             border-color: rgba(110, 118, 129, 0.35);
             background: rgba(110, 118, 129, 0.12);
@@ -461,15 +506,15 @@
                 </div>
             </div>
             <div class="badge-group">
-                <span class="badge badge-os os-web">🌐 Web / PWA</span>
+                <span class="badge badge-os os-android">🤖 Android</span> <span class="badge badge-os os-roku">📺 Roku</span> <span class="badge badge-os os-web">🌐 Web</span> <span class="badge badge-os os-docker">🐳 Docker</span>
                 <span class="badge badge-ready">Release Ready</span>
             </div>
         </div>
         <p class="hero-desc">Flutter tabletop gaming suite.</p>
         <div class="meta-pills">
-            <span class="pill pill-accent">🌐 Web / PWA</span>
+            <span class="pill pill-accent">🤖 Android</span> <span class="pill pill-accent">📺 Roku</span> <span class="pill pill-accent">🌐 Web</span> <span class="pill pill-accent">🐳 Docker</span>
             <span class="pill">flutter-web</span>
-            <span class="pill">v0.1.27</span>
+            <span class="pill">v0.1.28</span>
             <span class="pill">Applications & Frontends</span>
             <span class="pill">pkg: pwa</span>
             <span class="pill">ref: 2026-09-30</span>
@@ -485,35 +530,71 @@
         <div class="main-column">
             <section class="content-card">
                 <h2 class="card-heading">📖 Installation & Setup Documentation</h2>
-                <p class="guide-summary">This application can be accessed instantly in any modern web browser or installed locally as a Progressive Web App (PWA).</p>
+                <p class="guide-summary">Android Card Games can be enjoyed across multiple platforms: on mobile via Android APK, on television screens via Roku TV sideloading, self-hosted via Docker container or standalone server binaries, or played directly in the browser via instant Web PWA.</p>
                 
         <div class="guide-prereqs">
             <h3>System Prerequisites</h3>
-            <ul><li>Modern web browser (Google Chrome, Mozilla Firefox, Microsoft Edge, Safari)</li><li>For local builds: Flutter SDK >= 3.22 (stable channel)</li><li>Dart SDK >= 3.4</li></ul>
+            <ul><li>Android device running Android 8.0 (API 26) or higher for mobile play</li><li>Roku Streaming Player or Roku TV with Developer Mode enabled</li><li>Docker Engine >= 24.0 or Docker Compose v2 for containerized party server</li><li>Linux, macOS, or Windows for standalone server binaries</li><li>Modern web browser (Chrome, Firefox, Safari, Edge) for instant Web / PWA</li></ul>
         </div>
         
                 
             <div class="guide-step">
-                <h4>Instant Web & PWA Installation</h4>
-                <p>No installation required for direct use. Open the live web application and choose 'Install' or 'Add to Home Screen' from your browser menu to run offline.</p>
-                
+                <h4>📱 Android APK Installation</h4>
+                <p>1. Download AndroidCardGames-v0.1.28.apk from the GitHub Releases page.
+2. On your Android device, enable 'Install unknown apps' in Settings > Apps & notifications > Special app access.
+3. Open the downloaded APK file and tap Install.
+4. Launch Android Card Games and enjoy local or room-connected card gameplay.</p>
+                <pre><code># Or install via ADB to a connected device:
+adb install -r AndroidCardGames-v0.1.28.apk</code></pre>
             </div>
         
 
             <div class="guide-step">
-                <h4>Local Development Setup</h4>
-                
-                <pre><code>git clone https://github.com/jakej985-rgb/Android-card-games.git
-cd Android-card-games
-flutter pub get
-flutter run -d chrome</code></pre>
+                <h4>📺 Roku TV Developer Mode Sideloading</h4>
+                <p>1. Enable Developer Mode on your Roku device using the remote: press Home 3 times, Up 2 times, Right, Left, Right, Left, Right.
+2. Note the device IP address shown on screen and set your developer password.
+3. Open a browser on a device on the same local network and navigate to the Roku web portal (http://<roku-ip>).
+4. Log in with username 'rokudev' and your password.
+5. Upload cardgames-roku-v0.1.28.zip and click Install.
+6. The Android Card Games channel will immediately launch on your TV.</p>
+                <pre><code># Or sideload from terminal using curl:
+curl -u rokudev:YOUR_PASSWORD -F "mysubmit=Install" -F "archive=@cardgames-roku-v0.1.28.zip" http://<roku-ip>/plugin_install</code></pre>
             </div>
         
 
             <div class="guide-step">
-                <h4>Building Production Web Release</h4>
-                
-                <pre><code>flutter build web --release --base-href /M3tal-Hub/Android-card-games/</code></pre>
+                <h4>🐳 Docker Self-Hosted TV Party Server</h4>
+                <p>Host a persistent multiplayer room server for living room TVs, mobile players, and web clients using Docker.</p>
+                <pre><code># Run party server container:
+docker run -d \
+  --name android-card-games-server \
+  --restart unless-stopped \
+  -p 8080:8080 \
+  -p 8081:8081 \
+  ghcr.io/jakej985-rgb/android-card-games:v0.1.28
+
+# Or with docker compose:
+# docker compose up -d</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>💻 Standalone TV Server Binaries</h4>
+                <p>Standalone executable binaries are available for Linux, macOS, and Windows from GitHub Releases, requiring no Docker runtime.</p>
+                <pre><code># Linux / macOS:
+chmod +x cardgames-server-linux
+./cardgames-server-linux --port 8080 --ws-port 8081
+
+# Windows (PowerShell / Command Prompt):
+.\cardgames-server-windows.exe --port 8080 --ws-port 8081</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>🌐 Instant Web / PWA</h4>
+                <p>Play immediately in your browser on desktop or mobile without downloading any installer. To install as an offline PWA app, select 'Install' or 'Add to Home Screen' in your browser.</p>
+                <pre><code># Web release hosted on M3tal-Hub:
+https://jakej985-rgb.github.io/M3tal-Hub/Android-card-games/</code></pre>
             </div>
         
             </section>
@@ -523,8 +604,20 @@ flutter run -d chrome</code></pre>
                 
             <div class="changelog-entry">
                 <div class="changelog-header">
-                    <span class="changelog-version">v0.1.27</span>
+                    <span class="changelog-version">v0.1.28</span>
                     <span class="changelog-tag">Latest Release</span>
+                    <span class="changelog-date">2026-09-30</span>
+                </div>
+                <ul class="changelog-list">
+                    <li>Multi-platform distribution across Android, Roku TV, Web PWA, and Docker backend.</li><li>📱 Android APK release (AndroidCardGames-v0.1.28.apk) with touch-optimized controls and haptic dealing.</li><li>📺 Roku TV client package (cardgames-roku-v0.1.28.zip) with big-screen tabletop layout and remote D-pad controls.</li><li>🐳 Docker TV party server (ghcr.io/jakej985-rgb/android-card-games:v0.1.28) for self-hosted multi-room play.</li><li>💻 Standalone TV server binaries for Linux, macOS, and Windows with zero runtime dependencies.</li><li>🌐 Progressive Web App (PWA) on M3tal-Hub with offline caching and CanvasKit rendering pipeline.</li>
+                </ul>
+            </div>
+        
+
+            <div class="changelog-entry">
+                <div class="changelog-header">
+                    <span class="changelog-version">v0.1.27</span>
+                    <span class="changelog-tag">Previous Release</span>
                     <span class="changelog-date">2026-09-30</span>
                 </div>
                 <ul class="changelog-list">
@@ -540,8 +633,8 @@ flutter run -d chrome</code></pre>
                 <h2 class="card-heading">⚙️ System Specifications</h2>
                 <div class="spec-list">
                     <div class="spec-item">
-                        <span class="spec-label">Target OS / Platform</span>
-                        <span class="spec-value">🌐 Web / PWA</span>
+                        <span class="spec-label">Target OS / Platforms</span>
+                        <span class="spec-value">🤖 Android, 📺 Roku, 🌐 Web, 🐳 Docker</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Target Architecture</span>
@@ -561,7 +654,7 @@ flutter run -d chrome</code></pre>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Current Release</span>
-                        <span class="spec-value">v0.1.27</span>
+                        <span class="spec-value">v0.1.28</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Package Format</span>

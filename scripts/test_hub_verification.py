@@ -654,6 +654,68 @@ def test_app_detail_pages():
 
     print("App detail pages verification passed!")
 
+def test_multi_platform_badges():
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    manifest_path = os.path.join(base_dir, "apps", "manifest.yml")
+    index_path = os.path.join(base_dir, "index.html")
+    apps_dir = os.path.join(base_dir, "apps")
+
+    with open(manifest_path, 'r', encoding='utf-8') as f:
+        manifest = yaml.safe_load(f)
+    apps = manifest["apps"]
+
+    index_content = open(index_path, 'r', encoding='utf-8').read()
+
+    # 1. Verify every app in manifest has platforms defined
+    for app in apps:
+        app_id = app["id"]
+        assert "platforms" in app, f"App '{app_id}' is missing 'platforms' list in manifest.yml"
+        assert isinstance(app["platforms"], list) and len(app["platforms"]) > 0, (
+            f"App '{app_id}' must define non-empty platforms list"
+        )
+
+    # 2. Verify key multi-platform applications
+    key_expectations = {
+        "android-card-games": ["os-android", "os-roku", "os-web", "os-docker"],
+        "monster-lab": ["os-web", "os-android", "os-windows", "os-linux", "os-docker"],
+        "idle-animals": ["os-android", "os-web"],
+        "red-music-locker": ["os-web", "os-docker"],
+        "red-music-locker-account-linker": ["os-chrome", "os-firefox"],
+        "subaru-specs-n-parts": ["os-android", "os-web"],
+        "comicinfo-generator": ["os-docker", "os-tool"],
+        "shop-manager": ["os-desktop", "os-linux", "os-windows"],
+        "infernal-ink-steel-suite": ["os-desktop", "os-linux", "os-windows"],
+        "m3tal-godash": ["os-linux", "os-docker"],
+        "m3tal-api": ["os-linux", "os-docker"],
+        "m3tal-ui-kit": ["os-dart"],
+        "ytmusicapi": ["os-python"],
+        "m3tal-hub-template": ["os-template", "os-web"],
+        "m3tal-docs": ["os-docs", "os-web"],
+    }
+
+    for app_id, expected_classes in key_expectations.items():
+        page_path = os.path.join(apps_dir, f"{app_id}.html")
+        assert os.path.exists(page_path), f"Missing page {page_path}"
+        content = open(page_path, 'r', encoding='utf-8').read()
+
+        # Check detail page contains all expected platform badge classes
+        for cls in expected_classes:
+            assert cls in content, f"{app_id}.html missing platform class '{cls}'"
+
+        # Check index page contains all expected platform badge classes
+        for cls in expected_classes:
+            assert cls in index_content, f"index.html missing platform class '{cls}'"
+
+        print(f"  [OK Platform Badges] {app_id} verified with classes {expected_classes}")
+
+    # 3. Check System Specifications row uses "Target OS / Platforms"
+    for app in apps:
+        app_id = app["id"]
+        content = open(os.path.join(apps_dir, f"{app_id}.html"), 'r', encoding='utf-8').read()
+        assert "Target OS / Platforms" in content, f"{app_id}.html missing 'Target OS / Platforms' header"
+
+    print("Multi-platform badge verification passed!")
+
 if __name__ == "__main__":
     print("=== Running M3tal-Hub Verification Suite ===")
     test_manifest_and_status()
@@ -673,6 +735,8 @@ if __name__ == "__main__":
     test_plan_14_infrastructure_and_libraries()
     print("\n=== Testing App Detail & Release Pages ===")
     test_app_detail_pages()
+    print("\n=== Testing Multi-Platform Badges ===")
+    test_multi_platform_badges()
     print("\n=== All Tests Passed Successfully ===")
 
 

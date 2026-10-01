@@ -382,6 +382,51 @@
             background: rgba(240, 136, 62, 0.12);
             color: #f0883e;
         }
+        .os-roku {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-windows {
+            border-color: rgba(0, 164, 239, 0.35);
+            background: rgba(0, 164, 239, 0.12);
+            color: #4dc9f6;
+        }
+        .os-macos {
+            border-color: rgba(235, 235, 235, 0.35);
+            background: rgba(235, 235, 235, 0.12);
+            color: #e0e0e0;
+        }
+        .os-chrome {
+            border-color: rgba(234, 67, 53, 0.35);
+            background: rgba(234, 67, 53, 0.12);
+            color: #f28b82;
+        }
+        .os-firefox {
+            border-color: rgba(255, 113, 34, 0.35);
+            background: rgba(255, 113, 34, 0.12);
+            color: #ff9436;
+        }
+        .os-python {
+            border-color: rgba(255, 212, 59, 0.35);
+            background: rgba(255, 212, 59, 0.12);
+            color: #ffe873;
+        }
+        .os-dart {
+            border-color: rgba(1, 117, 194, 0.35);
+            background: rgba(1, 117, 194, 0.12);
+            color: #40c4ff;
+        }
+        .os-template {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-docs {
+            border-color: rgba(88, 166, 255, 0.35);
+            background: rgba(88, 166, 255, 0.12);
+            color: #79c0ff;
+        }
         .os-cross {
             border-color: rgba(110, 118, 129, 0.35);
             background: rgba(110, 118, 129, 0.12);
@@ -461,17 +506,17 @@
                 </div>
             </div>
             <div class="badge-group">
-                <span class="badge badge-os os-ext">🧩 Extension</span>
+                <span class="badge badge-os os-chrome">🌐 Chrome</span> <span class="badge badge-os os-firefox">🦊 Firefox</span>
                 <span class="badge badge-placeholder">Placeholder</span>
             </div>
         </div>
-        <p class="hero-desc">Browser extension release.</p>
+        <p class="hero-desc">Browser extension companion for 1-click YouTube Music account linking.</p>
         <div class="meta-pills">
-            <span class="pill pill-accent">🧩 Extension</span>
+            <span class="pill pill-accent">🌐 Chrome</span> <span class="pill pill-accent">🦊 Firefox</span>
             <span class="pill">extension</span>
-            <span class="pill">v1.0.0</span>
+            <span class="pill">v1.1.0</span>
             <span class="pill">Applications & Frontends</span>
-            <span class="pill">pkg: source</span>
+            <span class="pill">pkg: extension</span>
             <span class="pill">ref: 2026-09-30</span>
         </div>
         <div class="actions-row">
@@ -484,20 +529,46 @@
         <div class="main-column">
             <section class="content-card">
                 <h2 class="card-heading">📖 Installation & Setup Documentation</h2>
-                <p class="guide-summary">Developer tooling and workspace configuration utility.</p>
+                <p class="guide-summary">Lightweight browser companion extension for 1-click YouTube Music session linkage with your self-hosted Red Music Locker server. Available for Google Chrome and Mozilla Firefox.</p>
                 
         <div class="guide-prereqs">
             <h3>System Prerequisites</h3>
-            <ul><li>Git</li><li>Standard Linux / UNIX shell</li></ul>
+            <ul><li>Google Chrome, Chromium, Brave, Microsoft Edge, or Mozilla Firefox</li><li>Active YouTube Music session on music.youtube.com</li><li>Running Red Music Locker container instance</li></ul>
         </div>
         
                 
             <div class="guide-step">
-                <h4>Repository Clone & Configuration</h4>
+                <h4>Google Chrome / Chromium Extension Installation</h4>
+                <p>1. Download 'red-music-locker-account-linker-chrome-v1.1.0.zip' from GitHub Releases.
+2. Extract the ZIP archive into a local folder.
+3. Open Chrome and navigate to 'chrome://extensions'.
+4. Enable the 'Developer mode' toggle in the upper right corner.
+5. Click 'Load unpacked' in the upper left and select the extracted folder containing manifest.json.
+6. Pin the Red Music Locker extension icon to your browser toolbar.</p>
+                <pre><code># Unpack Chrome release package:
+unzip red-music-locker-account-linker-chrome-v1.1.0.zip -d chrome-linker/
+# In chrome://extensions -> Click 'Load unpacked' -> Select chrome-linker/</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>Mozilla Firefox Add-on Installation</h4>
+                <p>1. Download 'red-music-locker-account-linker-firefox-v1.1.0.zip' from GitHub Releases.
+2. Open Firefox and navigate to 'about:debugging#/runtime/this-firefox'.
+3. Click 'Load Temporary Add-on...'.
+4. Select 'red-music-locker-account-linker-firefox-v1.1.0.zip' or the manifest.json inside it.
+5. The extension will appear in your Firefox toolbar ready to link.</p>
+                <pre><code># Load in Firefox about:debugging#/runtime/this-firefox:
+# Click 'Load Temporary Add-on...' -> Select red-music-locker-account-linker-firefox-v1.1.0.zip</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>Connect to Red Music Locker Server</h4>
+                <p>1. Navigate to music.youtube.com in your browser and confirm you are signed in.
+2. Click the Red Music Locker icon on your browser toolbar.
+3. Enter your self-hosted server URL and click 'Link Account'. The extension securely forwards session headers directly to your server.</p>
                 
-                <pre><code>git clone https://github.com/jakej985-rgb/red-music-locker-account-linker.git
-cd red-music-locker-account-linker
-# Review configuration files and documentation</code></pre>
             </div>
         
             </section>
@@ -507,12 +578,12 @@ cd red-music-locker-account-linker
                 
             <div class="changelog-entry">
                 <div class="changelog-header">
-                    <span class="changelog-version">v1.0.0</span>
-                    <span class="changelog-tag">Current Release</span>
+                    <span class="changelog-version">v1.1.0</span>
+                    <span class="changelog-tag">Dual Extension Release</span>
                     <span class="changelog-date">2026-09-30</span>
                 </div>
                 <ul class="changelog-list">
-                    <li>Initial release registered under M3tal Hub release registry.</li><li>Automated CI/CD integration and deployment verification safeguards enabled.</li><li>Ecosystem release tracking and documentation published.</li>
+                    <li>Chrome Manifest V3 package (red-music-locker-account-linker-chrome-v1.1.0.zip) with service worker background architecture.</li><li>Firefox Manifest V3 package (red-music-locker-account-linker-firefox-v1.1.0.zip) adhering to AMO lint standards.</li><li>1-click YouTube Music session cookie extraction without opening DevTools or copying headers.</li><li>Direct session linkage to self-hosted Red Music Locker server instance.</li>
                 </ul>
             </div>
         
@@ -524,8 +595,8 @@ cd red-music-locker-account-linker
                 <h2 class="card-heading">⚙️ System Specifications</h2>
                 <div class="spec-list">
                     <div class="spec-item">
-                        <span class="spec-label">Target OS / Platform</span>
-                        <span class="spec-value">🧩 Extension</span>
+                        <span class="spec-label">Target OS / Platforms</span>
+                        <span class="spec-value">🌐 Chrome, 🦊 Firefox</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Target Architecture</span>
@@ -545,11 +616,11 @@ cd red-music-locker-account-linker
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Current Release</span>
-                        <span class="spec-value">v1.0.0</span>
+                        <span class="spec-value">v1.1.0</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Package Format</span>
-                        <span class="spec-value">source</span>
+                        <span class="spec-value">extension</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Pipeline Status</span>
