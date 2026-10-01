@@ -542,20 +542,49 @@
         <div class="main-column">
             <section class="content-card">
                 <h2 class="card-heading">📖 Installation & Setup Documentation</h2>
-                <p class="guide-summary">Backend service and system infrastructure component.</p>
+                <p class="guide-summary">Core infrastructure orchestration platform, CLI daemon, and REST control plane API packaged as a Debian (.deb) package.</p>
                 
         <div class="guide-prereqs">
             <h3>System Prerequisites</h3>
-            <ul><li>Git</li><li>Go >= 1.22 or Python 3.11 depending on module</li></ul>
+            <ul><li>🐧 Linux: Debian 12/13 (trixie), Ubuntu 22.04/24.04 (noble), Linux Mint 21/22 (amd64)</li><li>🔑 Administrative sudo privileges for APT installation and systemd service management</li><li>📦 Official M3tal APT repository enabled (see M3tal APT Keyring)</li><li>🐳 Docker Engine (recommended for container orchestration)</li></ul>
         </div>
         
                 
             <div class="guide-step">
-                <h4>Clone and Run Locally</h4>
-                
-                <pre><code>git clone https://github.com/jakej985-rgb/m3tal-core.git
-cd m3tal-core
-# Follow service-specific configuration in README.md</code></pre>
+                <h4>📦 1. Add M3tal APT Repository</h4>
+                <p>Configure the official M3tal repository and GPG signing key if not already installed:</p>
+                <pre><code>curl -fsSL https://jakej985-rgb.github.io/m3tal-apt-key/install.sh | sudo bash</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>📥 2. Install M3tal Core via APT</h4>
+                <p>Update the repository index and install the verified Debian package:</p>
+                <pre><code>sudo apt update
+sudo apt install -y m3tal</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>🚀 3. Initialize Configuration & Services</h4>
+                <p>Initialize configuration and inspect active systemd daemon units:</p>
+                <pre><code># Initialize environment configuration
+sudo m3tal init
+
+# Check daemon services status
+systemctl status m3tal.service
+systemctl status m3tal-api.service</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>💻 4. CLI Usage & Control Center</h4>
+                <p>Run the interactive terminal Control Center or access CLI commands:</p>
+                <pre><code># Launch Control Center
+m3tal
+
+# View all commands
+m3tal help</code></pre>
             </div>
         
             </section>

@@ -542,18 +542,47 @@
         <div class="main-column">
             <section class="content-card">
                 <h2 class="card-heading">📖 Installation & Setup Documentation</h2>
-                <p class="guide-summary">APT archive signing key and Debian repository configuration.</p>
+                <p class="guide-summary">Official M3tal package signing key, cryptographic trust store, and Debian/Ubuntu distribution repository configuration.</p>
                 
         <div class="guide-prereqs">
             <h3>System Prerequisites</h3>
-            <ul><li>Debian or Ubuntu Linux system with sudo privileges</li><li>curl and gpg</li></ul>
+            <ul><li>Debian or Ubuntu Linux system (amd64)</li><li>Standard administrative sudo privileges</li><li>curl and gpg installed</li></ul>
         </div>
         
                 
             <div class="guide-step">
-                <h4>Importing Archive Keyring</h4>
-                
-                <pre><code>curl -fsSL https://raw.githubusercontent.com/jakej985-rgb/m3tal-apt-key/main/m3tal-archive-keyring.gpg | sudo tee /etc/apt/trusted.gpg.d/m3tal.gpg > /dev/null</code></pre>
+                <h4>🚀 Universal Bootstrap (Recommended)</h4>
+                <p>Run the official automated bootstrap installer to import the signing key into `/etc/apt/keyrings/m3tal-archive-keyring.gpg` and configure `/etc/apt/sources.list.d/m3tal.list`:</p>
+                <pre><code>curl -fsSL https://jakej985-rgb.github.io/m3tal-apt-key/install.sh | sudo bash</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>🔑 Manual Keyring & Sources Configuration</h4>
+                <p>Alternatively, configure the repository and keyring manually adhering to Debian signed-by standards:</p>
+                <pre><code># 1. Create keyrings directory
+sudo install -m 0755 -d /etc/apt/keyrings
+
+# 2. Download and dearmor M3tal public key
+curl -fsSL https://jakej985-rgb.github.io/m3tal-apt-key/KEY.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/m3tal-archive-keyring.gpg
+sudo chmod a+r /etc/apt/keyrings/m3tal-archive-keyring.gpg
+
+# 3. Add APT sources list entry
+echo "deb [signed-by=/etc/apt/keyrings/m3tal-archive-keyring.gpg] https://jakej985-rgb.github.io/m3tal-apt-key stable main" | sudo tee /etc/apt/sources.list.d/m3tal.list > /dev/null
+
+# 4. Synchronize package lists
+sudo apt update</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>🔍 Keyring & Repository Verification</h4>
+                <p>Verify that the GPG key is installed with fingerprint `B95A 45C6 4757 7DEB CC87  7C49 AF61 90B0 C013 46DD` and packages are available:</p>
+                <pre><code># Inspect imported key fingerprint
+gpg --show-keys /etc/apt/keyrings/m3tal-archive-keyring.gpg
+
+# Query m3tal package policy
+apt-cache policy m3tal</code></pre>
             </div>
         
             </section>

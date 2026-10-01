@@ -471,6 +471,79 @@ def get_install_guide(app):
                 }
             ]
         }
+    elif app_id == "m3tal-core":
+        return {
+            "summary": "Core infrastructure orchestration platform, CLI daemon, and REST control plane API packaged as a Debian (.deb) package.",
+            "prerequisites": [
+                "🐧 Linux: Debian 12/13 (trixie), Ubuntu 22.04/24.04 (noble), Linux Mint 21/22 (amd64)",
+                "🔑 Administrative sudo privileges for APT installation and systemd service management",
+                "📦 Official M3tal APT repository enabled (see M3tal APT Keyring)",
+                "🐳 Docker Engine (recommended for container orchestration)"
+            ],
+            "steps": [
+                {
+                    "title": "📦 1. Add M3tal APT Repository",
+                    "content": "Configure the official M3tal repository and GPG signing key if not already installed:",
+                    "code": "curl -fsSL https://jakej985-rgb.github.io/m3tal-apt-key/install.sh | sudo bash"
+                },
+                {
+                    "title": "📥 2. Install M3tal Core via APT",
+                    "content": "Update the repository index and install the verified Debian package:",
+                    "code": "sudo apt update\nsudo apt install -y m3tal"
+                },
+                {
+                    "title": "🚀 3. Initialize Configuration & Services",
+                    "content": "Initialize configuration and inspect active systemd daemon units:",
+                    "code": "# Initialize environment configuration\nsudo m3tal init\n\n# Check daemon services status\nsystemctl status m3tal.service\nsystemctl status m3tal-api.service"
+                },
+                {
+                    "title": "💻 4. CLI Usage & Control Center",
+                    "content": "Run the interactive terminal Control Center or access CLI commands:",
+                    "code": "# Launch Control Center\nm3tal\n\n# View all commands\nm3tal help"
+                }
+            ]
+        }
+    elif app_id == "m3tal-apt-key":
+        return {
+            "summary": "Official M3tal package signing key, cryptographic trust store, and Debian/Ubuntu distribution repository configuration.",
+            "prerequisites": [
+                "Debian or Ubuntu Linux system (amd64)",
+                "Standard administrative sudo privileges",
+                "curl and gpg installed"
+            ],
+            "steps": [
+                {
+                    "title": "🚀 Universal Bootstrap (Recommended)",
+                    "content": "Run the official automated bootstrap installer to import the signing key into `/etc/apt/keyrings/m3tal-archive-keyring.gpg` and configure `/etc/apt/sources.list.d/m3tal.list`:",
+                    "code": "curl -fsSL https://jakej985-rgb.github.io/m3tal-apt-key/install.sh | sudo bash"
+                },
+                {
+                    "title": "🔑 Manual Keyring & Sources Configuration",
+                    "content": "Alternatively, configure the repository and keyring manually adhering to Debian signed-by standards:",
+                    "code": """# 1. Create keyrings directory
+sudo install -m 0755 -d /etc/apt/keyrings
+
+# 2. Download and dearmor M3tal public key
+curl -fsSL https://jakej985-rgb.github.io/m3tal-apt-key/KEY.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/m3tal-archive-keyring.gpg
+sudo chmod a+r /etc/apt/keyrings/m3tal-archive-keyring.gpg
+
+# 3. Add APT sources list entry
+echo "deb [signed-by=/etc/apt/keyrings/m3tal-archive-keyring.gpg] https://jakej985-rgb.github.io/m3tal-apt-key stable main" | sudo tee /etc/apt/sources.list.d/m3tal.list > /dev/null
+
+# 4. Synchronize package lists
+sudo apt update"""
+                },
+                {
+                    "title": "🔍 Keyring & Repository Verification",
+                    "content": "Verify that the GPG key is installed with fingerprint `B95A 45C6 4757 7DEB CC87  7C49 AF61 90B0 C013 46DD` and packages are available:",
+                    "code": """# Inspect imported key fingerprint
+gpg --show-keys /etc/apt/keyrings/m3tal-archive-keyring.gpg
+
+# Query m3tal package policy
+apt-cache policy m3tal"""
+                }
+            ]
+        }
     elif app_id in ["shop-manager", "infernal-ink-steel-suite"]:
         return {
             "summary": f"{app.get('name', 'Application')} is a Qt C++ desktop application built for Linux and Windows desktop environments.",
@@ -1469,11 +1542,24 @@ def generate_hub(manifest_path, status_path, output_dir, site_status_path=None):
             cards.append(render_card(app, release_info))
         
         rendered_grid = "\n".join(cards)
+        banner_html = ""
+        if cat_id == "infrastructure":
+            banner_html = """
+        <div class="repo-banner" style="background: rgba(88, 166, 255, 0.08); border: 1px solid rgba(88, 166, 255, 0.25); border-radius: 8px; padding: 14px 18px; margin-bottom: 18px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;">
+            <div>
+                <strong style="color: var(--accent); font-size: 14px;">📦 Official M3tal Debian/APT Repository</strong>
+                <p style="margin: 4px 0 0 0; color: var(--text-sub); font-size: 13px;">Install core packages, CLI daemons, and system services directly via APT on Debian &amp; Ubuntu.</p>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <code style="background: rgba(0,0,0,0.4); padding: 6px 10px; border-radius: 6px; font-size: 12px; color: var(--text-main);">curl -fsSL https://jakej985-rgb.github.io/m3tal-apt-key/install.sh | sudo bash</code>
+                <a class="card-btn card-btn-primary" href="./apps/m3tal-apt-key.html" style="font-size: 12px; white-space: nowrap;">Repo Setup Docs →</a>
+            </div>
+        </div>"""
         section = f"""    <section class="section-group">
         <div class="section-header">
             <h2 class="section-title">{cat_def['title']}</h2>
             <p class="section-desc">{cat_def['description']}</p>
-        </div>
+        </div>{banner_html}
         <div class="grid">
 {rendered_grid}
         </div>
