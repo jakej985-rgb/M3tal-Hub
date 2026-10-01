@@ -236,8 +236,11 @@ apps:
         - title: "Docker Sync Container Deployment"
           content: "Download the release compose specification ytsync.yml and copy default.env.example to .env. Configure your music library mount paths, config directory, and port:"
           code: |-
-            curl -fsSL https://raw.githubusercontent.com/jakej985-rgb/red-music-locker/main/ytsync.yml -o ytsync.yml
+            # Download release specification & environment template:
+            curl -fsSLO https://github.com/jakej985-rgb/red-music-locker/releases/download/v0.0.1-beta/ytsync.yml
+            curl -fsSL https://github.com/jakej985-rgb/red-music-locker/releases/download/v0.0.1-beta/default.env.example -o .env || \
             curl -fsSL https://raw.githubusercontent.com/jakej985-rgb/red-music-locker/main/.env.example -o .env
+
             # Edit .env to set your MUSIC_PATH, CONFIG_PATH, and PORT
         - title: "Launch Background Sync Service"
           content: "Start the containerized sync service in detached mode. The service runs under an unprivileged user with read-only music directory mounts."
@@ -279,13 +282,19 @@ apps:
         - title: "Google Chrome / Chromium Extension Installation"
           content: "1. Download 'red-music-locker-account-linker-chrome-v1.1.0.zip' from GitHub Releases.\n2. Extract the ZIP archive into a local folder.\n3. Open Chrome and navigate to 'chrome://extensions'.\n4. Enable the 'Developer mode' toggle in the upper right corner.\n5. Click 'Load unpacked' in the upper left and select the extracted folder containing manifest.json.\n6. Pin the Red Music Locker extension icon to your browser toolbar."
           code: |-
+            # Download Chrome release package from GitHub Releases:
+            wget https://github.com/jakej985-rgb/red-music-locker-account-linker/releases/download/v1.1.0/red-music-locker-account-linker-chrome-v1.1.0.zip
+
             # Unpack Chrome release package:
             unzip red-music-locker-account-linker-chrome-v1.1.0.zip -d chrome-linker/
-            # In chrome://extensions -> Click 'Load unpacked' -> Select chrome-linker/
+            # In chrome://extensions -> Enable Developer Mode -> Click 'Load unpacked' -> Select chrome-linker/
         - title: "Mozilla Firefox Add-on Installation"
           content: "1. Download 'red-music-locker-account-linker-firefox-v1.1.0.zip' from GitHub Releases.\n2. Open Firefox and navigate to 'about:debugging#/runtime/this-firefox'.\n3. Click 'Load Temporary Add-on...'.\n4. Select 'red-music-locker-account-linker-firefox-v1.1.0.zip' or the manifest.json inside it.\n5. The extension will appear in your Firefox toolbar ready to link."
           code: |-
-            # Load in Firefox about:debugging#/runtime/this-firefox:
+            # Download Firefox release package from GitHub Releases:
+            wget https://github.com/jakej985-rgb/red-music-locker-account-linker/releases/download/v1.1.0/red-music-locker-account-linker-firefox-v1.1.0.zip
+
+            # In Firefox about:debugging#/runtime/this-firefox:
             # Click 'Load Temporary Add-on...' -> Select red-music-locker-account-linker-firefox-v1.1.0.zip
         - title: "Connect to Red Music Locker Server"
           content: "1. Navigate to music.youtube.com in your browser and confirm you are signed in.\n2. Click the Red Music Locker icon on your browser toolbar.\n3. Enter your self-hosted server URL and click 'Link Account'. The extension securely forwards session headers directly to your server."
@@ -311,6 +320,7 @@ apps:
     base_href: /M3tal-Hub/subaru-specs-n-parts/
     repo_url: https://github.com/jakej985-rgb/Subaru.specs.n.parts
     release_url: https://github.com/jakej985-rgb/Subaru.specs.n.parts/releases
+    apk_url: https://github.com/jakej985-rgb/Subaru.specs.n.parts/releases/download/Alpha/android-apk.V.A0.1.zip
     changelog:
       - version: "1.0.0"
         date: "2026-09-30"
@@ -339,7 +349,13 @@ apps:
           code: "# Web deployment URL:\nhttps://jakej985-rgb.github.io/M3tal-Hub/subaru-specs-n-parts/"
         - title: "📱 Android APK Installation (Alpha Release)"
           content: "1. Download the Alpha release package 'android-apk.V.A0.1.zip' from the GitHub Releases page.\n2. Extract the archive on your Android device or computer to retrieve the .apk package.\n3. In Android Settings, enable 'Install unknown apps' for your browser or file manager.\n4. Open the extracted APK file to complete installation and launch."
-          code: "# Or install directly using ADB on connected device:\nunzip android-apk.V.A0.1.zip\nadb install -r *.apk"
+          code: |-
+            # Direct package download:
+            curl -LO https://github.com/jakej985-rgb/Subaru.specs.n.parts/releases/download/Alpha/android-apk.V.A0.1.zip
+            unzip android-apk.V.A0.1.zip
+
+            # Or install directly using ADB on connected device:
+            adb install -r *.apk
         - title: "🛠️ Compiling from Source"
           content: "To build the Android APK or web bundle directly from source code:"
           code: |-
@@ -369,8 +385,11 @@ apps:
     platforms: [web]
     enabled: true
     status: ready
+    version: "1.0.2"
+    package: pwa
     description: Infernal web application.
     base_href: /M3tal-Hub/infernal-web/
+    release_url: https://github.com/jakej985-rgb/infernal-web/releases
     changelog:
       - version: 1.0.2
         date: "2026-09-30"
@@ -430,6 +449,22 @@ apps:
           - "Low-latency hardware GPS sensor reading and velocity smoothing."
           - "Dark OLED HUD reflection mode for windshield projection."
           - "Max speed, trip odometer, and average velocity tracking."
+    install_guide:
+      summary: "GPS Speedometer is a native Android application built for mobile devices with low-latency hardware GPS sensor reading, velocity smoothing, and dark OLED HUD windshield projection."
+      prerequisites:
+        - "Android mobile device running Android 8.0 (Oreo / API 26) or higher"
+        - "Hardware GPS / Location sensor capability"
+        - "Developers / Build from Source: Android Studio, Java 17 (JDK), Gradle toolchain"
+      steps:
+        - title: "📱 Installation via Pre-built APK"
+          content: "1. Download the latest `.apk` package from the GitHub Releases page.\n2. In Android Settings, enable 'Install unknown apps' for your browser or file manager.\n3. Open the downloaded APK file and tap 'Install'.\n4. Launch GPS Speedometer and grant Location permissions when prompted."
+          code: "# Or install directly using ADB on connected device:\nadb install -r *.apk"
+        - title: "🛠️ Compiling from Source"
+          content: "To build the release APK directly from the source repository using Gradle:"
+          code: |-
+            git clone https://github.com/jakej985-rgb/GPS-speedometer.git
+            cd GPS-speedometer
+            ./gradlew assembleRelease
 
   - id: jellyfin-ui
     name: Jellyfin UI

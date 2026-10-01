@@ -554,8 +554,11 @@ https://jakej985-rgb.github.io/M3tal-Hub/red-music-locker/</code></pre>
             <div class="guide-step">
                 <h4>Docker Sync Container Deployment</h4>
                 <p>Download the release compose specification ytsync.yml and copy default.env.example to .env. Configure your music library mount paths, config directory, and port:</p>
-                <pre><code>curl -fsSL https://raw.githubusercontent.com/jakej985-rgb/red-music-locker/main/ytsync.yml -o ytsync.yml
+                <pre><code># Download release specification & environment template:
+curl -fsSLO https://github.com/jakej985-rgb/red-music-locker/releases/download/v0.0.1-beta/ytsync.yml
+curl -fsSL https://github.com/jakej985-rgb/red-music-locker/releases/download/v0.0.1-beta/default.env.example -o .env || \
 curl -fsSL https://raw.githubusercontent.com/jakej985-rgb/red-music-locker/main/.env.example -o .env
+
 # Edit .env to set your MUSIC_PATH, CONFIG_PATH, and PORT</code></pre>
             </div>
         

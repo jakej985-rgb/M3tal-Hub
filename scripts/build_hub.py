@@ -118,7 +118,7 @@ PLATFORM_INFO = {
     "windows": ("🪟", "Windows", "os-windows"),
     "macos": ("🍎", "macOS", "os-macos"),
     "desktop": ("🖥️", "Desktop", "os-desktop"),
-    "chrome": ("🌐", "Chrome", "os-chrome"),
+    "chrome": ("🧩", "Chrome", "os-chrome"),
     "firefox": ("🦊", "Firefox", "os-firefox"),
     "extension": ("🧩", "Extension", "os-ext"),
     "python": ("🐍", "Python", "os-python"),
@@ -366,8 +366,8 @@ def get_install_guide(app):
                     "content": "Open the live web interface on M3tal-Hub to browse playlists, stream audio, and manage library metadata."
                 },
                 {
-                    "title": "Docker Backend Deployment (ytsync.yml & .env)",
-                    "code": f"curl -fsSL https://raw.githubusercontent.com/jakej985-rgb/{repo}/main/ytsync.yml -o ytsync.yml\ncurl -fsSL https://raw.githubusercontent.com/jakej985-rgb/{repo}/main/.env.example -o .env\n# Configure storage paths in .env\ndocker compose -f ytsync.yml up -d\ndocker compose -f ytsync.yml logs -f ytm-sync"
+                    "title": "Docker Backend Deployment (ytsync.yml & default.env.example)",
+                    "code": f"# Download release assets:\ncurl -fsSLO https://github.com/jakej985-rgb/{repo}/releases/download/v0.0.1-beta/ytsync.yml\ncurl -fsSL https://github.com/jakej985-rgb/{repo}/releases/download/v0.0.1-beta/default.env.example -o .env || \\\ncurl -fsSL https://raw.githubusercontent.com/jakej985-rgb/{repo}/main/.env.example -o .env\n# Configure storage paths in .env\ndocker compose -f ytsync.yml up -d\ndocker compose -f ytsync.yml logs -f ytm-sync"
                 }
             ]
         }
@@ -381,15 +381,17 @@ def get_install_guide(app):
             "steps": [
                 {
                     "title": "Google Chrome / Chromium Installation",
-                    "content": "1. Download `red-music-locker-account-linker-chrome-v1.1.0.zip` from Releases and extract it.\n2. Navigate to chrome://extensions in Chrome.\n3. Enable 'Developer mode' in the top right.\n4. Click 'Load unpacked' and select the unzipped directory containing manifest.json."
+                    "content": "1. Download `red-music-locker-account-linker-chrome-v1.1.0.zip` from Releases and extract it.\n2. Navigate to chrome://extensions in Chrome.\n3. Enable 'Developer mode' in the top right.\n4. Click 'Load unpacked' and select the unzipped directory containing manifest.json.",
+                    "code": f"wget https://github.com/jakej985-rgb/{repo}/releases/download/v1.1.0/red-music-locker-account-linker-chrome-v1.1.0.zip\nunzip red-music-locker-account-linker-chrome-v1.1.0.zip -d chrome-linker/"
                 },
                 {
                     "title": "Mozilla Firefox Installation",
-                    "content": "1. Download `red-music-locker-account-linker-firefox-v1.1.0.zip` from Releases.\n2. Navigate to about:debugging#/runtime/this-firefox in Firefox.\n3. Click 'Load Temporary Add-on' and select the ZIP package or manifest.json."
+                    "content": "1. Download `red-music-locker-account-linker-firefox-v1.1.0.zip` from Releases.\n2. Navigate to about:debugging#/runtime/this-firefox in Firefox.\n3. Click 'Load Temporary Add-on' and select the ZIP package or manifest.json.",
+                    "code": f"wget https://github.com/jakej985-rgb/{repo}/releases/download/v1.1.0/red-music-locker-account-linker-firefox-v1.1.0.zip"
                 }
             ]
         }
-    elif app_id == "subaru-specs-n-parts":
+    elif app_id in ["subaru-specs-n-parts", "specs-n-parts"]:
         return {
             "summary": "Subaru Specs & Parts is an offline-first automotive reference application available as a Web PWA and as an Android APK package.",
             "prerequisites": [
@@ -404,6 +406,27 @@ def get_install_guide(app):
                 {
                     "title": "Android APK Installation",
                     "content": "1. Download the Android APK package zip from Releases.\n2. Extract and open the `.apk` on your Android device to install."
+                }
+            ]
+        }
+    elif app_id == "gps-speedometer":
+        return {
+            "summary": "GPS Speedometer is a native Android application built for mobile devices with high-frequency GPS sensor integration, velocity smoothing, and dark OLED HUD windshield projection.",
+            "prerequisites": [
+                "Android mobile device running Android 8.0 (Oreo / API 26) or higher",
+                "Hardware GPS / Location sensor capability",
+                "For developers: Android Studio / Java 17 (JDK) / Gradle toolchain"
+            ],
+            "steps": [
+                {
+                    "title": "📱 Installation via Pre-built APK",
+                    "content": "1. Download the latest `.apk` package from GitHub Releases.\n2. In Android Settings, enable 'Install unknown apps' for your browser or file manager.\n3. Open the downloaded APK file and tap 'Install'.\n4. Launch GPS Speedometer and grant Location permissions when prompted.",
+                    "code": "# Or sideload via ADB to connected device:\nadb install -r *.apk"
+                },
+                {
+                    "title": "🛠️ Compiling from Source",
+                    "content": "To build the release APK directly from the source repository using Gradle:",
+                    "code": f"git clone https://github.com/jakej985-rgb/{repo}.git\ncd {repo}\n./gradlew assembleRelease"
                 }
             ]
         }
@@ -497,16 +520,15 @@ def get_install_guide(app):
             }
         ]
     elif app_type == "android-native":
-        guide["summary"] = "Native Android application built for mobile devices with high-frequency GPS sensor integration."
+        guide["summary"] = "Native Android application built for mobile devices with Gradle build toolchain."
         guide["prerequisites"] = [
             "Android device running Android 8.0 (Oreo / API 26) or higher",
-            "Hardware GPS / Location service capability",
             "For developers: Android Studio / Java 17 / Gradle"
         ]
         guide["steps"] = [
             {
                 "title": "Installation via Pre-built APK",
-                "content": "1. Download the latest `.apk` package from the Releases section.\n2. On your Android device, enable 'Install unknown apps' in Settings for your browser or file manager.\n3. Open the downloaded APK and tap 'Install'.\n4. Launch the application and grant Location permissions when prompted."
+                "content": "1. Download the latest `.apk` package from the Releases section.\n2. On your Android device, enable 'Install unknown apps' in Settings for your browser or file manager.\n3. Open the downloaded APK and tap 'Install'."
             },
             {
                 "title": "Compiling from Source",

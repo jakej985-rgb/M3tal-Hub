@@ -942,6 +942,89 @@ def test_android_card_games_release():
 
     print("Android-Card-Games release verification passed!")
 
+def test_red_music_locker_releases():
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    manifest_path = os.path.join(base_dir, "apps", "manifest.yml")
+    status_path = os.path.join(base_dir, "apps", "status.json")
+    index_path = os.path.join(base_dir, "index.html")
+    rml_page_path = os.path.join(base_dir, "apps", "red-music-locker.html")
+    linker_page_path = os.path.join(base_dir, "apps", "red-music-locker-account-linker.html")
+
+    # 1. Manifest verification
+    with open(manifest_path, 'r', encoding='utf-8') as f:
+        manifest = yaml.safe_load(f)
+    apps = {a["id"]: a for a in manifest["apps"]}
+
+    assert "red-music-locker" in apps, "red-music-locker missing from manifest.yml"
+    rml = apps["red-music-locker"]
+    assert str(rml.get("version")) == "0.0.1-beta", f"red-music-locker version mismatch: {rml.get('version')}"
+    assert rml.get("platforms") == ["web", "docker"], f"red-music-locker platforms mismatch: {rml.get('platforms')}"
+    assert rml.get("enabled") is True, "red-music-locker should be enabled"
+    assert rml.get("status") == "ready", "red-music-locker should have status ready"
+    rml_guide = rml.get("install_guide")
+    assert rml_guide, "red-music-locker missing install_guide"
+    rml_steps_text = " ".join([s.get("content", "") + " " + s.get("code", "") for s in rml_guide.get("steps", [])])
+    assert "ytsync.yml" in rml_steps_text, "ytsync.yml missing from red-music-locker install guide"
+    assert "default.env.example" in rml_steps_text, "default.env.example missing from red-music-locker install guide"
+
+    assert "red-music-locker-account-linker" in apps, "red-music-locker-account-linker missing from manifest.yml"
+    linker = apps["red-music-locker-account-linker"]
+    assert str(linker.get("version")) == "1.1.0", f"linker version mismatch: {linker.get('version')}"
+    assert linker.get("platforms") == ["chrome", "firefox"], f"linker platforms mismatch: {linker.get('platforms')}"
+    linker_guide = linker.get("install_guide")
+    assert linker_guide, "linker missing install_guide"
+    linker_steps_text = " ".join([s.get("content", "") + " " + s.get("code", "") for s in linker_guide.get("steps", [])])
+    assert "red-music-locker-account-linker-chrome-v1.1.0.zip" in linker_steps_text
+    assert "red-music-locker-account-linker-firefox-v1.1.0.zip" in linker_steps_text
+
+    # 2. Status verification
+    with open(status_path, 'r', encoding='utf-8') as f:
+        status = json.load(f)
+    rml_status = status.get("releases", {}).get("red-music-locker", {})
+    assert str(rml_status.get("version")) == "0.0.1-beta", f"status.json rml version mismatch: {rml_status.get('version')}"
+    linker_status = status.get("releases", {}).get("red-music-locker-account-linker", {})
+    assert str(linker_status.get("version")) == "1.1.0", f"status.json linker version mismatch: {linker_status.get('version')}"
+
+    # 3. HTML detail pages verification
+    assert os.path.exists(rml_page_path), f"Missing {rml_page_path}"
+    rml_html = open(rml_page_path, 'r', encoding='utf-8').read()
+    assert "os-web" in rml_html and "os-docker" in rml_html, "Missing platform badge in red-music-locker.html"
+    assert "v0.0.1-beta" in rml_html, "Missing v0.0.1-beta in red-music-locker.html"
+    assert "ytsync.yml" in rml_html, "Missing ytsync.yml in red-music-locker.html"
+    assert "default.env.example" in rml_html, "Missing default.env.example in red-music-locker.html"
+
+    assert os.path.exists(linker_page_path), f"Missing {linker_page_path}"
+    linker_html = open(linker_page_path, 'r', encoding='utf-8').read()
+    assert "os-chrome" in linker_html and "os-firefox" in linker_html, "Missing platform badge in linker.html"
+    assert "v1.1.0" in linker_html, "Missing v1.1.0 in linker.html"
+    assert "red-music-locker-account-linker-chrome-v1.1.0.zip" in linker_html
+    assert "red-music-locker-account-linker-firefox-v1.1.0.zip" in linker_html
+
+    # 4. Hub index card verification
+    index_content = open(index_path, 'r', encoding='utf-8').read()
+    assert 'href="./apps/red-music-locker.html"' in index_content
+    assert 'href="./apps/red-music-locker-account-linker.html"' in index_content
+    assert "v0.0.1-beta" in index_content
+    assert "v1.1.0" in index_content
+
+    # 5. Build hub fallback verification
+    import importlib.util
+    build_hub_path = os.path.join(base_dir, "scripts", "build_hub.py")
+    spec = importlib.util.spec_from_file_location("build_hub_mod_rml", build_hub_path)
+    bhm = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(bhm)
+
+    rml_fallback = bhm.get_install_guide({"id": "red-music-locker", "type": "flutter-web"})
+    assert rml_fallback is not None
+    assert any("ytsync.yml" in s.get("code", "") for s in rml_fallback["steps"])
+
+    linker_fallback = bhm.get_install_guide({"id": "red-music-locker-account-linker", "type": "extension"})
+    assert linker_fallback is not None
+    assert any("red-music-locker-account-linker-chrome-v1.1.0.zip" in s.get("content", "") for s in linker_fallback["steps"])
+    assert any("red-music-locker-account-linker-firefox-v1.1.0.zip" in s.get("content", "") for s in linker_fallback["steps"])
+
+    print("Red Music Locker and Account Linker release verification passed!")
+
 if __name__ == "__main__":
     print("=== Running M3tal-Hub Verification Suite ===")
     test_manifest_and_status()
@@ -967,6 +1050,8 @@ if __name__ == "__main__":
     test_idle_animals_release()
     print("\n=== Testing Android-Card-Games Release & Multi-Platform ===")
     test_android_card_games_release()
+    print("\n=== Testing Red Music Locker & Linker Release & Multi-Platform ===")
+    test_red_music_locker_releases()
     print("\n=== All Tests Passed Successfully ===")
 
 

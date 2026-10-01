@@ -535,27 +535,28 @@
         <div class="main-column">
             <section class="content-card">
                 <h2 class="card-heading">📖 Installation & Setup Documentation</h2>
-                <p class="guide-summary">Native Android application built for mobile devices with high-frequency GPS sensor integration.</p>
+                <p class="guide-summary">GPS Speedometer is a native Android application built for mobile devices with low-latency hardware GPS sensor reading, velocity smoothing, and dark OLED HUD windshield projection.</p>
                 
         <div class="guide-prereqs">
             <h3>System Prerequisites</h3>
-            <ul><li>Android device running Android 8.0 (Oreo / API 26) or higher</li><li>Hardware GPS / Location service capability</li><li>For developers: Android Studio / Java 17 / Gradle</li></ul>
+            <ul><li>Android mobile device running Android 8.0 (Oreo / API 26) or higher</li><li>Hardware GPS / Location sensor capability</li><li>Developers / Build from Source: Android Studio, Java 17 (JDK), Gradle toolchain</li></ul>
         </div>
         
                 
             <div class="guide-step">
-                <h4>Installation via Pre-built APK</h4>
-                <p>1. Download the latest `.apk` package from the Releases section.
-2. On your Android device, enable 'Install unknown apps' in Settings for your browser or file manager.
-3. Open the downloaded APK and tap 'Install'.
-4. Launch the application and grant Location permissions when prompted.</p>
-                
+                <h4>📱 Installation via Pre-built APK</h4>
+                <p>1. Download the latest `.apk` package from the GitHub Releases page.
+2. In Android Settings, enable 'Install unknown apps' for your browser or file manager.
+3. Open the downloaded APK file and tap 'Install'.
+4. Launch GPS Speedometer and grant Location permissions when prompted.</p>
+                <pre><code># Or install directly using ADB on connected device:
+adb install -r *.apk</code></pre>
             </div>
         
 
             <div class="guide-step">
-                <h4>Compiling from Source</h4>
-                
+                <h4>🛠️ Compiling from Source</h4>
+                <p>To build the release APK directly from the source repository using Gradle:</p>
                 <pre><code>git clone https://github.com/jakej985-rgb/GPS-speedometer.git
 cd GPS-speedometer
 ./gradlew assembleRelease</code></pre>
