@@ -382,6 +382,56 @@
             background: rgba(240, 136, 62, 0.12);
             color: #f0883e;
         }
+        .os-roku {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-server {
+            border-color: rgba(57, 197, 187, 0.35);
+            background: rgba(57, 197, 187, 0.12);
+            color: #4ee2d4;
+        }
+        .os-windows {
+            border-color: rgba(0, 164, 239, 0.35);
+            background: rgba(0, 164, 239, 0.12);
+            color: #4dc9f6;
+        }
+        .os-macos {
+            border-color: rgba(235, 235, 235, 0.35);
+            background: rgba(235, 235, 235, 0.12);
+            color: #e0e0e0;
+        }
+        .os-chrome {
+            border-color: rgba(234, 67, 53, 0.35);
+            background: rgba(234, 67, 53, 0.12);
+            color: #f28b82;
+        }
+        .os-firefox {
+            border-color: rgba(255, 113, 34, 0.35);
+            background: rgba(255, 113, 34, 0.12);
+            color: #ff9436;
+        }
+        .os-python {
+            border-color: rgba(255, 212, 59, 0.35);
+            background: rgba(255, 212, 59, 0.12);
+            color: #ffe873;
+        }
+        .os-dart {
+            border-color: rgba(1, 117, 194, 0.35);
+            background: rgba(1, 117, 194, 0.12);
+            color: #40c4ff;
+        }
+        .os-template {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-docs {
+            border-color: rgba(88, 166, 255, 0.35);
+            background: rgba(88, 166, 255, 0.12);
+            color: #79c0ff;
+        }
         .os-cross {
             border-color: rgba(110, 118, 129, 0.35);
             background: rgba(110, 118, 129, 0.12);
@@ -461,13 +511,13 @@
                 </div>
             </div>
             <div class="badge-group">
-                <span class="badge badge-os os-tool">🛠️ CLI</span>
+                <span class="badge badge-os os-docker">🐳 Docker</span> <span class="badge badge-os os-tool">🛠️ CLI</span>
                 <span class="badge badge-active">Active</span>
             </div>
         </div>
         <p class="hero-desc">Comic metadata enrichment engine and ComicInfo.xml batch generator.</p>
         <div class="meta-pills">
-            <span class="pill pill-accent">🛠️ CLI</span>
+            <span class="pill pill-accent">🐳 Docker</span> <span class="pill pill-accent">🛠️ CLI</span>
             <span class="pill">tooling</span>
             <span class="pill">v1.1.0</span>
             <span class="pill">Tooling & Documentation</span>
@@ -484,20 +534,28 @@
         <div class="main-column">
             <section class="content-card">
                 <h2 class="card-heading">📖 Installation & Setup Documentation</h2>
-                <p class="guide-summary">Developer tooling and workspace configuration utility.</p>
+                <p class="guide-summary">ComicInfo Generator provides both a command-line tool (CLI) and an automated Docker container release for batch ComicInfo.xml generation.</p>
                 
         <div class="guide-prereqs">
             <h3>System Prerequisites</h3>
-            <ul><li>Git</li><li>Standard Linux / UNIX shell</li></ul>
+            <ul><li>Docker Engine >= 24.0 or Python 3.10+ with pip</li></ul>
         </div>
         
                 
             <div class="guide-step">
-                <h4>Repository Clone & Configuration</h4>
+                <h4>Running with Docker</h4>
+                
+                <pre><code>docker run --rm -v /path/to/comics:/comics jakej985/comicinfo-generator:latest /comics</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>Running with Python CLI</h4>
                 
                 <pre><code>git clone https://github.com/jakej985-rgb/comicinfo-generator.git
 cd comicinfo-generator
-# Review configuration files and documentation</code></pre>
+pip install -e .
+comicinfo --help</code></pre>
             </div>
         
             </section>
@@ -508,11 +566,11 @@ cd comicinfo-generator
             <div class="changelog-entry">
                 <div class="changelog-header">
                     <span class="changelog-version">v1.1.0</span>
-                    <span class="changelog-tag">Current Release</span>
+                    <span class="changelog-tag">CLI & Docker Release</span>
                     <span class="changelog-date">2026-09-30</span>
                 </div>
                 <ul class="changelog-list">
-                    <li>Initial release registered under M3tal Hub release registry.</li><li>Automated CI/CD integration and deployment verification safeguards enabled.</li><li>Ecosystem release tracking and documentation published.</li>
+                    <li>Command-line batch ComicInfo.xml generator.</li><li>Docker container image release (v0.5) for automated container pipelines.</li>
                 </ul>
             </div>
         
@@ -524,8 +582,8 @@ cd comicinfo-generator
                 <h2 class="card-heading">⚙️ System Specifications</h2>
                 <div class="spec-list">
                     <div class="spec-item">
-                        <span class="spec-label">Target OS / Platform</span>
-                        <span class="spec-value">🛠️ CLI</span>
+                        <span class="spec-label">Target OS / Platforms</span>
+                        <span class="spec-value">🐳 Docker, 🛠️ CLI</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Target Architecture</span>

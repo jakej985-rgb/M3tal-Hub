@@ -382,6 +382,56 @@
             background: rgba(240, 136, 62, 0.12);
             color: #f0883e;
         }
+        .os-roku {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-server {
+            border-color: rgba(57, 197, 187, 0.35);
+            background: rgba(57, 197, 187, 0.12);
+            color: #4ee2d4;
+        }
+        .os-windows {
+            border-color: rgba(0, 164, 239, 0.35);
+            background: rgba(0, 164, 239, 0.12);
+            color: #4dc9f6;
+        }
+        .os-macos {
+            border-color: rgba(235, 235, 235, 0.35);
+            background: rgba(235, 235, 235, 0.12);
+            color: #e0e0e0;
+        }
+        .os-chrome {
+            border-color: rgba(234, 67, 53, 0.35);
+            background: rgba(234, 67, 53, 0.12);
+            color: #f28b82;
+        }
+        .os-firefox {
+            border-color: rgba(255, 113, 34, 0.35);
+            background: rgba(255, 113, 34, 0.12);
+            color: #ff9436;
+        }
+        .os-python {
+            border-color: rgba(255, 212, 59, 0.35);
+            background: rgba(255, 212, 59, 0.12);
+            color: #ffe873;
+        }
+        .os-dart {
+            border-color: rgba(1, 117, 194, 0.35);
+            background: rgba(1, 117, 194, 0.12);
+            color: #40c4ff;
+        }
+        .os-template {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-docs {
+            border-color: rgba(88, 166, 255, 0.35);
+            background: rgba(88, 166, 255, 0.12);
+            color: #79c0ff;
+        }
         .os-cross {
             border-color: rgba(110, 118, 129, 0.35);
             background: rgba(110, 118, 129, 0.12);
@@ -461,13 +511,13 @@
                 </div>
             </div>
             <div class="badge-group">
-                <span class="badge badge-os os-desktop">🖥️ Desktop</span>
+                <span class="badge badge-os os-desktop">🖥️ Desktop</span> <span class="badge badge-os os-linux">🐧 Linux</span> <span class="badge badge-os os-windows">🪟 Windows</span>
                 <span class="badge badge-review">In Review</span>
             </div>
         </div>
         <p class="hero-desc">Studio operations and inventory management system.</p>
         <div class="meta-pills">
-            <span class="pill pill-accent">🖥️ Desktop</span>
+            <span class="pill pill-accent">🖥️ Desktop</span> <span class="pill pill-accent">🐧 Linux</span> <span class="pill pill-accent">🪟 Windows</span>
             <span class="pill">desktop</span>
             <span class="pill">v0.1.0</span>
             <span class="pill">Applications & Frontends</span>
@@ -484,20 +534,59 @@
         <div class="main-column">
             <section class="content-card">
                 <h2 class="card-heading">📖 Installation & Setup Documentation</h2>
-                <p class="guide-summary">Developer tooling and workspace configuration utility.</p>
+                <p class="guide-summary">Shop Manager is a modern Qt C++ desktop operations suite designed for tattoo and piercing studios, providing inventory management, client tracking, appointment administration, and financial reporting across Linux and Windows desktop environments.</p>
                 
         <div class="guide-prereqs">
             <h3>System Prerequisites</h3>
-            <ul><li>Git</li><li>Standard Linux / UNIX shell</li></ul>
+            <ul><li>Operating System: Linux (Ubuntu 22.04+, Debian 12+, Arch Linux, Fedora) or Windows 10/11 (64-bit)</li><li>C++20 compliant compiler: GCC 11+, Clang 14+, or Microsoft Visual C++ (MSVC 2022)</li><li>CMake >= 3.20 build system</li><li>Qt 6 (Qt6Core, Qt6Gui, Qt6Widgets, Qt6Sql) development packages</li><li>SQLite 3 or compatible database runtime</li></ul>
         </div>
         
                 
             <div class="guide-step">
-                <h4>Repository Clone & Configuration</h4>
-                
-                <pre><code>git clone https://github.com/jakej985-rgb/Shop-manager.git
+                <h4>📦 Pre-built Desktop Releases</h4>
+                <p>Pre-compiled native binaries for Linux (AppImage / .deb) and Windows installer (.exe / portable .zip) are available on GitHub Releases.</p>
+                <pre><code># Linux AppImage:
+chmod +x ShopManager-x86_64.AppImage
+./ShopManager-x86_64.AppImage
+
+# Windows (PowerShell / Command Prompt):
+.\ShopManager-Setup.exe</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>🐧 Building from Source on Linux</h4>
+                <p>Install Qt 6 and build tools using your distribution package manager, then compile with CMake.</p>
+                <pre><code># Debian / Ubuntu dependencies:
+sudo apt update && sudo apt install -y build-essential cmake ninja-build \
+  qt6-base-dev qt6-base-dev-tools libqt6sql6-sqlite
+
+# Clone repository:
+git clone https://github.com/jakej985-rgb/Shop-manager.git
 cd Shop-manager
-# Review configuration files and documentation</code></pre>
+
+# Configure and build:
+cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake --build build
+
+# Run application:
+./build/ShopManager</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>🪟 Building from Source on Windows</h4>
+                <p>Compile on Windows using Visual Studio 2022 or MinGW64 with Qt 6 installed.</p>
+                <pre><code># Clone repository in PowerShell:
+git clone https://github.com/jakej985-rgb/Shop-manager.git
+cd Shop-manager
+
+# Configure and build with MSVC:
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="C:\Qt\6.6.0\msvc2022_64"
+cmake --build build --config Release
+
+# Run executable:
+.\build\Release\ShopManager.exe</code></pre>
             </div>
         
             </section>
@@ -508,11 +597,11 @@ cd Shop-manager
             <div class="changelog-entry">
                 <div class="changelog-header">
                     <span class="changelog-version">v0.1.0</span>
-                    <span class="changelog-tag">Current Release</span>
+                    <span class="changelog-tag">Desktop Preview</span>
                     <span class="changelog-date">2026-09-30</span>
                 </div>
                 <ul class="changelog-list">
-                    <li>Initial release registered under M3tal Hub release registry.</li><li>Automated CI/CD integration and deployment verification safeguards enabled.</li><li>Ecosystem release tracking and documentation published.</li>
+                    <li>Modern Qt C++ desktop operations architecture.</li><li>Inventory tracking, artist commission management, and studio scheduling.</li><li>Cross-platform support for Linux and Windows desktop environments.</li>
                 </ul>
             </div>
         
@@ -524,8 +613,8 @@ cd Shop-manager
                 <h2 class="card-heading">⚙️ System Specifications</h2>
                 <div class="spec-list">
                     <div class="spec-item">
-                        <span class="spec-label">Target OS / Platform</span>
-                        <span class="spec-value">🖥️ Desktop</span>
+                        <span class="spec-label">Target OS / Platforms</span>
+                        <span class="spec-value">🖥️ Desktop, 🐧 Linux, 🪟 Windows</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Target Architecture</span>

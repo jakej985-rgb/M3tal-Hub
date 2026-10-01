@@ -382,6 +382,56 @@
             background: rgba(240, 136, 62, 0.12);
             color: #f0883e;
         }
+        .os-roku {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-server {
+            border-color: rgba(57, 197, 187, 0.35);
+            background: rgba(57, 197, 187, 0.12);
+            color: #4ee2d4;
+        }
+        .os-windows {
+            border-color: rgba(0, 164, 239, 0.35);
+            background: rgba(0, 164, 239, 0.12);
+            color: #4dc9f6;
+        }
+        .os-macos {
+            border-color: rgba(235, 235, 235, 0.35);
+            background: rgba(235, 235, 235, 0.12);
+            color: #e0e0e0;
+        }
+        .os-chrome {
+            border-color: rgba(234, 67, 53, 0.35);
+            background: rgba(234, 67, 53, 0.12);
+            color: #f28b82;
+        }
+        .os-firefox {
+            border-color: rgba(255, 113, 34, 0.35);
+            background: rgba(255, 113, 34, 0.12);
+            color: #ff9436;
+        }
+        .os-python {
+            border-color: rgba(255, 212, 59, 0.35);
+            background: rgba(255, 212, 59, 0.12);
+            color: #ffe873;
+        }
+        .os-dart {
+            border-color: rgba(1, 117, 194, 0.35);
+            background: rgba(1, 117, 194, 0.12);
+            color: #40c4ff;
+        }
+        .os-template {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-docs {
+            border-color: rgba(88, 166, 255, 0.35);
+            background: rgba(88, 166, 255, 0.12);
+            color: #79c0ff;
+        }
         .os-cross {
             border-color: rgba(110, 118, 129, 0.35);
             background: rgba(110, 118, 129, 0.12);
@@ -461,15 +511,15 @@
                 </div>
             </div>
             <div class="badge-group">
-                <span class="badge badge-os os-web">🌐 Web / PWA</span>
+                <span class="badge badge-os os-web">🌐 Web</span> <span class="badge badge-os os-android">🤖 Android</span> <span class="badge badge-os os-windows">🪟 Windows</span> <span class="badge badge-os os-linux">🐧 Linux</span> <span class="badge badge-os os-docker">🐳 Docker</span>
                 <span class="badge badge-ready">Release Ready</span>
             </div>
         </div>
-        <p class="hero-desc">Robotics learning application.</p>
+        <p class="hero-desc">Robotics learning application with multi-platform simulation suite.</p>
         <div class="meta-pills">
-            <span class="pill pill-accent">🌐 Web / PWA</span>
+            <span class="pill pill-accent">🌐 Web</span> <span class="pill pill-accent">🤖 Android</span> <span class="pill pill-accent">🪟 Windows</span> <span class="pill pill-accent">🐧 Linux</span> <span class="pill pill-accent">🐳 Docker</span>
             <span class="pill">flutter-web</span>
-            <span class="pill">v1.0.0</span>
+            <span class="pill">v0.0.1</span>
             <span class="pill">Applications & Frontends</span>
             <span class="pill">pkg: pwa</span>
             <span class="pill">ref: 2026-09-30</span>
@@ -485,35 +535,91 @@
         <div class="main-column">
             <section class="content-card">
                 <h2 class="card-heading">📖 Installation & Setup Documentation</h2>
-                <p class="guide-summary">This application can be accessed instantly in any modern web browser or installed locally as a Progressive Web App (PWA).</p>
+                <p class="guide-summary">Monster Lab provides hands-on robotics and Arduino simulation across all major environments: an instant web simulator and PWA, native Android APK and AAB packages with USB OTG serial communication, Windows and Linux desktop binaries, and self-hosted Docker Compose container orchestration.</p>
                 
         <div class="guide-prereqs">
             <h3>System Prerequisites</h3>
-            <ul><li>Modern web browser (Google Chrome, Mozilla Firefox, Microsoft Edge, Safari)</li><li>For local builds: Flutter SDK >= 3.22 (stable channel)</li><li>Dart SDK >= 3.4</li></ul>
+            <ul><li>🌐 Web / PWA: Modern web browser (Chrome, Edge, Firefox, Safari) with WebAssembly and Web Serial API support.</li><li>🤖 Android: Android 8.0 (Oreo / API 26) or higher with USB Host / OTG support for physical Arduino connectivity.</li><li>🪟 Windows: Windows 10 or Windows 11 (64-bit x64).</li><li>🐧 Linux: Debian 11+, Ubuntu 20.04+, or compatible Linux x86_64 distribution with GTK3 and libserialport.</li><li>🐳 Docker: Docker Engine 20.10+ and Docker Compose v2.</li></ul>
         </div>
         
                 
             <div class="guide-step">
-                <h4>Instant Web & PWA Installation</h4>
-                <p>No installation required for direct use. Open the live web application and choose 'Install' or 'Add to Home Screen' from your browser menu to run offline.</p>
-                
+                <h4>🌐 Instant Web Simulator & PWA</h4>
+                <p>Run the full robotics curriculum and circuit simulator directly inside any modern browser, or install it as an offline-capable Progressive Web App (PWA).</p>
+                <pre><code># Access directly via M3tal-Hub:
+https://jakej985-rgb.github.io/M3tal-Hub/Monster-Lab/
+
+# Progressive Web App (PWA) installation:
+# 1. Open the URL above in Chrome, Edge, or Safari.
+# 2. Click the 'Install App' or 'Add to Home Screen' icon in your browser address bar.
+# 3. Launch Monster Lab as a standalone window with offline caching support.
+</code></pre>
             </div>
         
 
             <div class="guide-step">
-                <h4>Local Development Setup</h4>
-                
-                <pre><code>git clone https://github.com/jakej985-rgb/Monster-Lab.git
-cd Monster-Lab
-flutter pub get
-flutter run -d chrome</code></pre>
+                <h4>🤖 Android APK & AAB Installation</h4>
+                <p>Install natively on Android smartphones and tablets. Pre-configured with USB Host permissions for connecting physical Arduino microcontrollers via USB-C OTG.</p>
+                <pre><code># Download release APK from GitHub Releases (v0.0.1):
+wget https://github.com/jakej985-rgb/Monster-Lab/releases/download/v0.0.1/monster-lab-android.apk
+
+# Sideload onto your connected Android device:
+adb install -r monster-lab-android.apk
+
+# For Google Play distribution or bundle inspection:
+# Download monster-lab-android.aab
+</code></pre>
             </div>
         
 
             <div class="guide-step">
-                <h4>Building Production Web Release</h4>
-                
-                <pre><code>flutter build web --release --base-href /M3tal-Hub/Monster-Lab/</code></pre>
+                <h4>🪟 Windows Desktop Installer (.exe) & Portable Zip</h4>
+                <p>Run natively on Windows 64-bit with direct serial COM port access for Arduino flashing and real-time serial telemetry.</p>
+                <pre><code># Setup installer (.exe):
+# Download monster-lab-windows.exe and run the Inno Setup wizard:
+monster-lab-windows.exe /VERYSILENT /NORESTART
+
+# Portable standalone zip (no installation or administrator privileges required):
+# Download monster-lab-windows-portable.zip, extract and run:
+Expand-Archive -Path monster-lab-windows-portable.zip -DestinationPath .\MonsterLab
+.\MonsterLab\monster_lab.exe
+</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>🐧 Linux Desktop Debian Package (.deb) & Portable Tarball</h4>
+                <p>Native Linux x64 desktop package with system menu integration, AppStream desktop entries, and dialout serial permissions for Arduino hardware.</p>
+                <pre><code># Debian / Ubuntu / Linux Mint (.deb):
+wget https://github.com/jakej985-rgb/Monster-Lab/releases/download/v0.0.1/monster-lab-linux.deb
+sudo dpkg -i monster-lab-linux.deb || sudo apt-get install -f -y
+
+# Add current user to dialout group for Arduino USB access:
+sudo usermod -aG dialout $USER
+
+# Portable standalone tarball (distro-independent):
+wget https://github.com/jakej985-rgb/Monster-Lab/releases/download/v0.0.1/monster-lab-linux-portable.tar.gz
+tar -xzf monster-lab-linux-portable.tar.gz
+./monster_lab
+</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>🐳 Docker Compose Simulation Orchestration</h4>
+                <p>Deploy the containerized web simulation suite in classrooms, lab clusters, or home server environments using pre-configured Docker Compose.</p>
+                <pre><code># Download release docker-compose.yml:
+curl -sSLO https://github.com/jakej985-rgb/Monster-Lab/releases/download/v0.0.1/docker-compose.yml
+
+# Launch containerized simulation service:
+docker compose up -d
+
+# Or run directly via Docker container image:
+docker run -d -p 8080:80 --name monster-lab-web ghcr.io/jakej985-rgb/monster-lab-web:v0.0.1
+
+# Access simulation dashboard:
+# Open browser to http://<your-host>:8080
+</code></pre>
             </div>
         
             </section>
@@ -523,9 +629,21 @@ flutter run -d chrome</code></pre>
                 
             <div class="changelog-entry">
                 <div class="changelog-header">
-                    <span class="changelog-version">v1.0.0</span>
-                    <span class="changelog-tag">Stable Release</span>
+                    <span class="changelog-version">v0.0.1</span>
+                    <span class="changelog-tag">v0.0.1 Multi-Platform Release</span>
                     <span class="changelog-date">2026-09-30</span>
+                </div>
+                <ul class="changelog-list">
+                    <li>Multi-platform release packaging across Web PWA, Android, Windows, Linux, and Docker.</li><li>Android release assets (monster-lab-android.apk, monster-lab-android.aab) with USB Host OTG serial support.</li><li>Windows desktop Inno Setup installer (monster-lab-windows.exe) and standalone portable bundle (monster-lab-windows-portable.zip).</li><li>Linux desktop Debian package (monster-lab-linux.deb), portable archive (monster-lab-linux-portable.tar.gz), and GPG archive keyring.</li><li>Docker Compose simulation stack (docker-compose.yml) running ghcr.io/jakej985-rgb/monster-lab-web container image.</li><li>Instant Web simulator and Progressive Web App (PWA) with offline service worker caching on M3tal-Hub.</li><li>Full robotics curriculum: 12 lessons, 38 components, 20 guided projects, and interactive breadboard simulator.</li>
+                </ul>
+            </div>
+        
+
+            <div class="changelog-entry">
+                <div class="changelog-header">
+                    <span class="changelog-version">v1.0.0</span>
+                    <span class="changelog-tag">Initial Core Release</span>
+                    <span class="changelog-date">2026-09-29</span>
                 </div>
                 <ul class="changelog-list">
                     <li>Production web release with full robotics simulation suite.</li><li>Interactive module editor with drag-and-drop circuit simulator.</li><li>Progressive Web App (PWA) offline caching support.</li><li>Optimized CanvasKit and HTML rendering pipelines.</li>
@@ -540,8 +658,8 @@ flutter run -d chrome</code></pre>
                 <h2 class="card-heading">⚙️ System Specifications</h2>
                 <div class="spec-list">
                     <div class="spec-item">
-                        <span class="spec-label">Target OS / Platform</span>
-                        <span class="spec-value">🌐 Web / PWA</span>
+                        <span class="spec-label">Target OS / Platforms</span>
+                        <span class="spec-value">🌐 Web, 🤖 Android, 🪟 Windows, 🐧 Linux, 🐳 Docker</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Target Architecture</span>
@@ -561,7 +679,7 @@ flutter run -d chrome</code></pre>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Current Release</span>
-                        <span class="spec-value">v1.0.0</span>
+                        <span class="spec-value">v0.0.1</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Package Format</span>

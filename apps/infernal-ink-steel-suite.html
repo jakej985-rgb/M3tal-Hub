@@ -382,6 +382,56 @@
             background: rgba(240, 136, 62, 0.12);
             color: #f0883e;
         }
+        .os-roku {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-server {
+            border-color: rgba(57, 197, 187, 0.35);
+            background: rgba(57, 197, 187, 0.12);
+            color: #4ee2d4;
+        }
+        .os-windows {
+            border-color: rgba(0, 164, 239, 0.35);
+            background: rgba(0, 164, 239, 0.12);
+            color: #4dc9f6;
+        }
+        .os-macos {
+            border-color: rgba(235, 235, 235, 0.35);
+            background: rgba(235, 235, 235, 0.12);
+            color: #e0e0e0;
+        }
+        .os-chrome {
+            border-color: rgba(234, 67, 53, 0.35);
+            background: rgba(234, 67, 53, 0.12);
+            color: #f28b82;
+        }
+        .os-firefox {
+            border-color: rgba(255, 113, 34, 0.35);
+            background: rgba(255, 113, 34, 0.12);
+            color: #ff9436;
+        }
+        .os-python {
+            border-color: rgba(255, 212, 59, 0.35);
+            background: rgba(255, 212, 59, 0.12);
+            color: #ffe873;
+        }
+        .os-dart {
+            border-color: rgba(1, 117, 194, 0.35);
+            background: rgba(1, 117, 194, 0.12);
+            color: #40c4ff;
+        }
+        .os-template {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-docs {
+            border-color: rgba(88, 166, 255, 0.35);
+            background: rgba(88, 166, 255, 0.12);
+            color: #79c0ff;
+        }
         .os-cross {
             border-color: rgba(110, 118, 129, 0.35);
             background: rgba(110, 118, 129, 0.12);
@@ -461,13 +511,13 @@
                 </div>
             </div>
             <div class="badge-group">
-                <span class="badge badge-os os-desktop">🖥️ Desktop</span>
+                <span class="badge badge-os os-desktop">🖥️ Desktop</span> <span class="badge badge-os os-linux">🐧 Linux</span> <span class="badge badge-os os-windows">🪟 Windows</span>
                 <span class="badge badge-review">In Review</span>
             </div>
         </div>
         <p class="hero-desc">Integrated studio software suite (desktop/backend orchestration).</p>
         <div class="meta-pills">
-            <span class="pill pill-accent">🖥️ Desktop</span>
+            <span class="pill pill-accent">🖥️ Desktop</span> <span class="pill pill-accent">🐧 Linux</span> <span class="pill pill-accent">🪟 Windows</span>
             <span class="pill">suite</span>
             <span class="pill">v0.1.0</span>
             <span class="pill">Applications & Frontends</span>
@@ -484,20 +534,70 @@
         <div class="main-column">
             <section class="content-card">
                 <h2 class="card-heading">📖 Installation & Setup Documentation</h2>
-                <p class="guide-summary">Developer tooling and workspace configuration utility.</p>
+                <p class="guide-summary">Infernal Ink Steel Suite is a comprehensive studio operations management suite combining a high-performance Qt C++ desktop workstation interface with modular studio service orchestration for tattoo and body piercing shops on Linux and Windows.</p>
                 
         <div class="guide-prereqs">
             <h3>System Prerequisites</h3>
-            <ul><li>Git</li><li>Standard Linux / UNIX shell</li></ul>
+            <ul><li>Operating System: Linux (Ubuntu 22.04+, Debian 12+, Arch, Fedora) or Windows 10/11 (64-bit)</li><li>C++20 compliant compiler (GCC 11+, Clang 14+, or MSVC 2022)</li><li>CMake >= 3.20 and build generator (Ninja or GNU Make)</li><li>Qt 6 development libraries (Core, GUI, Widgets, Network, Sql)</li><li>Optional: Docker Engine >= 24.0 & Docker Compose v2 for local microservice orchestration</li></ul>
         </div>
         
                 
             <div class="guide-step">
-                <h4>Repository Clone & Configuration</h4>
-                
-                <pre><code>git clone https://github.com/jakej985-rgb/Infernal-Ink-Steel-Suite.git
+                <h4>📦 Pre-built Suite Packages</h4>
+                <p>Download pre-packaged releases from GitHub Releases for standalone desktop execution.</p>
+                <pre><code># Linux AppImage:
+chmod +x InfernalSuite-x86_64.AppImage
+./InfernalSuite-x86_64.AppImage
+
+# Windows standalone executable:
+.\InfernalSuite-Setup.exe</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>🐧 Compiling Desktop Suite on Linux</h4>
+                <p>Build the complete Qt C++ suite binary from source.</p>
+                <pre><code># Install build dependencies:
+sudo apt update && sudo apt install -y build-essential cmake ninja-build \
+  qt6-base-dev qt6-base-dev-tools libqt6network6 libqt6sql6-sqlite
+
+# Clone repository:
+git clone https://github.com/jakej985-rgb/Infernal-Ink-Steel-Suite.git
 cd Infernal-Ink-Steel-Suite
-# Review configuration files and documentation</code></pre>
+
+# Configure and compile:
+cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake --build build
+
+# Launch suite:
+./build/InfernalSuite</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>🪟 Compiling Desktop Suite on Windows</h4>
+                <p>Configure and build using Visual Studio 2022 Developer PowerShell.</p>
+                <pre><code># Clone repository:
+git clone https://github.com/jakej985-rgb/Infernal-Ink-Steel-Suite.git
+cd Infernal-Ink-Steel-Suite
+
+# Configure and build:
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="C:\Qt\6.6.0\msvc2022_64"
+cmake --build build --config Release
+
+# Run suite:
+.\build\Release\InfernalSuite.exe</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>🐳 Optional Studio Backend Service Orchestration</h4>
+                <p>For studios running synchronized multi-station setups, launch the background service stack using Docker Compose.</p>
+                <pre><code># Launch backend microservices:
+docker compose up -d
+
+# Verify service connectivity:
+docker compose ps</code></pre>
             </div>
         
             </section>
@@ -508,11 +608,11 @@ cd Infernal-Ink-Steel-Suite
             <div class="changelog-entry">
                 <div class="changelog-header">
                     <span class="changelog-version">v0.1.0</span>
-                    <span class="changelog-tag">Current Release</span>
+                    <span class="changelog-tag">Suite Preview</span>
                     <span class="changelog-date">2026-09-30</span>
                 </div>
                 <ul class="changelog-list">
-                    <li>Initial release registered under M3tal Hub release registry.</li><li>Automated CI/CD integration and deployment verification safeguards enabled.</li><li>Ecosystem release tracking and documentation published.</li>
+                    <li>Integrated studio suite orchestration and desktop client runtime.</li><li>Cross-platform Qt C++ operations for Linux and Windows.</li><li>Local database synchronization and optional backend service integration.</li>
                 </ul>
             </div>
         
@@ -524,8 +624,8 @@ cd Infernal-Ink-Steel-Suite
                 <h2 class="card-heading">⚙️ System Specifications</h2>
                 <div class="spec-list">
                     <div class="spec-item">
-                        <span class="spec-label">Target OS / Platform</span>
-                        <span class="spec-value">🖥️ Desktop</span>
+                        <span class="spec-label">Target OS / Platforms</span>
+                        <span class="spec-value">🖥️ Desktop, 🐧 Linux, 🪟 Windows</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Target Architecture</span>

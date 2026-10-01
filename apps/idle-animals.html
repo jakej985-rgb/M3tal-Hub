@@ -382,6 +382,56 @@
             background: rgba(240, 136, 62, 0.12);
             color: #f0883e;
         }
+        .os-roku {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-server {
+            border-color: rgba(57, 197, 187, 0.35);
+            background: rgba(57, 197, 187, 0.12);
+            color: #4ee2d4;
+        }
+        .os-windows {
+            border-color: rgba(0, 164, 239, 0.35);
+            background: rgba(0, 164, 239, 0.12);
+            color: #4dc9f6;
+        }
+        .os-macos {
+            border-color: rgba(235, 235, 235, 0.35);
+            background: rgba(235, 235, 235, 0.12);
+            color: #e0e0e0;
+        }
+        .os-chrome {
+            border-color: rgba(234, 67, 53, 0.35);
+            background: rgba(234, 67, 53, 0.12);
+            color: #f28b82;
+        }
+        .os-firefox {
+            border-color: rgba(255, 113, 34, 0.35);
+            background: rgba(255, 113, 34, 0.12);
+            color: #ff9436;
+        }
+        .os-python {
+            border-color: rgba(255, 212, 59, 0.35);
+            background: rgba(255, 212, 59, 0.12);
+            color: #ffe873;
+        }
+        .os-dart {
+            border-color: rgba(1, 117, 194, 0.35);
+            background: rgba(1, 117, 194, 0.12);
+            color: #40c4ff;
+        }
+        .os-template {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-docs {
+            border-color: rgba(88, 166, 255, 0.35);
+            background: rgba(88, 166, 255, 0.12);
+            color: #79c0ff;
+        }
         .os-cross {
             border-color: rgba(110, 118, 129, 0.35);
             background: rgba(110, 118, 129, 0.12);
@@ -461,21 +511,22 @@
                 </div>
             </div>
             <div class="badge-group">
-                <span class="badge badge-os os-web">🌐 Web / PWA</span>
+                <span class="badge badge-os os-android">🤖 Android</span> <span class="badge badge-os os-web">🌐 Web</span>
                 <span class="badge badge-ready">Release Ready</span>
             </div>
         </div>
         <p class="hero-desc">Extinct-animal idle game.</p>
         <div class="meta-pills">
-            <span class="pill pill-accent">🌐 Web / PWA</span>
+            <span class="pill pill-accent">🤖 Android</span> <span class="pill pill-accent">🌐 Web</span>
             <span class="pill">flutter-web</span>
-            <span class="pill">v1.0.0</span>
+            <span class="pill">v1.0.0+1.2</span>
             <span class="pill">Applications & Frontends</span>
             <span class="pill">pkg: pwa</span>
             <span class="pill">ref: 2026-09-30</span>
         </div>
         <div class="actions-row">
             <a href="../Idle-animals/" class="btn btn-primary">🚀 Launch Web Application</a>
+                <a href="https://github.com/jakej985-rgb/Idle-animals/releases/download/v1.0.0+1.2/extinction-sanctuary-v1.0.0+1.2.apk" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">🤖 Download Android APK ↗</a>
                 <a href="https://github.com/jakej985-rgb/Idle-animals" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">🐙 GitHub Repository ↗</a>
                 <a href="../" class="btn btn-secondary">← Back to Hub</a>
         </div>
@@ -485,35 +536,56 @@
         <div class="main-column">
             <section class="content-card">
                 <h2 class="card-heading">📖 Installation & Setup Documentation</h2>
-                <p class="guide-summary">This application can be accessed instantly in any modern web browser or installed locally as a Progressive Web App (PWA).</p>
+                <p class="guide-summary">Idle Animals (Extinction Sanctuary) is available across both Android and modern Web browsers, offering instant Progressive Web App (PWA) gameplay with offline persistence alongside a standalone native Android APK release.</p>
                 
         <div class="guide-prereqs">
             <h3>System Prerequisites</h3>
-            <ul><li>Modern web browser (Google Chrome, Mozilla Firefox, Microsoft Edge, Safari)</li><li>For local builds: Flutter SDK >= 3.22 (stable channel)</li><li>Dart SDK >= 3.4</li></ul>
+            <ul><li>🌐 Web / PWA: Modern browser (Google Chrome, Mozilla Firefox, Microsoft Edge, Safari)</li><li>🤖 Android: Mobile device running Android 8.0 (API 26 / Oreo) or higher</li><li>Android setting: 'Install unknown apps' enabled for your browser or file manager</li><li>🛠️ Developer: Flutter SDK >= 3.22 and Dart SDK >= 3.4</li></ul>
         </div>
         
                 
             <div class="guide-step">
-                <h4>Instant Web & PWA Installation</h4>
-                <p>No installation required for direct use. Open the live web application and choose 'Install' or 'Add to Home Screen' from your browser menu to run offline.</p>
-                
+                <h4>🌐 Web / PWA Browser Gameplay</h4>
+                <p>1. Play immediately in your browser via M3tal Hub (or visit /M3tal-Hub/Idle-animals/).
+2. No installer or download required for direct browser gameplay.
+3. To install locally as a standalone Progressive Web App (PWA), tap 'Install App' in your browser address bar or select 'Add to Home Screen' from the browser menu.
+4. Service workers automatically cache game assets for complete offline progression.</p>
+                <pre><code># Live Web App URL:
+https://jakej985-rgb.github.io/M3tal-Hub/Idle-animals/</code></pre>
             </div>
         
 
             <div class="guide-step">
-                <h4>Local Development Setup</h4>
-                
-                <pre><code>git clone https://github.com/jakej985-rgb/Idle-animals.git
+                <h4>🤖 Android APK Installation</h4>
+                <p>1. Download the release package extinction-sanctuary-v1.0.0+1.2.apk from GitHub Releases.
+2. On your Android device, navigate to Settings > Security / Apps > Special App Access and enable 'Install unknown apps' for your browser or file manager.
+3. Open the downloaded extinction-sanctuary-v1.0.0+1.2.apk file and tap 'Install'.
+4. Once installed, launch 'Extinction Sanctuary' from your app drawer and enjoy native gameplay.</p>
+                <pre><code># Direct APK Download URL:
+https://github.com/jakej985-rgb/Idle-animals/releases/download/v1.0.0+1.2/extinction-sanctuary-v1.0.0+1.2.apk
+
+# Or sideload directly via ADB:
+adb install -r extinction-sanctuary-v1.0.0+1.2.apk</code></pre>
+            </div>
+        
+
+            <div class="guide-step">
+                <h4>🛠️ Local Development & Build</h4>
+                <p>Developers can clone the source code to build and test both the Web and Android APK targets locally.</p>
+                <pre><code># Clone source repository
+git clone https://github.com/jakej985-rgb/Idle-animals.git
 cd Idle-animals
 flutter pub get
-flutter run -d chrome</code></pre>
-            </div>
-        
 
-            <div class="guide-step">
-                <h4>Building Production Web Release</h4>
-                
-                <pre><code>flutter build web --release --base-href /M3tal-Hub/Idle-animals/</code></pre>
+# Run locally in Chrome
+flutter run -d chrome
+
+# Run on Android device or emulator
+flutter run -d android
+
+# Build production releases
+flutter build web --release --base-href /M3tal-Hub/Idle-animals/
+flutter build apk --release</code></pre>
             </div>
         
             </section>
@@ -521,6 +593,18 @@ flutter run -d chrome</code></pre>
             <section class="content-card">
                 <h2 class="card-heading">📜 Version History & Changelog</h2>
                 
+            <div class="changelog-entry">
+                <div class="changelog-header">
+                    <span class="changelog-version">v1.0.0+1.2</span>
+                    <span class="changelog-tag">Latest Release</span>
+                    <span class="changelog-date">2026-09-30</span>
+                </div>
+                <ul class="changelog-list">
+                    <li>Release v1.0.0+1.2: Added native Android standalone APK packaging (extinction-sanctuary-v1.0.0+1.2.apk).</li><li>Dual-platform distribution: Instant browser-based PWA on M3tal-Hub and native Android APK package.</li><li>Incremental extinction discovery mechanics, species taxonomy, and biodiversity restoration simulation.</li><li>Persistent idle progression and gene sequencing state saved across offline sessions.</li><li>Responsive cyberpunk UI styling and optimized CanvasKit/HTML rendering pipelines.</li>
+                </ul>
+            </div>
+        
+
             <div class="changelog-entry">
                 <div class="changelog-header">
                     <span class="changelog-version">v1.0.0</span>
@@ -540,8 +624,8 @@ flutter run -d chrome</code></pre>
                 <h2 class="card-heading">⚙️ System Specifications</h2>
                 <div class="spec-list">
                     <div class="spec-item">
-                        <span class="spec-label">Target OS / Platform</span>
-                        <span class="spec-value">🌐 Web / PWA</span>
+                        <span class="spec-label">Target OS / Platforms</span>
+                        <span class="spec-value">🤖 Android, 🌐 Web</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Target Architecture</span>
@@ -561,7 +645,7 @@ flutter run -d chrome</code></pre>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Current Release</span>
-                        <span class="spec-value">v1.0.0</span>
+                        <span class="spec-value">v1.0.0+1.2</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Package Format</span>
@@ -587,7 +671,7 @@ flutter run -d chrome</code></pre>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">GitHub Releases</span>
-                        <a href="https://github.com/jakej985-rgb/Idle-animals/releases" target="_blank" rel="noopener noreferrer" class="spec-value" style="color: var(--accent); text-decoration: none;">Releases ↗</a>
+                        <a href="https://github.com/jakej985-rgb/Idle-animals/releases/tag/v1.0.0+1.2" target="_blank" rel="noopener noreferrer" class="spec-value" style="color: var(--accent); text-decoration: none;">Releases ↗</a>
                     </div>
                 </div>
             </div>

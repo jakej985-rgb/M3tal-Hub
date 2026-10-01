@@ -382,6 +382,56 @@
             background: rgba(240, 136, 62, 0.12);
             color: #f0883e;
         }
+        .os-roku {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-server {
+            border-color: rgba(57, 197, 187, 0.35);
+            background: rgba(57, 197, 187, 0.12);
+            color: #4ee2d4;
+        }
+        .os-windows {
+            border-color: rgba(0, 164, 239, 0.35);
+            background: rgba(0, 164, 239, 0.12);
+            color: #4dc9f6;
+        }
+        .os-macos {
+            border-color: rgba(235, 235, 235, 0.35);
+            background: rgba(235, 235, 235, 0.12);
+            color: #e0e0e0;
+        }
+        .os-chrome {
+            border-color: rgba(234, 67, 53, 0.35);
+            background: rgba(234, 67, 53, 0.12);
+            color: #f28b82;
+        }
+        .os-firefox {
+            border-color: rgba(255, 113, 34, 0.35);
+            background: rgba(255, 113, 34, 0.12);
+            color: #ff9436;
+        }
+        .os-python {
+            border-color: rgba(255, 212, 59, 0.35);
+            background: rgba(255, 212, 59, 0.12);
+            color: #ffe873;
+        }
+        .os-dart {
+            border-color: rgba(1, 117, 194, 0.35);
+            background: rgba(1, 117, 194, 0.12);
+            color: #40c4ff;
+        }
+        .os-template {
+            border-color: rgba(163, 113, 247, 0.35);
+            background: rgba(163, 113, 247, 0.12);
+            color: #d2a8ff;
+        }
+        .os-docs {
+            border-color: rgba(88, 166, 255, 0.35);
+            background: rgba(88, 166, 255, 0.12);
+            color: #79c0ff;
+        }
         .os-cross {
             border-color: rgba(110, 118, 129, 0.35);
             background: rgba(110, 118, 129, 0.12);
@@ -485,24 +535,25 @@
         <div class="main-column">
             <section class="content-card">
                 <h2 class="card-heading">📖 Installation & Setup Documentation</h2>
-                <p class="guide-summary">Modern React/Vite web application with component-based architecture and dynamic client rendering.</p>
+                <p class="guide-summary">Jellyfin UI is a responsive dark cyberpunk media front-end for Jellyfin personal media servers, built with React 18, TypeScript, Tailwind CSS, and Vite for instant browser streaming across desktop, tablet, and mobile displays.</p>
                 
         <div class="guide-prereqs">
             <h3>System Prerequisites</h3>
-            <ul><li>Modern web browser</li><li>Node.js >= 20.x LTS</li><li>npm >= 10.x</li></ul>
+            <ul><li>Modern web browser (Google Chrome, Mozilla Firefox, Microsoft Edge, Safari)</li><li>Jellyfin Media Server (v10.8+ recommended) with active API endpoint</li><li>For developers: Node.js >= 20.x LTS and npm >= 10.x</li></ul>
         </div>
         
                 
             <div class="guide-step">
-                <h4>Instant Browser Access</h4>
-                <p>Access the application instantly through GitHub Pages without local setup.</p>
-                
+                <h4>🌐 Instant Web Streaming</h4>
+                <p>Launch the web interface immediately through M3tal Hub without manual installation. Connect to your local or remote Jellyfin server instance by entering your server URL and login credentials.</p>
+                <pre><code># Hosted web release:
+https://jakej985-rgb.github.io/M3tal-Hub/jellyfin-ui/</code></pre>
             </div>
         
 
             <div class="guide-step">
-                <h4>Local Development Setup</h4>
-                
+                <h4>💻 Local Development Setup</h4>
+                <p>Run the Vite development server locally with Hot Module Replacement (HMR).</p>
                 <pre><code>git clone https://github.com/jakej985-rgb/Jellyfin-ui.git
 cd Jellyfin-ui
 npm install
@@ -511,8 +562,8 @@ npm run dev</code></pre>
         
 
             <div class="guide-step">
-                <h4>Building Production Release</h4>
-                
+                <h4>🚀 Building Production Release</h4>
+                <p>Compile and bundle the production assets with the target GitHub Pages subpath.</p>
                 <pre><code>BASE_HREF=/M3tal-Hub/jellyfin-ui/ npm run build</code></pre>
             </div>
         
@@ -540,7 +591,7 @@ npm run dev</code></pre>
                 <h2 class="card-heading">⚙️ System Specifications</h2>
                 <div class="spec-list">
                     <div class="spec-item">
-                        <span class="spec-label">Target OS / Platform</span>
+                        <span class="spec-label">Target OS / Platforms</span>
                         <span class="spec-value">🌐 Web</span>
                     </div>
                     <div class="spec-item">

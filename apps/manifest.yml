@@ -7,14 +7,98 @@ apps:
     repo: Monster-Lab
     path: Monster-Lab
     type: flutter-web
+    platforms: [web, android, windows, linux, docker]
     enabled: true
     status: ready
-    description: Robotics learning application.
+    version: 0.0.1
+    repo_url: https://github.com/jakej985-rgb/Monster-Lab
+    release_url: https://github.com/jakej985-rgb/Monster-Lab/releases
+    description: Robotics learning application with multi-platform simulation suite.
     base_href: /M3tal-Hub/Monster-Lab/
+    install_guide:
+      summary: "Monster Lab provides hands-on robotics and Arduino simulation across all major environments: an instant web simulator and PWA, native Android APK and AAB packages with USB OTG serial communication, Windows and Linux desktop binaries, and self-hosted Docker Compose container orchestration."
+      prerequisites:
+        - "🌐 Web / PWA: Modern web browser (Chrome, Edge, Firefox, Safari) with WebAssembly and Web Serial API support."
+        - "🤖 Android: Android 8.0 (Oreo / API 26) or higher with USB Host / OTG support for physical Arduino connectivity."
+        - "🪟 Windows: Windows 10 or Windows 11 (64-bit x64)."
+        - "🐧 Linux: Debian 11+, Ubuntu 20.04+, or compatible Linux x86_64 distribution with GTK3 and libserialport."
+        - "🐳 Docker: Docker Engine 20.10+ and Docker Compose v2."
+      steps:
+        - title: "🌐 Instant Web Simulator & PWA"
+          content: "Run the full robotics curriculum and circuit simulator directly inside any modern browser, or install it as an offline-capable Progressive Web App (PWA)."
+          code: |
+            # Access directly via M3tal-Hub:
+            https://jakej985-rgb.github.io/M3tal-Hub/Monster-Lab/
+
+            # Progressive Web App (PWA) installation:
+            # 1. Open the URL above in Chrome, Edge, or Safari.
+            # 2. Click the 'Install App' or 'Add to Home Screen' icon in your browser address bar.
+            # 3. Launch Monster Lab as a standalone window with offline caching support.
+        - title: "🤖 Android APK & AAB Installation"
+          content: "Install natively on Android smartphones and tablets. Pre-configured with USB Host permissions for connecting physical Arduino microcontrollers via USB-C OTG."
+          code: |
+            # Download release APK from GitHub Releases (v0.0.1):
+            wget https://github.com/jakej985-rgb/Monster-Lab/releases/download/v0.0.1/monster-lab-android.apk
+
+            # Sideload onto your connected Android device:
+            adb install -r monster-lab-android.apk
+
+            # For Google Play distribution or bundle inspection:
+            # Download monster-lab-android.aab
+        - title: "🪟 Windows Desktop Installer (.exe) & Portable Zip"
+          content: "Run natively on Windows 64-bit with direct serial COM port access for Arduino flashing and real-time serial telemetry."
+          code: |
+            # Setup installer (.exe):
+            # Download monster-lab-windows.exe and run the Inno Setup wizard:
+            monster-lab-windows.exe /VERYSILENT /NORESTART
+
+            # Portable standalone zip (no installation or administrator privileges required):
+            # Download monster-lab-windows-portable.zip, extract and run:
+            Expand-Archive -Path monster-lab-windows-portable.zip -DestinationPath .\MonsterLab
+            .\MonsterLab\monster_lab.exe
+        - title: "🐧 Linux Desktop Debian Package (.deb) & Portable Tarball"
+          content: "Native Linux x64 desktop package with system menu integration, AppStream desktop entries, and dialout serial permissions for Arduino hardware."
+          code: |
+            # Debian / Ubuntu / Linux Mint (.deb):
+            wget https://github.com/jakej985-rgb/Monster-Lab/releases/download/v0.0.1/monster-lab-linux.deb
+            sudo dpkg -i monster-lab-linux.deb || sudo apt-get install -f -y
+
+            # Add current user to dialout group for Arduino USB access:
+            sudo usermod -aG dialout $USER
+
+            # Portable standalone tarball (distro-independent):
+            wget https://github.com/jakej985-rgb/Monster-Lab/releases/download/v0.0.1/monster-lab-linux-portable.tar.gz
+            tar -xzf monster-lab-linux-portable.tar.gz
+            ./monster_lab
+        - title: "🐳 Docker Compose Simulation Orchestration"
+          content: "Deploy the containerized web simulation suite in classrooms, lab clusters, or home server environments using pre-configured Docker Compose."
+          code: |
+            # Download release docker-compose.yml:
+            curl -sSLO https://github.com/jakej985-rgb/Monster-Lab/releases/download/v0.0.1/docker-compose.yml
+
+            # Launch containerized simulation service:
+            docker compose up -d
+
+            # Or run directly via Docker container image:
+            docker run -d -p 8080:80 --name monster-lab-web ghcr.io/jakej985-rgb/monster-lab-web:v0.0.1
+
+            # Access simulation dashboard:
+            # Open browser to http://<your-host>:8080
     changelog:
-      - version: 1.0.0
+      - version: 0.0.1
         date: "2026-09-30"
-        tag: "Stable Release"
+        tag: "v0.0.1 Multi-Platform Release"
+        notes:
+          - "Multi-platform release packaging across Web PWA, Android, Windows, Linux, and Docker."
+          - "Android release assets (monster-lab-android.apk, monster-lab-android.aab) with USB Host OTG serial support."
+          - "Windows desktop Inno Setup installer (monster-lab-windows.exe) and standalone portable bundle (monster-lab-windows-portable.zip)."
+          - "Linux desktop Debian package (monster-lab-linux.deb), portable archive (monster-lab-linux-portable.tar.gz), and GPG archive keyring."
+          - "Docker Compose simulation stack (docker-compose.yml) running ghcr.io/jakej985-rgb/monster-lab-web container image."
+          - "Instant Web simulator and Progressive Web App (PWA) with offline service worker caching on M3tal-Hub."
+          - "Full robotics curriculum: 12 lessons, 38 components, 20 guided projects, and interactive breadboard simulator."
+      - version: 1.0.0
+        date: "2026-09-29"
+        tag: "Initial Core Release"
         notes:
           - "Production web release with full robotics simulation suite."
           - "Interactive module editor with drag-and-drop circuit simulator."
@@ -26,30 +110,96 @@ apps:
     repo: Android-card-games
     path: Android-card-games
     type: flutter-web
+    version: 0.1.28
+    platforms: [android, roku, web, docker, server]
     enabled: true
     status: ready
     description: Flutter tabletop gaming suite.
     base_href: /M3tal-Hub/Android-card-games/
     changelog:
-      - version: 0.1.27
+      - version: 0.1.28
         date: "2026-09-30"
         tag: "Latest Release"
+        notes:
+          - "Multi-platform distribution across Android, Roku TV, Web PWA, and Docker backend."
+          - "📱 Android APK release (AndroidCardGames-v0.1.28.apk) with touch-optimized controls and haptic dealing."
+          - "📺 Roku TV client package (cardgames-roku-v0.1.28.zip) with big-screen tabletop layout and remote D-pad controls."
+          - "🐳 Docker TV party server (ghcr.io/jakej985-rgb/android-card-games:v0.1.28) for self-hosted multi-room play."
+          - "💻 Standalone TV server binaries for Linux, macOS, and Windows with zero runtime dependencies."
+          - "🌐 Progressive Web App (PWA) on M3tal-Hub with offline caching and CanvasKit rendering pipeline."
+      - version: 0.1.27
+        date: "2026-09-30"
+        tag: "Previous Release"
         notes:
           - "Card game rules engine and multi-game tabletop selection."
           - "Touch-optimized deck shuffling and card dealing animations."
           - "PWA install support and offline game states."
+    install_guide:
+      summary: "Android Card Games can be enjoyed across multiple platforms: on mobile via Android APK, on television screens via Roku TV sideloading, self-hosted via Docker container or standalone server binaries, or played directly in the browser via instant Web PWA."
+      prerequisites:
+        - "Android device running Android 8.0 (API 26) or higher for mobile play"
+        - "Roku Streaming Player or Roku TV with Developer Mode enabled"
+        - "Docker Engine >= 24.0 or Docker Compose v2 for containerized party server"
+        - "Linux, macOS, or Windows for standalone server binaries"
+        - "Modern web browser (Chrome, Firefox, Safari, Edge) for instant Web / PWA"
+      steps:
+        - title: "📱 Android APK Installation"
+          content: "1. Download AndroidCardGames-v0.1.28.apk from the GitHub Releases page.\n2. On your Android device, enable 'Install unknown apps' in Settings > Apps & notifications > Special app access.\n3. Open the downloaded APK file and tap Install.\n4. Launch Android Card Games and enjoy local or room-connected card gameplay."
+          code: "# Or install via ADB to a connected device:\nadb install -r AndroidCardGames-v0.1.28.apk"
+        - title: "📺 Roku TV Developer Mode Sideloading"
+          content: "1. Enable Developer Mode on your Roku device using the remote: press Home 3 times, Up 2 times, Right, Left, Right, Left, Right.\n2. Note the device IP address shown on screen and set your developer password.\n3. Open a browser on a device on the same local network and navigate to the Roku web portal (http://<roku-ip>).\n4. Log in with username 'rokudev' and your password.\n5. Upload cardgames-roku-v0.1.28.zip and click Install.\n6. The Android Card Games channel will immediately launch on your TV."
+          code: "# Or sideload from terminal using curl:\ncurl -u rokudev:YOUR_PASSWORD -F \"mysubmit=Install\" -F \"archive=@cardgames-roku-v0.1.28.zip\" http://<roku-ip>/plugin_install"
+        - title: "🐳 Docker Self-Hosted TV Party Server"
+          content: "Host a persistent multiplayer room server for living room TVs, mobile players, and web clients using Docker."
+          code: "# Run party server container:\ndocker run -d \\\n  --name android-card-games-server \\\n  --restart unless-stopped \\\n  -p 8080:8080 \\\n  -p 8081:8081 \\\n  ghcr.io/jakej985-rgb/android-card-games:v0.1.28\n\n# Or with docker compose:\n# docker compose up -d"
+        - title: "💻 Standalone TV Server Binaries"
+          content: "Standalone executable binaries are available for Linux, macOS, and Windows from GitHub Releases, requiring no Docker runtime."
+          code: "# Linux / macOS:\nchmod +x cardgames-server-linux\n./cardgames-server-linux --port 8080 --ws-port 8081\n\n# Windows (PowerShell / Command Prompt):\n.\\cardgames-server-windows.exe --port 8080 --ws-port 8081"
+        - title: "🌐 Instant Web / PWA"
+          content: "Play immediately in your browser on desktop or mobile without downloading any installer. To install as an offline PWA app, select 'Install' or 'Add to Home Screen' in your browser."
+          code: "# Web release hosted on M3tal-Hub:\nhttps://jakej985-rgb.github.io/M3tal-Hub/Android-card-games/"
 
   - id: idle-animals
     name: Idle Animals
     repo: Idle-animals
     path: Idle-animals
     type: flutter-web
+    version: "1.0.0+1.2"
+    platforms: [android, web]
     enabled: true
     status: ready
     description: Extinct-animal idle game.
     base_href: /M3tal-Hub/Idle-animals/
+    release_url: https://github.com/jakej985-rgb/Idle-animals/releases/tag/v1.0.0+1.2
+    apk_url: https://github.com/jakej985-rgb/Idle-animals/releases/download/v1.0.0+1.2/extinction-sanctuary-v1.0.0+1.2.apk
+    install_guide:
+      summary: "Idle Animals (Extinction Sanctuary) is available across both Android and modern Web browsers, offering instant Progressive Web App (PWA) gameplay with offline persistence alongside a standalone native Android APK release."
+      prerequisites:
+        - "🌐 Web / PWA: Modern browser (Google Chrome, Mozilla Firefox, Microsoft Edge, Safari)"
+        - "🤖 Android: Mobile device running Android 8.0 (API 26 / Oreo) or higher"
+        - "Android setting: 'Install unknown apps' enabled for your browser or file manager"
+        - "🛠️ Developer: Flutter SDK >= 3.22 and Dart SDK >= 3.4"
+      steps:
+        - title: "🌐 Web / PWA Browser Gameplay"
+          content: "1. Play immediately in your browser via M3tal Hub (or visit /M3tal-Hub/Idle-animals/).\n2. No installer or download required for direct browser gameplay.\n3. To install locally as a standalone Progressive Web App (PWA), tap 'Install App' in your browser address bar or select 'Add to Home Screen' from the browser menu.\n4. Service workers automatically cache game assets for complete offline progression."
+          code: "# Live Web App URL:\nhttps://jakej985-rgb.github.io/M3tal-Hub/Idle-animals/"
+        - title: "🤖 Android APK Installation"
+          content: "1. Download the release package extinction-sanctuary-v1.0.0+1.2.apk from GitHub Releases.\n2. On your Android device, navigate to Settings > Security / Apps > Special App Access and enable 'Install unknown apps' for your browser or file manager.\n3. Open the downloaded extinction-sanctuary-v1.0.0+1.2.apk file and tap 'Install'.\n4. Once installed, launch 'Extinction Sanctuary' from your app drawer and enjoy native gameplay."
+          code: "# Direct APK Download URL:\nhttps://github.com/jakej985-rgb/Idle-animals/releases/download/v1.0.0+1.2/extinction-sanctuary-v1.0.0+1.2.apk\n\n# Or sideload directly via ADB:\nadb install -r extinction-sanctuary-v1.0.0+1.2.apk"
+        - title: "🛠️ Local Development & Build"
+          content: "Developers can clone the source code to build and test both the Web and Android APK targets locally."
+          code: "# Clone source repository\ngit clone https://github.com/jakej985-rgb/Idle-animals.git\ncd Idle-animals\nflutter pub get\n\n# Run locally in Chrome\nflutter run -d chrome\n\n# Run on Android device or emulator\nflutter run -d android\n\n# Build production releases\nflutter build web --release --base-href /M3tal-Hub/Idle-animals/\nflutter build apk --release"
     changelog:
-      - version: 1.0.0
+      - version: "1.0.0+1.2"
+        date: "2026-09-30"
+        tag: "Latest Release"
+        notes:
+          - "Release v1.0.0+1.2: Added native Android standalone APK packaging (extinction-sanctuary-v1.0.0+1.2.apk)."
+          - "Dual-platform distribution: Instant browser-based PWA on M3tal-Hub and native Android APK package."
+          - "Incremental extinction discovery mechanics, species taxonomy, and biodiversity restoration simulation."
+          - "Persistent idle progression and gene sequencing state saved across offline sessions."
+          - "Responsive cyberpunk UI styling and optimized CanvasKit/HTML rendering pipelines."
+      - version: "1.0.0"
         date: "2026-09-30"
         tag: "Initial Release"
         notes:
@@ -62,60 +212,160 @@ apps:
     repo: red-music-locker
     path: red-music-locker
     type: flutter-web
+    version: 0.0.1-beta
+    platforms: [web, docker]
     enabled: true
     status: ready
-    description: Self-hosted music locker frontend.
+    description: Self-hosted music locker audio streaming and YouTube Music synchronization service.
     base_href: /M3tal-Hub/red-music-locker/
+    repo_url: https://github.com/jakej985-rgb/red-music-locker
+    release_url: https://github.com/jakej985-rgb/red-music-locker/releases
+    install_guide:
+      summary: "Red Music Locker provides a responsive Web frontend for audio streaming and playlist management on M3tal-Hub, paired with a containerized YouTube Music background synchronization service using Docker Compose."
+      prerequisites:
+        - "Modern web browser for instant web player access (Chrome, Firefox, Safari, Edge)"
+        - "Docker Engine >= 24.0 and Docker Compose v2.x for background sync container"
+        - "Host audio directory containing your music collection (FLAC, MP3, AAC)"
+      steps:
+        - title: "Web Frontend Player Access"
+          content: "Access the Flutter web audio player directly on M3tal-Hub. The web player connects to your self-hosted instance or runs with client-side audio caching. It can also be installed as a Progressive Web App (PWA) for offline access."
+          code: |-
+            # Direct web access:
+            https://jakej985-rgb.github.io/M3tal-Hub/red-music-locker/
+        - title: "Docker Sync Container Deployment"
+          content: "Download the release compose specification ytsync.yml and copy default.env.example to .env. Configure your music library mount paths, config directory, and port:"
+          code: |-
+            curl -fsSL https://raw.githubusercontent.com/jakej985-rgb/red-music-locker/main/ytsync.yml -o ytsync.yml
+            curl -fsSL https://raw.githubusercontent.com/jakej985-rgb/red-music-locker/main/.env.example -o .env
+            # Edit .env to set your MUSIC_PATH, CONFIG_PATH, and PORT
+        - title: "Launch Background Sync Service"
+          content: "Start the containerized sync service in detached mode. The service runs under an unprivileged user with read-only music directory mounts."
+          code: |-
+            docker compose -f ytsync.yml up -d
+            docker compose -f ytsync.yml ps
+            docker compose -f ytsync.yml logs -f ytm-sync
+        - title: "Link YouTube Music Account"
+          content: "Use the Red Music Locker Account Linker browser extension or auto-link utility to pair your YouTube Music library session with the self-hosted sync container."
     changelog:
-      - version: 1.0.0
+      - version: 0.0.1-beta
         date: "2026-09-30"
-        tag: "Initial Release"
+        tag: "Web & Docker Release"
         notes:
-          - "Self-hosted music locker audio streaming web interface."
-          - "Persistent playback queue and client-side audio caching."
-          - "Responsive mobile player controls and playlist organizer."
+          - "Self-hosted music locker audio streaming web interface deployed on M3tal-Hub."
+          - "Docker container deployment with ytsync.yml and default.env.example configuration."
+          - "Automated YouTube Music library synchronization and upload reconciliation engine."
+          - "Unprivileged container execution with read-only host music storage protection."
 
   - id: red-music-locker-account-linker
     name: Red Music Locker Account Linker
     repo: red-music-locker-account-linker
     path: red-music-locker-account-linker
     type: extension
+    version: 1.1.0
+    platforms: [chrome, firefox]
     enabled: false
     status: placeholder
-    description: Browser extension release.
+    description: Browser extension companion for 1-click YouTube Music account linking.
+    repo_url: https://github.com/jakej985-rgb/red-music-locker-account-linker
+    release_url: https://github.com/jakej985-rgb/red-music-locker-account-linker/releases
+    install_guide:
+      summary: "Lightweight browser companion extension for 1-click YouTube Music session linkage with your self-hosted Red Music Locker server. Available for Google Chrome and Mozilla Firefox."
+      prerequisites:
+        - "Google Chrome, Chromium, Brave, Microsoft Edge, or Mozilla Firefox"
+        - "Active YouTube Music session on music.youtube.com"
+        - "Running Red Music Locker container instance"
+      steps:
+        - title: "Google Chrome / Chromium Extension Installation"
+          content: "1. Download 'red-music-locker-account-linker-chrome-v1.1.0.zip' from GitHub Releases.\n2. Extract the ZIP archive into a local folder.\n3. Open Chrome and navigate to 'chrome://extensions'.\n4. Enable the 'Developer mode' toggle in the upper right corner.\n5. Click 'Load unpacked' in the upper left and select the extracted folder containing manifest.json.\n6. Pin the Red Music Locker extension icon to your browser toolbar."
+          code: |-
+            # Unpack Chrome release package:
+            unzip red-music-locker-account-linker-chrome-v1.1.0.zip -d chrome-linker/
+            # In chrome://extensions -> Click 'Load unpacked' -> Select chrome-linker/
+        - title: "Mozilla Firefox Add-on Installation"
+          content: "1. Download 'red-music-locker-account-linker-firefox-v1.1.0.zip' from GitHub Releases.\n2. Open Firefox and navigate to 'about:debugging#/runtime/this-firefox'.\n3. Click 'Load Temporary Add-on...'.\n4. Select 'red-music-locker-account-linker-firefox-v1.1.0.zip' or the manifest.json inside it.\n5. The extension will appear in your Firefox toolbar ready to link."
+          code: |-
+            # Load in Firefox about:debugging#/runtime/this-firefox:
+            # Click 'Load Temporary Add-on...' -> Select red-music-locker-account-linker-firefox-v1.1.0.zip
+        - title: "Connect to Red Music Locker Server"
+          content: "1. Navigate to music.youtube.com in your browser and confirm you are signed in.\n2. Click the Red Music Locker icon on your browser toolbar.\n3. Enter your self-hosted server URL and click 'Link Account'. The extension securely forwards session headers directly to your server."
+    changelog:
+      - version: 1.1.0
+        date: "2026-09-30"
+        tag: "Dual Extension Release"
+        notes:
+          - "Chrome Manifest V3 package (red-music-locker-account-linker-chrome-v1.1.0.zip) with service worker background architecture."
+          - "Firefox Manifest V3 package (red-music-locker-account-linker-firefox-v1.1.0.zip) adhering to AMO lint standards."
+          - "1-click YouTube Music session cookie extraction without opening DevTools or copying headers."
+          - "Direct session linkage to self-hosted Red Music Locker server instance."
 
   - id: subaru-specs-n-parts
     name: Subaru Specs & Parts
     repo: Subaru.specs.n.parts
     path: subaru-specs-n-parts
     type: flutter-web
+    platforms: [android, web]
     enabled: true
     status: ready
     description: Offline-first Subaru reference app.
     base_href: /M3tal-Hub/subaru-specs-n-parts/
+    repo_url: https://github.com/jakej985-rgb/Subaru.specs.n.parts
+    release_url: https://github.com/jakej985-rgb/Subaru.specs.n.parts/releases
     changelog:
-      - version: 1.0.0
+      - version: "1.0.0"
         date: "2026-09-30"
-        tag: "Initial Release"
+        tag: "Web PWA Release"
         notes:
+          - "Dual-platform distribution: Android APK archive and Progressive Web App (PWA)."
           - "Offline-first Subaru technical specifications and part cross-reference catalog."
           - "Engine torque specs, fluid capacities, and chassis dimensions database."
           - "IndexedDB / SQLite local caching for roadside reference."
+          - "Deployed as Progressive Web App (PWA) on M3tal-Hub with offline service worker."
+      - version: "0.1-alpha"
+        date: "2025-12-14"
+        tag: "Alpha Release"
+        notes:
+          - "Initial Alpha release with standalone Android APK package."
+          - "Release asset: android-apk.V.A0.1.zip"
+    install_guide:
+      summary: "Subaru Specs & Parts is an offline-first technical reference manual and fitment database available as an instant in-browser Progressive Web App (PWA) on M3tal-Hub and as a standalone Android APK package."
+      prerequisites:
+        - "Web PWA: Modern web browser (Chrome, Firefox, Safari, Edge) with Service Worker and IndexedDB support"
+        - "Android APK: Mobile device running Android 8.0 (Oreo / API 26) or higher"
+        - "Developers / Build from Source: Flutter SDK >= 3.24, Java 17, Android Studio / Gradle toolchain"
+      steps:
+        - title: "🌐 Instant Web & PWA Installation"
+          content: "1. Open the web application directly from M3tal Hub (https://jakej985-rgb.github.io/M3tal-Hub/subaru-specs-n-parts/).\n2. In Chrome or Chromium-based browsers, tap the 'Install App' prompt in the address bar or choose 'Install Subaru Specs & Parts' from the browser menu.\n3. The PWA caches engine torque specs, fluid capacities, and chassis dimensions for complete roadside functionality without mobile cell service."
+          code: "# Web deployment URL:\nhttps://jakej985-rgb.github.io/M3tal-Hub/subaru-specs-n-parts/"
+        - title: "📱 Android APK Installation (Alpha Release)"
+          content: "1. Download the Alpha release package 'android-apk.V.A0.1.zip' from the GitHub Releases page.\n2. Extract the archive on your Android device or computer to retrieve the .apk package.\n3. In Android Settings, enable 'Install unknown apps' for your browser or file manager.\n4. Open the extracted APK file to complete installation and launch."
+          code: "# Or install directly using ADB on connected device:\nunzip android-apk.V.A0.1.zip\nadb install -r *.apk"
+        - title: "🛠️ Compiling from Source"
+          content: "To build the Android APK or web bundle directly from source code:"
+          code: |-
+            git clone https://github.com/jakej985-rgb/Subaru.specs.n.parts.git
+            cd Subaru.specs.n.parts
+            flutter pub get
+            flutter test
+            flutter build apk --release
 
   - id: specs-n-parts
     name: Spec-s-N-Part-s
     repo: Spec-s-N-Part-s
     path: specs-n-parts
     type: flutter-web
+    platforms: [android, web]
     enabled: false
     status: review
     description: Pending duplicate/project review.
+    repo_url: https://github.com/jakej985-rgb/Spec-s-N-Part-s
+    release_url: https://github.com/jakej985-rgb/Spec-s-N-Part-s/releases
 
   - id: infernal-web
     name: Infernal Web
     repo: infernal-web
     path: infernal-web
     type: flutter-web
+    platforms: [web]
     enabled: true
     status: ready
     description: Infernal web application.
@@ -133,12 +383,38 @@ apps:
         tag: "Initial Release"
         notes:
           - "Initial web deployment release."
+    install_guide:
+      summary: "Infernal Web is the web client and online portal for the Infernal Ink & Steel studio suite, built with Flutter Web and optimized for desktop browsers, tablets, and smartphones as an offline-capable Progressive Web App (PWA)."
+      prerequisites:
+        - "Modern web browser (Google Chrome, Mozilla Firefox, Microsoft Edge, Safari)"
+        - "For developers: Flutter SDK >= 3.22 (stable channel)"
+        - "Dart SDK >= 3.4"
+      steps:
+        - title: "🌐 Instant Web Access & PWA Installation"
+          content: "Launch directly in any modern browser without installation. Select 'Install' or 'Add to Home Screen' from the browser menu to install as a standalone desktop or mobile Progressive Web App."
+          code: |-
+            # Live web application:
+            https://jakej985-rgb.github.io/M3tal-Hub/infernal-web/
+        - title: "💻 Local Development Setup"
+          content: "Clone the repository and run the development server with hot reload."
+          code: |-
+            git clone https://github.com/jakej985-rgb/infernal-web.git
+            cd infernal-web/app
+            flutter pub get
+            dart run build_runner build --delete-conflicting-outputs
+            flutter run -d chrome
+        - title: "🚀 Building Production Release"
+          content: "Build the production-optimized web bundle configured with the M3tal Hub subpath."
+          code: |-
+            cd app
+            flutter build web --release --base-href /M3tal-Hub/infernal-web/
 
   - id: gps-speedometer
     name: GPS Speedometer
     repo: GPS-speedometer
     path: gps-speedometer
     type: android-native
+    platforms: [android]
     enabled: false
     status: placeholder
     description: Native Android GPS speed display application.
@@ -160,6 +436,7 @@ apps:
     ref: feat/netflix-jellyfin-ui-8605598523484562409
     path: jellyfin-ui
     type: vite
+    platforms: [web]
     enabled: true
     status: ready
     description: React/Vite Jellyfin interface project.
@@ -173,12 +450,36 @@ apps:
           - "React 18 and Vite high-performance bundler architecture."
           - "Dynamic library streaming, media details modal, and hero spotlight."
           - "Responsive grid supporting ultra-wide desktop and mobile layouts."
+    install_guide:
+      summary: "Jellyfin UI is a responsive dark cyberpunk media front-end for Jellyfin personal media servers, built with React 18, TypeScript, Tailwind CSS, and Vite for instant browser streaming across desktop, tablet, and mobile displays."
+      prerequisites:
+        - "Modern web browser (Google Chrome, Mozilla Firefox, Microsoft Edge, Safari)"
+        - "Jellyfin Media Server (v10.8+ recommended) with active API endpoint"
+        - "For developers: Node.js >= 20.x LTS and npm >= 10.x"
+      steps:
+        - title: "🌐 Instant Web Streaming"
+          content: "Launch the web interface immediately through M3tal Hub without manual installation. Connect to your local or remote Jellyfin server instance by entering your server URL and login credentials."
+          code: |-
+            # Hosted web release:
+            https://jakej985-rgb.github.io/M3tal-Hub/jellyfin-ui/
+        - title: "💻 Local Development Setup"
+          content: "Run the Vite development server locally with Hot Module Replacement (HMR)."
+          code: |-
+            git clone https://github.com/jakej985-rgb/Jellyfin-ui.git
+            cd Jellyfin-ui
+            npm install
+            npm run dev
+        - title: "🚀 Building Production Release"
+          content: "Compile and bundle the production assets with the target GitHub Pages subpath."
+          code: |-
+            BASE_HREF=/M3tal-Hub/jellyfin-ui/ npm run build
 
   - id: m3tal-plugin-page
     name: M3tal Plugin Page
     repo: m3tal-plugin-page
     path: m3tal-plugin-page
     type: static
+    platforms: [web]
     enabled: true
     status: ready
     description: M3tal plugin landing page.
@@ -191,12 +492,37 @@ apps:
           - "Official M3tal plugin landing page static distribution."
           - "Sanitized relative asset resolution and clean routing."
           - "Responsive grid for plugin discovery and documentation."
+    install_guide:
+      summary: "M3tal Plugin Page is the official static discovery portal and catalog explorer for M3tal ecosystem plugins, signatures, and project documentation."
+      prerequisites:
+        - "Modern web browser (Google Chrome, Mozilla Firefox, Microsoft Edge, Safari)"
+        - "Optional: Python 3.x or lightweight HTTP static file server for local preview"
+      steps:
+        - title: "🌐 Instant Web Access"
+          content: "Browse the live plugin directory and cryptographic catalog directly on M3tal Hub with zero setup required."
+          code: |-
+            # Official catalog portal:
+            https://jakej985-rgb.github.io/M3tal-Hub/m3tal-plugin-page/
+        - title: "💻 Local Testing & Static Serving"
+          content: "Clone the static repository and serve locally using any standard static web server."
+          code: |-
+            git clone https://github.com/jakej985-rgb/m3tal-plugin-page.git
+            cd m3tal-plugin-page
+            python3 -m http.server 8080
+            # Open the local server port in your browser
+        - title: "🔍 Validating Plugin Signatures & Catalog Schema"
+          content: "Verify ecosystem plugin catalog JSON files and cryptographic signatures."
+          code: |-
+            # Verify JSON syntax:
+            python3 -m json.tool catalog.json > /dev/null && echo "Catalog JSON is valid"
+            python3 -m json.tool plugins.json > /dev/null && echo "Plugins JSON is valid"
 
   - id: munchkin-companion-app
     name: Munchkin Companion App
     repo: Munchkin-Companion-App
     path: munchkin-companion-app
     type: flutter-web
+    platforms: [android, web]
     enabled: false
     status: planned
     description: Flutter rules-aware game companion.
@@ -208,20 +534,142 @@ apps:
     repo: Shop-manager
     path: shop-manager
     type: desktop
+    platforms: [desktop, linux, windows]
     enabled: false
     status: review
     description: Studio operations and inventory management system.
     repo_url: https://github.com/jakej985-rgb/Shop-manager
+    changelog:
+      - version: "0.1.0"
+        date: "2026-09-30"
+        tag: "Desktop Preview"
+        notes:
+          - "Modern Qt C++ desktop operations architecture."
+          - "Inventory tracking, artist commission management, and studio scheduling."
+          - "Cross-platform support for Linux and Windows desktop environments."
+    install_guide:
+      summary: "Shop Manager is a modern Qt C++ desktop operations suite designed for tattoo and piercing studios, providing inventory management, client tracking, appointment administration, and financial reporting across Linux and Windows desktop environments."
+      prerequisites:
+        - "Operating System: Linux (Ubuntu 22.04+, Debian 12+, Arch Linux, Fedora) or Windows 10/11 (64-bit)"
+        - "C++20 compliant compiler: GCC 11+, Clang 14+, or Microsoft Visual C++ (MSVC 2022)"
+        - "CMake >= 3.20 build system"
+        - "Qt 6 (Qt6Core, Qt6Gui, Qt6Widgets, Qt6Sql) development packages"
+        - "SQLite 3 or compatible database runtime"
+      steps:
+        - title: "📦 Pre-built Desktop Releases"
+          content: "Pre-compiled native binaries for Linux (AppImage / .deb) and Windows installer (.exe / portable .zip) are available on GitHub Releases."
+          code: |-
+            # Linux AppImage:
+            chmod +x ShopManager-x86_64.AppImage
+            ./ShopManager-x86_64.AppImage
+
+            # Windows (PowerShell / Command Prompt):
+            .\ShopManager-Setup.exe
+        - title: "🐧 Building from Source on Linux"
+          content: "Install Qt 6 and build tools using your distribution package manager, then compile with CMake."
+          code: |-
+            # Debian / Ubuntu dependencies:
+            sudo apt update && sudo apt install -y build-essential cmake ninja-build \
+              qt6-base-dev qt6-base-dev-tools libqt6sql6-sqlite
+
+            # Clone repository:
+            git clone https://github.com/jakej985-rgb/Shop-manager.git
+            cd Shop-manager
+
+            # Configure and build:
+            cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Release
+            cmake --build build
+
+            # Run application:
+            ./build/ShopManager
+        - title: "🪟 Building from Source on Windows"
+          content: "Compile on Windows using Visual Studio 2022 or MinGW64 with Qt 6 installed."
+          code: |-
+            # Clone repository in PowerShell:
+            git clone https://github.com/jakej985-rgb/Shop-manager.git
+            cd Shop-manager
+
+            # Configure and build with MSVC:
+            cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="C:\Qt\6.6.0\msvc2022_64"
+            cmake --build build --config Release
+
+            # Run executable:
+            .\build\Release\ShopManager.exe
 
   - id: infernal-ink-steel-suite
     name: Infernal Ink Steel Suite
     repo: Infernal-Ink-Steel-Suite
     path: infernal-ink-steel-suite
     type: suite
+    platforms: [desktop, linux, windows]
     enabled: false
     status: review
     description: Integrated studio software suite (desktop/backend orchestration).
     repo_url: https://github.com/jakej985-rgb/Infernal-Ink-Steel-Suite
+    changelog:
+      - version: "0.1.0"
+        date: "2026-09-30"
+        tag: "Suite Preview"
+        notes:
+          - "Integrated studio suite orchestration and desktop client runtime."
+          - "Cross-platform Qt C++ operations for Linux and Windows."
+          - "Local database synchronization and optional backend service integration."
+    install_guide:
+      summary: "Infernal Ink Steel Suite is a comprehensive studio operations management suite combining a high-performance Qt C++ desktop workstation interface with modular studio service orchestration for tattoo and body piercing shops on Linux and Windows."
+      prerequisites:
+        - "Operating System: Linux (Ubuntu 22.04+, Debian 12+, Arch, Fedora) or Windows 10/11 (64-bit)"
+        - "C++20 compliant compiler (GCC 11+, Clang 14+, or MSVC 2022)"
+        - "CMake >= 3.20 and build generator (Ninja or GNU Make)"
+        - "Qt 6 development libraries (Core, GUI, Widgets, Network, Sql)"
+        - "Optional: Docker Engine >= 24.0 & Docker Compose v2 for local microservice orchestration"
+      steps:
+        - title: "📦 Pre-built Suite Packages"
+          content: "Download pre-packaged releases from GitHub Releases for standalone desktop execution."
+          code: |-
+            # Linux AppImage:
+            chmod +x InfernalSuite-x86_64.AppImage
+            ./InfernalSuite-x86_64.AppImage
+
+            # Windows standalone executable:
+            .\InfernalSuite-Setup.exe
+        - title: "🐧 Compiling Desktop Suite on Linux"
+          content: "Build the complete Qt C++ suite binary from source."
+          code: |-
+            # Install build dependencies:
+            sudo apt update && sudo apt install -y build-essential cmake ninja-build \
+              qt6-base-dev qt6-base-dev-tools libqt6network6 libqt6sql6-sqlite
+
+            # Clone repository:
+            git clone https://github.com/jakej985-rgb/Infernal-Ink-Steel-Suite.git
+            cd Infernal-Ink-Steel-Suite
+
+            # Configure and compile:
+            cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Release
+            cmake --build build
+
+            # Launch suite:
+            ./build/InfernalSuite
+        - title: "🪟 Compiling Desktop Suite on Windows"
+          content: "Configure and build using Visual Studio 2022 Developer PowerShell."
+          code: |-
+            # Clone repository:
+            git clone https://github.com/jakej985-rgb/Infernal-Ink-Steel-Suite.git
+            cd Infernal-Ink-Steel-Suite
+
+            # Configure and build:
+            cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="C:\Qt\6.6.0\msvc2022_64"
+            cmake --build build --config Release
+
+            # Run suite:
+            .\build\Release\InfernalSuite.exe
+        - title: "🐳 Optional Studio Backend Service Orchestration"
+          content: "For studios running synchronized multi-station setups, launch the background service stack using Docker Compose."
+          code: |-
+            # Launch backend microservices:
+            docker compose up -d
+
+            # Verify service connectivity:
+            docker compose ps
 
   # Infrastructure and Backend Services
   - id: m3tal-godash
@@ -229,6 +677,7 @@ apps:
     repo: m3tal-godash
     type: service
     category: infrastructure
+    platforms: [linux, docker]
     enabled: false
     status: active
     version: 0.2.0
@@ -241,18 +690,27 @@ apps:
     repo: m3tal-core
     type: library
     category: infrastructure
+    platforms: [linux]
     enabled: false
     status: active
     version: 0.1.0
     package: library
     description: Foundation backend libraries, utilities, and common service primitives.
     repo_url: https://github.com/jakej985-rgb/m3tal-core
+    changelog:
+      - version: "1.1.62"
+        date: "2026-09-30"
+        tag: "Debian Release"
+        notes:
+          - "Debian package (.deb) binary distribution."
+          - "Core system primitives and native utilities."
 
   - id: m3tal-api
     name: M3tal API
     repo: m3tal-api
     type: service
     category: infrastructure
+    platforms: [linux, docker]
     enabled: false
     status: active
     version: 0.1.0
@@ -265,6 +723,7 @@ apps:
     repo: m3tal-stack
     type: infrastructure
     category: infrastructure
+    platforms: [docker]
     enabled: false
     status: active
     version: 1.0.0
@@ -277,6 +736,7 @@ apps:
     repo: m3tal-apt-key
     type: package
     category: infrastructure
+    platforms: [linux]
     enabled: false
     status: active
     version: 1.0.0
@@ -290,6 +750,7 @@ apps:
     repo: m3tal-ui-kit
     type: library
     category: libraries
+    platforms: [dart]
     enabled: false
     status: active
     version: 0.1.0
@@ -302,6 +763,7 @@ apps:
     repo: m3tal-hub-template
     type: template
     category: libraries
+    platforms: [template, web]
     enabled: false
     status: active
     version: 1.0.0
@@ -314,6 +776,7 @@ apps:
     repo: ytmusicapi
     type: library
     category: libraries
+    platforms: [python]
     enabled: false
     status: active
     version: 0.25.0
@@ -327,6 +790,7 @@ apps:
     repo: m3tal-docs
     type: docs
     category: tooling
+    platforms: [docs, web]
     enabled: false
     status: active
     version: 1.0.0
@@ -339,9 +803,17 @@ apps:
     repo: comicinfo-generator
     type: tooling
     category: tooling
+    platforms: [docker, cli]
     enabled: false
     status: active
     version: 1.1.0
     package: cli-tool
     description: Comic metadata enrichment engine and ComicInfo.xml batch generator.
     repo_url: https://github.com/jakej985-rgb/comicinfo-generator
+    changelog:
+      - version: "1.1.0"
+        date: "2026-09-30"
+        tag: "CLI & Docker Release"
+        notes:
+          - "Command-line batch ComicInfo.xml generator."
+          - "Docker container image release (v0.5) for automated container pipelines."
