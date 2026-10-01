@@ -155,6 +155,7 @@ def test_hub_generator():
     assert "Infrastructure & Backend Services" in content, "Infrastructure section missing"
     assert "Libraries, SDKs & Templates" in content, "Libraries section missing"
     assert "Tooling & Documentation" in content, "Tooling section missing"
+    assert "badge-os" in content, "badge-os badge missing in generated index.html"
 
     # Verify all projects are present
     expected_projects = [
@@ -635,7 +636,11 @@ def test_app_detail_pages():
         assert "Version History & Changelog" in content, f"{app_id}.html missing Changelog section"
         assert "System Specifications" in content, f"{app_id}.html missing System Specifications section"
 
-        # 5. Type-specific assertions
+        # 5. OS Badge and Platform assertions
+        assert "badge-os" in content, f"{app_id}.html missing badge-os badge"
+        assert "Target OS / Platform" in content, f"{app_id}.html missing Target OS / Platform in specs"
+
+        # 6. Type-specific assertions
         if enabled and app_type in valid_web_types:
             assert f'href="../{path}/"' in content, f"{app_id}.html missing launch link to ../{path}/"
         elif app_type == "android-native":
@@ -645,7 +650,7 @@ def test_app_detail_pages():
         if repo_url:
             assert repo_url in content, f"{app_id}.html missing repo link {repo_url}"
 
-        print(f"  [OK Detail Page] {app_id}.html verified with release, changelog, and install docs")
+        print(f"  [OK Detail Page] {app_id}.html verified with OS badge, release, changelog, and install docs")
 
     print("App detail pages verification passed!")
 

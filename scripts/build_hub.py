@@ -108,6 +108,41 @@ def get_badge(app, release_info):
     
     return (status.title(), "badge-active" if category != "apps" else "badge-planned")
 
+def get_os_info(app):
+    explicit_os = str(app.get("os", "")).lower()
+    app_type = str(app.get("type", "web")).lower()
+    category = str(app.get("category", "apps")).lower()
+    package = str(app.get("package", "")).lower()
+
+    if explicit_os == "android" or app_type == "android-native":
+        return ("🤖", "Android", "os-android")
+    elif explicit_os == "web" or app_type in VALID_WEB_TYPES:
+        if app_type == "flutter-web":
+            return ("🌐", "Web / PWA", "os-web")
+        return ("🌐", "Web", "os-web")
+    elif explicit_os == "extension" or app_type == "extension":
+        return ("🧩", "Extension", "os-ext")
+    elif explicit_os in ["desktop", "windows", "linux", "macos"] or app_type in ["desktop", "suite"]:
+        return ("🖥️", "Desktop", "os-desktop")
+    elif explicit_os == "docker" or package == "docker-compose" or app_type in ["container", "infrastructure"]:
+        return ("🐳", "Docker", "os-docker")
+    elif package == "gpg-keyring" or app_type == "package":
+        return ("🐧", "Linux / APT", "os-linux")
+    elif app_type in ["service", "backend"]:
+        return ("🐧", "Linux", "os-linux")
+    elif category == "infrastructure":
+        return ("🐧", "Linux", "os-linux")
+    elif category == "libraries":
+        if package == "pypi":
+            return ("🐍", "Python", "os-lib")
+        elif package == "dart-pkg":
+            return ("🎯", "Dart", "os-lib")
+        return ("📦", "Library", "os-lib")
+    elif category == "tooling":
+        return ("🛠️", "CLI", "os-tool")
+    
+    return ("⚡", "Universal", "os-cross")
+
 def get_changelog(app, release_info):
     if "changelog" in app and app["changelog"]:
         return app["changelog"]
@@ -324,10 +359,11 @@ def render_card(app, release_info):
     category = app.get("category", "apps")
     
     badge_text, badge_class = get_badge(app, release_info)
+    os_icon, os_label, os_class = get_os_info(app)
 
     meta_info = []
     if app.get("type"):
-        meta_info.append(f'<span class="app-type">{app["type"]}</span>')
+        meta_info.append(f'<span class="app-type">{os_icon} {app["type"]}</span>')
     
     version = release_info.get("version") or app.get("version")
     if version:
@@ -372,7 +408,10 @@ def render_card(app, release_info):
             <a class="card-main-link" href="{detail_href}">
                 <div class="card-header">
                     <h2>{name}</h2>
-                    <span class="badge {badge_class}">{badge_text}</span>
+                    <div class="badge-group">
+                        <span class="badge badge-os {os_class}">{os_icon} {os_label}</span>
+                        <span class="badge {badge_class}">{badge_text}</span>
+                    </div>
                 </div>
                 <p>{desc}</p>
                 {meta_html}
@@ -391,6 +430,7 @@ def generate_app_page(app, release_info, category_map):
     app_type = app.get("type", "web")
     
     badge_text, badge_class = get_badge(app, release_info)
+    os_icon, os_label, os_class = get_os_info(app)
     version = release_info.get("version") or app.get("version") or "1.0.0"
     last_released = release_info.get("last_released") or app.get("last_released") or "2026-09-30"
     repo_url = app.get("repo_url") or (f"https://github.com/jakej985-rgb/{repo}" if repo else "")
@@ -792,6 +832,13 @@ def generate_app_page(app, release_info, category_map):
             text-overflow: ellipsis;
             white-space: nowrap;
         }}
+        .badge-group {{
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }}
         .badge {{
             display: inline-block;
             font-size: 11px;
@@ -799,6 +846,60 @@ def generate_app_page(app, release_info, category_map):
             padding: 2px 8px;
             border-radius: 999px;
             white-space: nowrap;
+        }}
+        .badge-os {{
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            font-size: 11px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }}
+        .os-android {{
+            border-color: rgba(63, 185, 80, 0.35);
+            background: rgba(63, 185, 80, 0.12);
+            color: #56d364;
+        }}
+        .os-web {{
+            border-color: rgba(88, 166, 255, 0.35);
+            background: rgba(88, 166, 255, 0.12);
+            color: #79c0ff;
+        }}
+        .os-ext {{
+            border-color: rgba(210, 153, 34, 0.35);
+            background: rgba(210, 153, 34, 0.12);
+            color: #e3b341;
+        }}
+        .os-desktop {{
+            border-color: rgba(188, 140, 255, 0.35);
+            background: rgba(188, 140, 255, 0.12);
+            color: #d2a8ff;
+        }}
+        .os-docker {{
+            border-color: rgba(56, 139, 253, 0.35);
+            background: rgba(56, 139, 253, 0.12);
+            color: #58a6ff;
+        }}
+        .os-linux {{
+            border-color: rgba(240, 136, 62, 0.35);
+            background: rgba(240, 136, 62, 0.12);
+            color: #ff9b5e;
+        }}
+        .os-lib {{
+            border-color: rgba(188, 140, 255, 0.35);
+            background: rgba(188, 140, 255, 0.12);
+            color: #bc8cff;
+        }}
+        .os-tool {{
+            border-color: rgba(240, 136, 62, 0.35);
+            background: rgba(240, 136, 62, 0.12);
+            color: #f0883e;
+        }}
+        .os-cross {{
+            border-color: rgba(110, 118, 129, 0.35);
+            background: rgba(110, 118, 129, 0.12);
+            color: #c9d1d9;
         }}
         .badge-live {{
             background: rgba(46, 160, 67, 0.2);
@@ -873,11 +974,15 @@ def generate_app_page(app, release_info, category_map):
                     <h1 class="hero-title">{name}</h1>
                 </div>
             </div>
-            <span class="badge {badge_class}">{badge_text}</span>
+            <div class="badge-group">
+                <span class="badge badge-os {os_class}">{os_icon} {os_label}</span>
+                <span class="badge {badge_class}">{badge_text}</span>
+            </div>
         </div>
         <p class="hero-desc">{desc}</p>
         <div class="meta-pills">
-            <span class="pill pill-accent">{app_type}</span>
+            <span class="pill pill-accent">{os_icon} {os_label}</span>
+            <span class="pill">{app_type}</span>
             <span class="pill">v{version}</span>
             <span class="pill">{cat_meta['title']}</span>
             <span class="pill">pkg: {package_val}</span>
@@ -907,6 +1012,10 @@ def generate_app_page(app, release_info, category_map):
             <div class="content-card">
                 <h2 class="card-heading">⚙️ System Specifications</h2>
                 <div class="spec-list">
+                    <div class="spec-item">
+                        <span class="spec-label">Target OS / Platform</span>
+                        <span class="spec-value">{os_icon} {os_label}</span>
+                    </div>
                     <div class="spec-item">
                         <span class="spec-label">Target Architecture</span>
                         <span class="spec-value">{app_type}</span>
@@ -1250,6 +1359,13 @@ def generate_hub(manifest_path, status_path, output_dir, site_status_path=None):
             border-color: #3fb950;
             color: #56d364;
         }}
+        .badge-group {{
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }}
         .badge {{
             display: inline-block;
             font-size: 11px;
@@ -1257,6 +1373,60 @@ def generate_hub(manifest_path, status_path, output_dir, site_status_path=None):
             padding: 2px 8px;
             border-radius: 999px;
             white-space: nowrap;
+        }}
+        .badge-os {{
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            font-size: 10.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }}
+        .os-android {{
+            border-color: rgba(63, 185, 80, 0.35);
+            background: rgba(63, 185, 80, 0.12);
+            color: #56d364;
+        }}
+        .os-web {{
+            border-color: rgba(88, 166, 255, 0.35);
+            background: rgba(88, 166, 255, 0.12);
+            color: #79c0ff;
+        }}
+        .os-ext {{
+            border-color: rgba(210, 153, 34, 0.35);
+            background: rgba(210, 153, 34, 0.12);
+            color: #e3b341;
+        }}
+        .os-desktop {{
+            border-color: rgba(188, 140, 255, 0.35);
+            background: rgba(188, 140, 255, 0.12);
+            color: #d2a8ff;
+        }}
+        .os-docker {{
+            border-color: rgba(56, 139, 253, 0.35);
+            background: rgba(56, 139, 253, 0.12);
+            color: #58a6ff;
+        }}
+        .os-linux {{
+            border-color: rgba(240, 136, 62, 0.35);
+            background: rgba(240, 136, 62, 0.12);
+            color: #ff9b5e;
+        }}
+        .os-lib {{
+            border-color: rgba(188, 140, 255, 0.35);
+            background: rgba(188, 140, 255, 0.12);
+            color: #bc8cff;
+        }}
+        .os-tool {{
+            border-color: rgba(240, 136, 62, 0.35);
+            background: rgba(240, 136, 62, 0.12);
+            color: #f0883e;
+        }}
+        .os-cross {{
+            border-color: rgba(110, 118, 129, 0.35);
+            background: rgba(110, 118, 129, 0.12);
+            color: #c9d1d9;
         }}
         .badge-live {{
             background: rgba(46, 160, 67, 0.2);
