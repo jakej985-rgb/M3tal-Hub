@@ -10,13 +10,13 @@
     "android-card-games": {
       "status": "ready",
       "version": "0.1.28",
-      "last_released": null,
+      "last_released": "2026-09-30",
       "build_status": "configured"
     },
     "idle-animals": {
       "status": "ready",
       "version": "1.0.0+1.2",
-      "last_released": null,
+      "last_released": "2026-09-30",
       "build_status": "configured"
     },
     "subaru-specs-n-parts": {

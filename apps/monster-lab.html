@@ -567,7 +567,10 @@ wget https://github.com/jakej985-rgb/Monster-Lab/releases/download/v0.0.1/monste
 adb install -r monster-lab-android.apk
 
 # For Google Play distribution or bundle inspection:
-# Download monster-lab-android.aab
+# Download monster-lab-android.aab:
+wget https://github.com/jakej985-rgb/Monster-Lab/releases/download/v0.0.1/monster-lab-android.aab
+bundletool build-apks --bundle=monster-lab-android.aab --output=monster-lab.apks --mode=universal
+bundletool install-apks --apks=monster-lab.apks
 </code></pre>
             </div>
         
@@ -576,11 +579,11 @@ adb install -r monster-lab-android.apk
                 <h4>🪟 Windows Desktop Installer (.exe) & Portable Zip</h4>
                 <p>Run natively on Windows 64-bit with direct serial COM port access for Arduino flashing and real-time serial telemetry.</p>
                 <pre><code># Setup installer (.exe):
-# Download monster-lab-windows.exe and run the Inno Setup wizard:
-monster-lab-windows.exe /VERYSILENT /NORESTART
+Invoke-WebRequest -Uri "https://github.com/jakej985-rgb/Monster-Lab/releases/download/v0.0.1/monster-lab-windows.exe" -OutFile "monster-lab-windows.exe"
+.\monster-lab-windows.exe /VERYSILENT /NORESTART
 
 # Portable standalone zip (no installation or administrator privileges required):
-# Download monster-lab-windows-portable.zip, extract and run:
+Invoke-WebRequest -Uri "https://github.com/jakej985-rgb/Monster-Lab/releases/download/v0.0.1/monster-lab-windows-portable.zip" -OutFile "monster-lab-windows-portable.zip"
 Expand-Archive -Path monster-lab-windows-portable.zip -DestinationPath .\MonsterLab
 .\MonsterLab\monster_lab.exe
 </code></pre>
@@ -634,19 +637,7 @@ docker run -d -p 8080:80 --name monster-lab-web ghcr.io/jakej985-rgb/monster-lab
                     <span class="changelog-date">2026-09-30</span>
                 </div>
                 <ul class="changelog-list">
-                    <li>Multi-platform release packaging across Web PWA, Android, Windows, Linux, and Docker.</li><li>Android release assets (monster-lab-android.apk, monster-lab-android.aab) with USB Host OTG serial support.</li><li>Windows desktop Inno Setup installer (monster-lab-windows.exe) and standalone portable bundle (monster-lab-windows-portable.zip).</li><li>Linux desktop Debian package (monster-lab-linux.deb), portable archive (monster-lab-linux-portable.tar.gz), and GPG archive keyring.</li><li>Docker Compose simulation stack (docker-compose.yml) running ghcr.io/jakej985-rgb/monster-lab-web container image.</li><li>Instant Web simulator and Progressive Web App (PWA) with offline service worker caching on M3tal-Hub.</li><li>Full robotics curriculum: 12 lessons, 38 components, 20 guided projects, and interactive breadboard simulator.</li>
-                </ul>
-            </div>
-        
-
-            <div class="changelog-entry">
-                <div class="changelog-header">
-                    <span class="changelog-version">v1.0.0</span>
-                    <span class="changelog-tag">Initial Core Release</span>
-                    <span class="changelog-date">2026-09-29</span>
-                </div>
-                <ul class="changelog-list">
-                    <li>Production web release with full robotics simulation suite.</li><li>Interactive module editor with drag-and-drop circuit simulator.</li><li>Progressive Web App (PWA) offline caching support.</li><li>Optimized CanvasKit and HTML rendering pipelines.</li>
+                    <li>Initial multi-platform release packaging across Web PWA, Android, Windows, Linux, and Docker.</li><li>Android release assets (monster-lab-android.apk, monster-lab-android.aab) with USB Host OTG serial support.</li><li>Windows desktop Inno Setup installer (monster-lab-windows.exe) and standalone portable bundle (monster-lab-windows-portable.zip).</li><li>Linux desktop Debian package (monster-lab-linux.deb), portable archive (monster-lab-linux-portable.tar.gz), and GPG archive keyring.</li><li>Docker Compose simulation stack (docker-compose.yml) running ghcr.io/jakej985-rgb/monster-lab-web container image.</li><li>Instant Web simulator and Progressive Web App (PWA) with offline service worker caching on M3tal-Hub.</li><li>Full robotics curriculum: 12 lessons, 38 components, 20 guided projects, and interactive breadboard simulator.</li><li>Interactive module editor with drag-and-drop circuit simulator.</li><li>Optimized CanvasKit and HTML rendering pipelines.</li>
                 </ul>
             </div>
         
