@@ -110,8 +110,11 @@ apps:
     repo: Android-card-games
     path: Android-card-games
     type: flutter-web
-    version: 0.1.28
-    platforms: [android, roku, web, docker, server]
+    version: "0.1.28"
+    last_released: "2026-09-30"
+    platforms: [roku, android, web, docker]
+    release_url: https://github.com/jakej985-rgb/Android-card-games/releases/tag/v0.1.28
+    apk_url: https://github.com/jakej985-rgb/Android-card-games/releases/download/v0.1.28/AndroidCardGames-v0.1.28.apk
     enabled: true
     status: ready
     description: Flutter tabletop gaming suite.
