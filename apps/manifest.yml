@@ -109,7 +109,7 @@ apps:
     type: flutter-web
     version: "0.1.28"
     last_released: "2026-09-30"
-    platforms: [roku, android, web, docker]
+    platforms: [roku, android, web, docker, server]
     release_url: https://github.com/jakej985-rgb/Android-card-games/releases/tag/v0.1.28
     apk_url: https://github.com/jakej985-rgb/Android-card-games/releases/download/v0.1.28/AndroidCardGames-v0.1.28.apk
     enabled: true

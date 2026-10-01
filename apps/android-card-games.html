@@ -318,6 +318,14 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+        .spec-value.spec-platforms {
+            max-width: 220px;
+            white-space: normal;
+            word-break: normal;
+            line-height: 1.4;
+            overflow: visible;
+            text-overflow: clip;
+        }
         .badge-group {
             display: inline-flex;
             align-items: center;
@@ -352,7 +360,7 @@
             background: rgba(88, 166, 255, 0.12);
             color: #79c0ff;
         }
-        .os-ext {
+        .os-ext, .os-extension {
             border-color: rgba(210, 153, 34, 0.35);
             background: rgba(210, 153, 34, 0.12);
             color: #e3b341;
@@ -377,7 +385,7 @@
             background: rgba(188, 140, 255, 0.12);
             color: #bc8cff;
         }
-        .os-tool {
+        .os-tool, .os-cli {
             border-color: rgba(240, 136, 62, 0.35);
             background: rgba(240, 136, 62, 0.12);
             color: #f0883e;
@@ -511,13 +519,13 @@
                 </div>
             </div>
             <div class="badge-group">
-                <span class="badge badge-os os-roku">📺 Roku</span> <span class="badge badge-os os-android">🤖 Android</span> <span class="badge badge-os os-web">🌐 Web</span> <span class="badge badge-os os-docker">🐳 Docker</span>
+                <span class="badge badge-os os-roku">📺 Roku</span> <span class="badge badge-os os-android">🤖 Android</span> <span class="badge badge-os os-web">🌐 Web</span> <span class="badge badge-os os-docker">🐳 Docker</span> <span class="badge badge-os os-server">🖥️ Server</span>
                 <span class="badge badge-ready">Release Ready</span>
             </div>
         </div>
         <p class="hero-desc">Flutter tabletop gaming suite.</p>
         <div class="meta-pills">
-            <span class="pill pill-accent">📺 Roku</span> <span class="pill pill-accent">🤖 Android</span> <span class="pill pill-accent">🌐 Web</span> <span class="pill pill-accent">🐳 Docker</span>
+            <span class="pill pill-accent">📺 Roku</span> <span class="pill pill-accent">🤖 Android</span> <span class="pill pill-accent">🌐 Web</span> <span class="pill pill-accent">🐳 Docker</span> <span class="pill pill-accent">🖥️ Server</span>
             <span class="pill">flutter-web</span>
             <span class="pill">v0.1.28</span>
             <span class="pill">Applications & Frontends</span>
@@ -640,7 +648,7 @@ https://jakej985-rgb.github.io/M3tal-Hub/Android-card-games/</code></pre>
                 <div class="spec-list">
                     <div class="spec-item">
                         <span class="spec-label">Target OS / Platforms</span>
-                        <span class="spec-value">📺 Roku, 🤖 Android, 🌐 Web, 🐳 Docker</span>
+                        <span class="spec-value spec-platforms" title="📺 Roku, 🤖 Android, 🌐 Web, 🐳 Docker, 🖥️ Server">📺 Roku, 🤖 Android, 🌐 Web, 🐳 Docker, 🖥️ Server</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Target Architecture</span>

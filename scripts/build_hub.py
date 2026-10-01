@@ -126,6 +126,17 @@ PLATFORM_INFO = {
     "template": ("📦", "Template", "os-template"),
     "docs": ("📖", "Docs", "os-docs"),
     "cli": ("🛠️", "CLI", "os-tool"),
+    # Common aliases and secondary keys
+    "ext": ("🧩", "Extension", "os-ext"),
+    "tool": ("🛠️", "CLI", "os-tool"),
+    "lib": ("📦", "Library", "os-lib"),
+    "library": ("📦", "Library", "os-lib"),
+    "cross": ("⚡", "Universal", "os-cross"),
+    "universal": ("⚡", "Universal", "os-cross"),
+    "pwa": ("🌐", "Web / PWA", "os-web"),
+    "mac": ("🍎", "macOS", "os-macos"),
+    "osx": ("🍎", "macOS", "os-macos"),
+    "win": ("🪟", "Windows", "os-windows"),
 }
 
 # Compatibility alias
@@ -136,9 +147,13 @@ def get_platforms(app):
     Returns a list of platform tuples: (icon, label, css_class) for the given application.
     Supports multi-platform specifications from manifest.yml.
     """
-    if "platforms" in app and isinstance(app["platforms"], list) and len(app["platforms"]) > 0:
+    raw_platforms = app.get("platforms")
+    if isinstance(raw_platforms, str):
+        raw_platforms = [p.strip() for p in raw_platforms.replace(",", " ").split() if p.strip()]
+
+    if isinstance(raw_platforms, list) and len(raw_platforms) > 0:
         res = []
-        for p in app["platforms"]:
+        for p in raw_platforms:
             pkey = str(p).lower().strip()
             if pkey in PLATFORM_INFO:
                 res.append(PLATFORM_INFO[pkey])
@@ -156,36 +171,45 @@ def get_platforms(app):
             return [PLATFORM_INFO[explicit_os]]
         return [("⚡", explicit_os.title(), f"os-{explicit_os}")]
 
+    inferred = []
     if app_type == "android-native":
-        return [PLATFORM_INFO["android"]]
+        inferred.append(PLATFORM_INFO["android"])
     elif app_type in VALID_WEB_TYPES:
+        if app.get("apk_url"):
+            inferred.append(PLATFORM_INFO["android"])
         if app_type == "flutter-web":
-            return [("🌐", "Web / PWA", "os-web")]
-        return [PLATFORM_INFO["web"]]
+            inferred.append(("🌐", "Web / PWA", "os-web"))
+        else:
+            inferred.append(PLATFORM_INFO["web"])
     elif app_type == "extension":
-        return [PLATFORM_INFO["extension"]]
+        inferred.append(PLATFORM_INFO["extension"])
     elif app_type in ["desktop", "suite"]:
-        return [PLATFORM_INFO["desktop"]]
+        inferred.append(PLATFORM_INFO["desktop"])
     elif package == "docker-compose" or app_type in ["container", "infrastructure"]:
-        return [PLATFORM_INFO["docker"]]
+        inferred.append(PLATFORM_INFO["docker"])
     elif package == "gpg-keyring":
-        return [("🐧", "Linux / APT", "os-linux")]
+        inferred.append(("🐧", "Linux / APT", "os-linux"))
     elif app_type in ["service", "backend"]:
-        return [PLATFORM_INFO["linux"], PLATFORM_INFO["server"]]
+        inferred.extend([PLATFORM_INFO["linux"], PLATFORM_INFO["server"]])
     elif category == "infrastructure":
-        return [PLATFORM_INFO["linux"]]
+        inferred.append(PLATFORM_INFO["linux"])
     elif category == "libraries":
         if package == "pypi":
-            return [PLATFORM_INFO["python"]]
+            inferred.append(PLATFORM_INFO["python"])
         elif package == "dart-pkg":
-            return [PLATFORM_INFO["dart"]]
+            inferred.append(PLATFORM_INFO["dart"])
         elif app_type == "template" or package == "template":
-            return [PLATFORM_INFO["template"]]
-        return [("📦", "Library", "os-lib")]
+            inferred.append(PLATFORM_INFO["template"])
+        else:
+            inferred.append(("📦", "Library", "os-lib"))
     elif category == "tooling":
         if app_type == "docs" or package == "docs":
-            return [PLATFORM_INFO["docs"]]
-        return [PLATFORM_INFO["cli"]]
+            inferred.append(PLATFORM_INFO["docs"])
+        else:
+            inferred.append(PLATFORM_INFO["cli"])
+
+    if inferred:
+        return inferred
 
     return [("⚡", "Universal", "os-cross")]
 
@@ -1114,6 +1138,14 @@ def generate_app_page(app, release_info, category_map):
             text-overflow: ellipsis;
             white-space: nowrap;
         }}
+        .spec-value.spec-platforms {{
+            max-width: 220px;
+            white-space: normal;
+            word-break: normal;
+            line-height: 1.4;
+            overflow: visible;
+            text-overflow: clip;
+        }}
         .badge-group {{
             display: inline-flex;
             align-items: center;
@@ -1148,7 +1180,7 @@ def generate_app_page(app, release_info, category_map):
             background: rgba(88, 166, 255, 0.12);
             color: #79c0ff;
         }}
-        .os-ext {{
+        .os-ext, .os-extension {{
             border-color: rgba(210, 153, 34, 0.35);
             background: rgba(210, 153, 34, 0.12);
             color: #e3b341;
@@ -1173,7 +1205,7 @@ def generate_app_page(app, release_info, category_map):
             background: rgba(188, 140, 255, 0.12);
             color: #bc8cff;
         }}
-        .os-tool {{
+        .os-tool, .os-cli {{
             border-color: rgba(240, 136, 62, 0.35);
             background: rgba(240, 136, 62, 0.12);
             color: #f0883e;
@@ -1346,7 +1378,7 @@ def generate_app_page(app, release_info, category_map):
                 <div class="spec-list">
                     <div class="spec-item">
                         <span class="spec-label">Target OS / Platforms</span>
-                        <span class="spec-value">{platforms_spec_str}</span>
+                        <span class="spec-value spec-platforms" title="{platforms_spec_str}">{platforms_spec_str}</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Target Architecture</span>
@@ -1725,7 +1757,7 @@ def generate_hub(manifest_path, status_path, output_dir, site_status_path=None):
             background: rgba(88, 166, 255, 0.12);
             color: #79c0ff;
         }}
-        .os-ext {{
+        .os-ext, .os-extension {{
             border-color: rgba(210, 153, 34, 0.35);
             background: rgba(210, 153, 34, 0.12);
             color: #e3b341;
@@ -1750,7 +1782,7 @@ def generate_hub(manifest_path, status_path, output_dir, site_status_path=None):
             background: rgba(188, 140, 255, 0.12);
             color: #bc8cff;
         }}
-        .os-tool {{
+        .os-tool, .os-cli {{
             border-color: rgba(240, 136, 62, 0.35);
             background: rgba(240, 136, 62, 0.12);
             color: #f0883e;

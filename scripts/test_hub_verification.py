@@ -676,7 +676,7 @@ def test_multi_platform_badges():
 
     # 2. Verify key multi-platform applications
     key_expectations = {
-        "android-card-games": ["os-roku", "os-android", "os-web", "os-docker"],
+        "android-card-games": ["os-roku", "os-android", "os-web", "os-docker", "os-server"],
         "monster-lab": ["os-web", "os-android", "os-windows", "os-linux", "os-docker"],
         "idle-animals": ["os-android", "os-web"],
         "red-music-locker": ["os-web", "os-docker"],
@@ -858,8 +858,8 @@ def test_android_card_games_release():
     assert acg_app is not None, "android-card-games entry missing in manifest.yml"
 
     assert acg_app.get("version") == "0.1.28", f"Expected version 0.1.28, got {acg_app.get('version')}"
-    assert acg_app.get("platforms") == ["roku", "android", "web", "docker"], (
-        f"Expected platforms [roku, android, web, docker], got {acg_app.get('platforms')}"
+    assert acg_app.get("platforms") == ["roku", "android", "web", "docker", "server"], (
+        f"Expected platforms [roku, android, web, docker, server], got {acg_app.get('platforms')}"
     )
 
     expected_apk_url = "https://github.com/jakej985-rgb/Android-card-games/releases/download/v0.1.28/AndroidCardGames-v0.1.28.apk"
@@ -921,6 +921,7 @@ def test_android_card_games_release():
     assert "os-android" in page_content, "os-android class missing from android-card-games.html"
     assert "os-web" in page_content, "os-web class missing from android-card-games.html"
     assert "os-docker" in page_content, "os-docker class missing from android-card-games.html"
+    assert "os-server" in page_content, "os-server class missing from android-card-games.html"
     assert "v0.1.28" in page_content, "Version 0.1.28 missing from android-card-games.html"
 
     # 4. Hub index card verification
@@ -1136,6 +1137,103 @@ def test_assigned_repositories_review():
 
     print("Assigned repositories review verification passed!")
 
+def test_hub_engine_platform_rendering():
+    """
+    Directly tests the Hub Engine functions in scripts/build_hub.py:
+    - PLATFORM_INFO dictionary mapping all 17 required keys to 3-tuples
+    - get_platforms with lists, strings, aliases, unknown platforms, and inferred platforms
+    - render_card verifying badge-group platforms and app-type primary icon
+    - generate_app_page verifying hero header badge-group, meta-pills, and Target OS / Platforms spec item
+    - get_os_info backwards-compatibility tuple
+    """
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    import importlib.util
+    build_hub_path = os.path.join(base_dir, "scripts", "build_hub.py")
+    spec = importlib.util.spec_from_file_location("build_hub_engine_test", build_hub_path)
+    hub_engine = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(hub_engine)
+
+    # 1. PLATFORM_INFO completeness
+    required_keys = [
+        "android", "roku", "web", "docker", "server", "linux", "windows", "macos",
+        "desktop", "chrome", "firefox", "extension", "python", "dart", "template", "docs", "cli"
+    ]
+    for key in required_keys:
+        assert key in hub_engine.PLATFORM_INFO, f"Missing key '{key}' in PLATFORM_INFO"
+        icon, label, css_class = hub_engine.PLATFORM_INFO[key]
+        assert isinstance(icon, str) and len(icon) > 0, f"Empty icon for {key}"
+        assert isinstance(label, str) and len(label) > 0, f"Empty label for {key}"
+        assert isinstance(css_class, str) and css_class.startswith("os-"), f"Invalid css_class for {key}: {css_class}"
+
+    # 2. get_platforms with diverse inputs
+    # List format
+    res_list = hub_engine.get_platforms({"platforms": ["android", "roku", "docker", "server", "web"]})
+    assert len(res_list) == 5
+    assert res_list[0] == hub_engine.PLATFORM_INFO["android"]
+    assert res_list[1] == hub_engine.PLATFORM_INFO["roku"]
+    assert res_list[2] == hub_engine.PLATFORM_INFO["docker"]
+    assert res_list[3] == hub_engine.PLATFORM_INFO["server"]
+    assert res_list[4] == hub_engine.PLATFORM_INFO["web"]
+
+    # String format (comma and space separated)
+    res_str = hub_engine.get_platforms({"platforms": "roku, android, web, docker, server"})
+    assert len(res_str) == 5
+    assert res_str[0] == hub_engine.PLATFORM_INFO["roku"]
+
+    # Aliases
+    res_alias = hub_engine.get_platforms({"platforms": ["tool", "ext", "lib"]})
+    assert res_alias[0] == hub_engine.PLATFORM_INFO["cli"]
+    assert res_alias[1] == hub_engine.PLATFORM_INFO["extension"]
+    assert res_alias[2] == hub_engine.PLATFORM_INFO["library"]
+
+    # Unknown key fallback
+    res_unk = hub_engine.get_platforms({"platforms": ["custom-embedded"]})
+    assert res_unk[0] == ("⚡", "Custom-Embedded", "os-custom-embedded")
+
+    # Inferred fallback with apk_url
+    res_inferred = hub_engine.get_platforms({"type": "flutter-web", "apk_url": "https://example.com/app.apk"})
+    assert any(p[2] == "os-android" for p in res_inferred)
+    assert any(p[2] == "os-web" for p in res_inferred)
+
+    # Backward compatibility get_os_info
+    os_info = hub_engine.get_os_info({"platforms": ["roku", "android"]})
+    assert os_info == hub_engine.PLATFORM_INFO["roku"]
+
+    # 3. render_card badge rendering
+    sample_app = {
+        "id": "test-app",
+        "name": "Test Platform App",
+        "description": "Multi-platform testing harness.",
+        "type": "flutter-web",
+        "platforms": ["roku", "android", "web", "docker", "server"],
+        "enabled": True,
+        "status": "ready"
+    }
+    sample_rel = {"version": "1.0.0", "build_status": "success"}
+    card_html = hub_engine.render_card(sample_app, sample_rel)
+
+    assert "badge-group" in card_html
+    assert "os-roku" in card_html
+    assert "os-android" in card_html
+    assert "os-web" in card_html
+    assert "os-docker" in card_html
+    assert "os-server" in card_html
+    assert '<span class="app-type">📺 flutter-web</span>' in card_html, "Expected primary icon (Roku TV) in app-type badge"
+
+    # 4. generate_app_page rendering
+    page_html = hub_engine.generate_app_page(sample_app, sample_rel, {c["id"]: c for c in hub_engine.CATEGORIES})
+    assert "os-roku" in page_html
+    assert "os-android" in page_html
+    assert "os-web" in page_html
+    assert "os-docker" in page_html
+    assert "os-server" in page_html
+    assert "spec-platforms" in page_html
+    assert "Target OS / Platforms" in page_html
+    assert "📺 Roku, 🤖 Android, 🌐 Web, 🐳 Docker, 🖥️ Server" in page_html
+    assert "pill-accent" in page_html
+
+    print("Hub engine platform rendering unit tests passed!")
+
 if __name__ == "__main__":
     print("=== Running M3tal-Hub Verification Suite ===")
     test_manifest_and_status()
@@ -1157,6 +1255,8 @@ if __name__ == "__main__":
     test_app_detail_pages()
     print("\n=== Testing Multi-Platform Badges ===")
     test_multi_platform_badges()
+    print("\n=== Testing Hub Engine Platform Rendering Unit Tests ===")
+    test_hub_engine_platform_rendering()
     print("\n=== Testing Idle-Animals Release & Multi-Platform ===")
     test_idle_animals_release()
     print("\n=== Testing Android-Card-Games Release & Multi-Platform ===")
