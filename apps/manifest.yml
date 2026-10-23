@@ -742,11 +742,18 @@ apps:
     - linux
     enabled: false
     status: active
-    version: 0.1.17
+    version: 0.1.18
     package: library
     description: Foundation backend libraries, utilities, and common service primitives.
     repo_url: https://github.com/jakej985-rgb/m3tal-core
     changelog:
+    - version: 0.1.18
+      date: '2026-10-23'
+      tag: Release
+      notes:
+      - 'feat(dashboard): lock system storage to top row, add USB section, lock network
+        row'
+      - Debian package (.deb) binary distribution.
     - version: 0.1.17
       date: '2026-10-23'
       tag: Release
