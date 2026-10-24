@@ -515,7 +515,7 @@ apps:
 
   - id: m3tal-plugin-page
     name: M3tal Plugin Page
-    repo: m3tal-plugin-page
+    repo: m3tal-plugins
     path: m3tal-plugin-page
     type: static
     platforms: [web]
@@ -525,7 +525,7 @@ apps:
     package: static
     description: M3tal plugin landing page.
     base_href: /M3tal-Hub/m3tal-plugin-page/
-    release_url: https://github.com/jakej985-rgb/m3tal-plugin-page/releases
+    release_url: https://github.com/jakej985-rgb/m3tal-plugins/releases
     changelog:
       - version: 1.0.0
         date: "2026-09-30"
@@ -548,8 +548,8 @@ apps:
         - title: "💻 Local Testing & Static Serving"
           content: "Clone the static repository and serve locally using any standard static web server."
           code: |-
-            git clone https://github.com/jakej985-rgb/m3tal-plugin-page.git
-            cd m3tal-plugin-page
+            git clone https://github.com/jakej985-rgb/m3tal-plugins.git
+            cd m3tal-plugins
             python3 -m http.server 8080
             # Open the local server port in your browser
         - title: "🔍 Validating Plugin Signatures & Catalog Schema"
