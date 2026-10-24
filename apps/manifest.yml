@@ -515,7 +515,7 @@ apps:
 
   - id: m3tal-plugin-page
     name: M3tal Plugin Page
-    repo: m3tal-plugin-page
+    repo: m3tal-plugins
     path: m3tal-plugin-page
     type: static
     platforms: [web]
@@ -525,7 +525,7 @@ apps:
     package: static
     description: M3tal plugin landing page.
     base_href: /M3tal-Hub/m3tal-plugin-page/
-    release_url: https://github.com/jakej985-rgb/m3tal-plugin-page/releases
+    release_url: https://github.com/jakej985-rgb/m3tal-plugins/releases
     changelog:
       - version: 1.0.0
         date: "2026-09-30"
@@ -548,8 +548,8 @@ apps:
         - title: "💻 Local Testing & Static Serving"
           content: "Clone the static repository and serve locally using any standard static web server."
           code: |-
-            git clone https://github.com/jakej985-rgb/m3tal-plugin-page.git
-            cd m3tal-plugin-page
+            git clone https://github.com/jakej985-rgb/m3tal-plugins.git
+            cd m3tal-plugins
             python3 -m http.server 8080
             # Open the local server port in your browser
         - title: "🔍 Validating Plugin Signatures & Catalog Schema"
@@ -742,11 +742,147 @@ apps:
     - linux
     enabled: false
     status: active
-    version: 0.1.0
+    version: 0.3.0
     package: library
     description: Foundation backend libraries, utilities, and common service primitives.
     repo_url: https://github.com/jakej985-rgb/m3tal-core
     changelog:
+    - version: 0.3.0
+      date: '2026-10-24'
+      tag: Release
+      notes:
+      - 'chore(release): bump version to v0.3.0'
+      - Debian package (.deb) binary distribution.
+    - version: 0.2.0
+      date: '2026-10-24'
+      tag: Release
+      notes:
+      - 'fix(ci): repair pub-deb workflow syntax and test suite race conditions'
+      - Debian package (.deb) binary distribution.
+    - version: 0.1.20
+      date: '2026-10-24'
+      tag: Release
+      notes:
+      - 'feat(dashboard): integrate expandable host info & subsystem health into top
+        bar, purge legacy deploy plugins & catalog (v0.1.20)'
+      - Debian package (.deb) binary distribution.
+    - version: 0.1.19
+      date: '2026-10-24'
+      tag: Release
+      notes:
+      - 'chore(plugins): purge bundled plugins from core and document plugin catalog/standardization
+        spec (v0.1.19)'
+      - Debian package (.deb) binary distribution.
+    - version: 0.1.18
+      date: '2026-10-23'
+      tag: Release
+      notes:
+      - 'feat(dashboard): lock system storage to top row, add USB section, lock network
+        row'
+      - Debian package (.deb) binary distribution.
+    - version: 0.1.17
+      date: '2026-10-23'
+      tag: Release
+      notes:
+      - 'feat(storage): group multi-partition disks into unified drive cards and filter
+        boot/tmp'
+      - Debian package (.deb) binary distribution.
+    - version: 0.1.16
+      date: '2026-10-23'
+      tag: Release
+      notes:
+      - 'feat(system): add host cleanup routine and relocate docker prune to containers'
+      - Debian package (.deb) binary distribution.
+    - version: 0.1.15
+      date: '2026-10-23'
+      tag: Release
+      notes:
+      - 'chore: auto-bump version to v0.1.15 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.1.14
+      date: '2026-10-23'
+      tag: Release
+      notes:
+      - 'chore: auto-bump version to v0.1.14 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.1.13
+      date: '2026-10-23'
+      tag: Release
+      notes:
+      - 'chore: auto-bump version to v0.1.13 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.1.12
+      date: '2026-10-23'
+      tag: Release
+      notes:
+      - 'chore: auto-bump version to v0.1.12 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.1.11
+      date: '2026-10-23'
+      tag: Release
+      notes:
+      - 'chore: auto-bump version to v0.1.11 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.1.10
+      date: '2026-10-23'
+      tag: Release
+      notes:
+      - 'chore: auto-bump version to v0.1.10 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.1.9
+      date: '2026-10-23'
+      tag: Release
+      notes:
+      - 'chore: auto-bump version to v0.1.9 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.1.8
+      date: '2026-10-23'
+      tag: Release
+      notes:
+      - 'chore: auto-bump version to v0.1.8 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.1.7
+      date: '2026-10-23'
+      tag: Release
+      notes:
+      - 'chore: auto-bump version to v0.1.7 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.1.6
+      date: '2026-10-23'
+      tag: Release
+      notes:
+      - 'chore: auto-bump version to v0.1.6 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.1.5
+      date: '2026-10-23'
+      tag: Release
+      notes:
+      - 'chore: auto-bump version to v0.1.5 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.1.4
+      date: '2026-10-21'
+      tag: Release
+      notes:
+      - 'chore: auto-bump version to v0.1.4 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.1.3
+      date: '2026-10-21'
+      tag: Release
+      notes:
+      - 'chore: auto-bump version to v0.1.3 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.1.2
+      date: '2026-10-21'
+      tag: Release
+      notes:
+      - 'chore: auto-bump version to v0.1.2 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.1.1
+      date: '2026-10-21'
+      tag: Release
+      notes:
+      - 'chore: auto-bump version to v0.1.1 [skip ci]'
+      - Debian package (.deb) binary distribution.
     - version: 0.1.0
       date: '2026-10-20'
       tag: Release
