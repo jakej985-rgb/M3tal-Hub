@@ -751,7 +751,7 @@ apps:
       date: '2026-10-24'
       tag: Release
       notes:
-      - 'style(api): format Go files according to gofmt'
+      - 'chore(release): bump version to v0.4.0'
       - Debian package (.deb) binary distribution.
     - version: 0.3.0
       date: '2026-10-24'
