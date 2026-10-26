@@ -751,8 +751,7 @@ apps:
       date: '2026-10-26'
       tag: Release
       notes:
-      - 'feat(plugins): establish plugin widget ownership and decouple container fleet
-        widget from core dashboard'
+      - 'chore(release): bump version to v0.16.0'
       - Debian package (.deb) binary distribution.
     - version: 0.15.0
       date: '2026-10-26'
