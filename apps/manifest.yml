@@ -751,8 +751,7 @@ apps:
       date: '2026-10-26'
       tag: Release
       notes:
-      - 'fix(plugins): implement clean plugin update lifecycle with automatic restart
-        and zero host downtime'
+      - 'chore(release): bump version to v0.19.1'
       - Debian package (.deb) binary distribution.
     - version: 0.19.0
       date: '2026-10-26'
