@@ -742,16 +742,100 @@ apps:
     - linux
     enabled: false
     status: active
-    version: 0.4.0
+    version: 0.13.0
     package: library
     description: Foundation backend libraries, utilities, and common service primitives.
     repo_url: https://github.com/jakej985-rgb/m3tal-core
     changelog:
+    - version: 0.13.0
+      date: '2026-10-26'
+      tag: Release
+      notes:
+      - 'chore(release): bump version to v0.13.0'
+      - Debian package (.deb) binary distribution.
+    - version: 0.12.1
+      date: '2026-10-26'
+      tag: Release
+      notes:
+      - 'chore(release): bump version to v0.12.1'
+      - Debian package (.deb) binary distribution.
+    - version: 0.12.0
+      date: '2026-10-26'
+      tag: Release
+      notes:
+      - 'chore(release): auto-bump version to v0.12.0 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.11.0
+      date: '2026-10-24'
+      tag: Release
+      notes:
+      - 'chore(release): auto-bump version to v0.11.0 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.10.0
+      date: '2026-10-24'
+      tag: Release
+      notes:
+      - 'chore(release): auto-bump version to v0.10.0 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.9.0
+      date: '2026-10-24'
+      tag: Release
+      notes:
+      - 'chore(release): auto-bump version to v0.9.0 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.8.2
+      date: '2026-10-24'
+      tag: Release
+      notes:
+      - 'chore(release): auto-bump version to v0.8.2 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.8.1
+      date: '2026-10-24'
+      tag: Release
+      notes:
+      - 'chore(release): auto-bump version to v0.8.1 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.8.0
+      date: '2026-10-24'
+      tag: Release
+      notes:
+      - 'chore(release): auto-bump version to v0.8.0 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.7.0
+      date: '2026-10-24'
+      tag: Release
+      notes:
+      - 'chore(release): auto-bump version to v0.7.0 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.6.0
+      date: '2026-10-24'
+      tag: Release
+      notes:
+      - 'chore(release): auto-bump version to v0.6.0 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.5.0
+      date: '2026-10-24'
+      tag: Release
+      notes:
+      - 'chore(release): auto-bump version to v0.5.0 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.4.2
+      date: '2026-10-24'
+      tag: Release
+      notes:
+      - 'chore(release): auto-bump version to v0.4.2 [skip ci]'
+      - Debian package (.deb) binary distribution.
+    - version: 0.4.1
+      date: '2026-10-24'
+      tag: Release
+      notes:
+      - 'chore(release): auto-bump version to v0.4.1 [skip ci]'
+      - Debian package (.deb) binary distribution.
     - version: 0.4.0
       date: '2026-10-24'
       tag: Release
       notes:
-      - 'style(api): format Go files according to gofmt'
+      - 'chore(release): bump version to v0.4.0'
       - Debian package (.deb) binary distribution.
     - version: 0.3.0
       date: '2026-10-24'
