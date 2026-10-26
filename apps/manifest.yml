@@ -742,11 +742,17 @@ apps:
     - linux
     enabled: false
     status: active
-    version: 0.16.0
+    version: 0.17.0
     package: library
     description: Foundation backend libraries, utilities, and common service primitives.
     repo_url: https://github.com/jakej985-rgb/m3tal-core
     changelog:
+    - version: 0.17.0
+      date: '2026-10-26'
+      tag: Release
+      notes:
+      - 'feat(gui): implement uniform modular block grid with strict multi-span multiples'
+      - Debian package (.deb) binary distribution.
     - version: 0.16.0
       date: '2026-10-26'
       tag: Release
