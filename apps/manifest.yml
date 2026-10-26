@@ -751,7 +751,7 @@ apps:
       date: '2026-10-26'
       tag: Release
       notes:
-      - 'fix(plugins): resolve mode and explicit package name targeting during installation'
+      - 'chore(release): bump version to v0.20.1'
       - Debian package (.deb) binary distribution.
     - version: 0.20.0
       date: '2026-10-26'
