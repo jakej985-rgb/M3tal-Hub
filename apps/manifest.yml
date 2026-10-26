@@ -751,7 +751,7 @@ apps:
       date: '2026-10-26'
       tag: Release
       notes:
-      - 'feat(plugins): implement dynamic APT candidate discovery and repository management'
+      - 'chore(release): bump version to v0.20.0'
       - Debian package (.deb) binary distribution.
     - version: 0.19.1
       date: '2026-10-26'
