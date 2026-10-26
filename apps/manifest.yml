@@ -751,8 +751,7 @@ apps:
       date: '2026-10-26'
       tag: Release
       notes:
-      - 'feat(settings): implement dedicated settings page and dynamic plugin settings
-        architecture'
+      - 'chore(release): bump version to v0.18.0'
       - Debian package (.deb) binary distribution.
     - version: 0.17.0
       date: '2026-10-26'
