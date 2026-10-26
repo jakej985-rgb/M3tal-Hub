@@ -742,16 +742,22 @@ apps:
     - linux
     enabled: false
     status: active
-    version: 0.20.1
+    version: 0.20.2
     package: library
     description: Foundation backend libraries, utilities, and common service primitives.
     repo_url: https://github.com/jakej985-rgb/m3tal-core
     changelog:
+    - version: 0.20.2
+      date: '2026-10-26'
+      tag: Release
+      notes:
+      - 'fix(plugins): add automatic dependency recovery on unmet dependencies'
+      - Debian package (.deb) binary distribution.
     - version: 0.20.1
       date: '2026-10-26'
       tag: Release
       notes:
-      - 'fix(plugins): resolve mode and explicit package name targeting during installation'
+      - 'chore(release): bump version to v0.20.1'
       - Debian package (.deb) binary distribution.
     - version: 0.20.0
       date: '2026-10-26'
