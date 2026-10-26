@@ -751,7 +751,7 @@ apps:
       date: '2026-10-26'
       tag: Release
       notes:
-      - 'feat(gui): implement uniform modular block grid with strict multi-span multiples'
+      - 'chore(release): bump version to v0.17.0'
       - Debian package (.deb) binary distribution.
     - version: 0.16.0
       date: '2026-10-26'
