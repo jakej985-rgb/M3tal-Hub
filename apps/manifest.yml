@@ -742,11 +742,17 @@ apps:
     - linux
     enabled: false
     status: active
-    version: 0.11.0
+    version: 0.12.0
     package: library
     description: Foundation backend libraries, utilities, and common service primitives.
     repo_url: https://github.com/jakej985-rgb/m3tal-core
     changelog:
+    - version: 0.12.0
+      date: '2026-10-26'
+      tag: Release
+      notes:
+      - 'chore(release): auto-bump version to v0.12.0 [skip ci]'
+      - Debian package (.deb) binary distribution.
     - version: 0.11.0
       date: '2026-10-24'
       tag: Release
