@@ -742,11 +742,18 @@ apps:
     - linux
     enabled: false
     status: active
-    version: 0.19.0
+    version: 0.19.1
     package: library
     description: Foundation backend libraries, utilities, and common service primitives.
     repo_url: https://github.com/jakej985-rgb/m3tal-core
     changelog:
+    - version: 0.19.1
+      date: '2026-10-26'
+      tag: Release
+      notes:
+      - 'fix(plugins): implement clean plugin update lifecycle with automatic restart
+        and zero host downtime'
+      - Debian package (.deb) binary distribution.
     - version: 0.19.0
       date: '2026-10-26'
       tag: Release
