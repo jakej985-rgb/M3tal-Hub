@@ -523,7 +523,7 @@
                 <span class="badge badge-active">Active</span>
             </div>
         </div>
-        <p class="hero-desc">Package signing key and Debian/Ubuntu distribution repository configuration.</p>
+        <p class="hero-desc">Package signing key and Debian/Ubuntu distribution repository configuration. Hosts all signed .deb binaries for the M3tal ecosystem.</p>
         <div class="meta-pills">
             <span class="pill pill-accent">🐧 Linux</span>
             <span class="pill">package</span>
@@ -559,12 +559,12 @@
 
             <div class="guide-step">
                 <h4>🔑 Manual Keyring & Sources Configuration</h4>
-                <p>Alternatively, configure the repository and keyring manually adhering to Debian signed-by standards:</p>
+                <p>Alternatively, configure the repository and keyring manually adhering to Debian signed-by standards. Binary `.deb` packages are stored and served by the `m3tal-apt-key` repository — this Hub only hosts documentation and discovery pages:</p>
                 <pre><code># 1. Create keyrings directory
 sudo install -m 0755 -d /etc/apt/keyrings
 
 # 2. Download and dearmor M3tal public key
-curl -fsSL https://jakej985-rgb.github.io/m3tal-apt-key/KEY.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/m3tal-archive-keyring.gpg
+curl -fsSL https://jakej985-rgb.github.io/m3tal-apt-key/public.key | sudo gpg --dearmor -o /etc/apt/keyrings/m3tal-archive-keyring.gpg
 sudo chmod a+r /etc/apt/keyrings/m3tal-archive-keyring.gpg
 
 # 3. Add APT sources list entry
@@ -577,12 +577,12 @@ sudo apt update</code></pre>
 
             <div class="guide-step">
                 <h4>🔍 Keyring & Repository Verification</h4>
-                <p>Verify that the GPG key is installed with fingerprint `B95A 45C6 4757 7DEB CC87  7C49 AF61 90B0 C013 46DD` and packages are available:</p>
+                <p>Verify that the GPG key is installed with fingerprint `5F84 FE50 A401 11C9 8141 0E11 775A D147 3BF2 5102` and packages are available:</p>
                 <pre><code># Inspect imported key fingerprint
 gpg --show-keys /etc/apt/keyrings/m3tal-archive-keyring.gpg
 
-# Query m3tal package policy
-apt-cache policy m3tal</code></pre>
+# Query published M3tal packages
+apt-cache policy m3tal m3tal-plugin-compose m3tal-plugin-docker-monitor m3tal-plugin-mesh m3tal-plugin-mesh-cluster m3tal-plugin-mesh-node</code></pre>
             </div>
         
             </section>

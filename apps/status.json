@@ -86,10 +86,10 @@
     },
     "m3tal-core": {
       "status": "active",
-      "version": "0.1.0",
+      "version": "0.24.6",
       "last_released": null,
-      "build_status": "library",
-      "package_status": "library"
+      "build_status": "deb",
+      "package_status": "deb"
     },
     "m3tal-api": {
       "status": "active",

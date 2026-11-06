@@ -33,13 +33,18 @@ All Debian binary packages in the M3tal ecosystem must adhere to standard naming
 1. **Prefix**: Every application package name must be prefixed with `m3tal-`.
 2. **Casing**: Strictly lowercase alphanumeric characters and hyphens (`[a-z0-9-]+`).
 3. **Core Exception**: The foundational orchestration package is named `m3tal` and provides the virtual package `m3tal-core` via `Provides: m3tal-core`.
-4. **Archive Filename**: `<package>_<version>_<arch>.deb` (e.g., `m3tal-godash_0.2.0_amd64.deb`). Note: Historical builds with leading `v` (e.g. `m3tal_v1.1.62_amd64.deb`) are supported by index mapping, but future builds must omit the `v` prefix in the Debian control version field.
+4. **Archive Filename**: `<package>_<version>_<arch>.deb` (e.g., `m3tal_0.24.6_amd64.deb`). The Debian control `Version` field must omit any `v` prefix.
 
 ### Ecosystem Package Registry Mapping
 
 | Hub App ID | Ecosystem Category | Debian Package Name | Service / Binary | Dependency Tier |
 | :--- | :--- | :--- | :--- | :--- |
-| `m3tal-core` | Infrastructure | `m3tal` | `/usr/bin/m3tal`, `/usr/bin/m3tal-api` | Foundation |
+| `m3tal-core` | Infrastructure | `m3tal` | `/usr/bin/m3tal-api`, `m3tal-api.service` (GUI `/gui/`, API `/api/v2`, port 5050) | Foundation |
+| `m3tal-plugin-compose` | Plugins | `m3tal-plugin-compose` | Plugin (auto-discovered by Core) | Tight (`Depends: m3tal`) |
+| `m3tal-plugin-docker-monitor` | Plugins | `m3tal-plugin-docker-monitor` | Plugin (auto-discovered by Core) | Tight (`Depends: m3tal`) |
+| `m3tal-plugin-mesh` | Plugins | `m3tal-plugin-mesh` | Plugin (auto-discovered by Core) | Tight (`Depends: m3tal`) |
+| `m3tal-plugin-mesh-cluster` | Plugins | `m3tal-plugin-mesh-cluster` | Plugin (auto-discovered by Core) | Tight (`Depends: m3tal`) |
+| `m3tal-plugin-mesh-node` | Plugins | `m3tal-plugin-mesh-node` | Plugin (auto-discovered by Core) | Tight (`Depends: m3tal`) |
 | `m3tal-godash` | Infrastructure | `m3tal-godash` | `/usr/bin/m3tal-godash` | Tight (`Depends: m3tal`) |
 | `m3tal-api` | Infrastructure | `m3tal-api` | `/usr/bin/m3tal-api` | Tight (`Depends: m3tal`) |
 | `comicinfo-generator`| Tooling / CLI | `m3tal-comicinfo` | `/usr/bin/comicinfo` | Standalone |
@@ -61,13 +66,13 @@ Applications must declare dependencies explicitly in `DEBIAN/control` using Debi
 
 ### Tier 2: Ecosystem-Integrated Services
 - **Profile**: Services designed to attach to local M3tal orchestration, dynamic Traefik routing, or shared daemon coordination.
-- **Dependencies**: `Depends: m3tal (>= 1.1.0), adduser`
+- **Dependencies**: `Depends: m3tal (>= 0.24.0), adduser`
 - **Integration**: Shares `/etc/m3tal/`, runs under group `m3tal`, and registers dynamic routing configs under `/opt/m3tal/stack/dynamic/`.
 
 ### Tier 3: Desktop Graphical Applications
 - **Profile**: Flutter desktop, Qt C++, or native GUI applications.
 - **Dependencies**: `Depends: libgtk-3-0 | libqt6core6, xdg-utils`
-- **Recommends**: `Recommends: m3tal (>= 1.1.0)`
+- **Recommends**: `Recommends: m3tal (>= 0.24.0)`
 - **Integration**: Freedesktop desktop entries, application icons, and mime-type associations.
 
 ---

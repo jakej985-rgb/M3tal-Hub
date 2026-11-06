@@ -473,12 +473,12 @@ def get_install_guide(app):
         }
     elif app_id == "m3tal-core":
         return {
-            "summary": "Core infrastructure orchestration platform, CLI daemon, and REST control plane API packaged as a Debian (.deb) package.",
+            "summary": "M3tal Core is the runtime and plugin host for the M3tal ecosystem, packaged as a Debian (.deb) package. It ships an embedded Web GUI dashboard, a REST API, and the m3tal-api.service systemd daemon. All workload features are provided by external plugins installed as separate APT packages.",
             "prerequisites": [
                 "🐧 Linux: Debian 12/13 (trixie), Ubuntu 22.04/24.04 (noble), Linux Mint 21/22 (amd64)",
                 "🔑 Administrative sudo privileges for APT installation and systemd service management",
                 "📦 Official M3tal APT repository enabled (see M3tal APT Keyring)",
-                "🐳 Docker Engine (recommended for container orchestration)"
+                "🐳 Docker Engine (recommended for container orchestration plugins)"
             ],
             "steps": [
                 {
@@ -492,14 +492,14 @@ def get_install_guide(app):
                     "code": "sudo apt update\nsudo apt install -y m3tal"
                 },
                 {
-                    "title": "🚀 3. Initialize Configuration & Services",
-                    "content": "Initialize configuration and inspect active systemd daemon units:",
-                    "code": "# Initialize environment configuration\nsudo m3tal init\n\n# Check daemon services status\nsystemctl status m3tal.service\nsystemctl status m3tal-api.service"
+                    "title": "🚀 3. Service & Runtime Endpoints",
+                    "content": "The package installs and enables `m3tal-api.service`, a headless daemon that serves the embedded Web GUI and REST API. There is no separate CLI orchestrator — manage the runtime via systemd and the web interface:",
+                    "code": "# Check daemon service status\nsystemctl status m3tal-api.service\n\n# Web GUI (served by m3tal-api on port 5050)\nhttp://localhost:5050/gui/\n\n# REST API\nhttp://localhost:5050/api/v2\n\n# Change listening port via API_PORT in /etc/m3tal/.env"
                 },
                 {
-                    "title": "💻 4. CLI Usage & Control Center",
-                    "content": "Run the interactive terminal Control Center or access CLI commands:",
-                    "code": "# Launch Control Center\nm3tal\n\n# View all commands\nm3tal help"
+                    "title": "🧩 4. Install Ecosystem Plugins",
+                    "content": "Workload features ship as separate APT packages from the same repository. After `apt install`, M3tal Core automatically discovers installed plugins — no manual registration is required:",
+                    "code": "# Example plugin packages\nsudo apt install -y m3tal-plugin-compose\nsudo apt install -y m3tal-plugin-docker-monitor\nsudo apt install -y m3tal-plugin-mesh\nsudo apt install -y m3tal-plugin-mesh-cluster\nsudo apt install -y m3tal-plugin-mesh-node"
                 }
             ]
         }
@@ -519,12 +519,12 @@ def get_install_guide(app):
                 },
                 {
                     "title": "🔑 Manual Keyring & Sources Configuration",
-                    "content": "Alternatively, configure the repository and keyring manually adhering to Debian signed-by standards:",
+                    "content": "Alternatively, configure the repository and keyring manually adhering to Debian signed-by standards. Binary `.deb` packages are stored and served by the `m3tal-apt-key` repository — this Hub only hosts documentation and discovery pages:",
                     "code": """# 1. Create keyrings directory
 sudo install -m 0755 -d /etc/apt/keyrings
 
 # 2. Download and dearmor M3tal public key
-curl -fsSL https://jakej985-rgb.github.io/m3tal-apt-key/KEY.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/m3tal-archive-keyring.gpg
+curl -fsSL https://jakej985-rgb.github.io/m3tal-apt-key/public.key | sudo gpg --dearmor -o /etc/apt/keyrings/m3tal-archive-keyring.gpg
 sudo chmod a+r /etc/apt/keyrings/m3tal-archive-keyring.gpg
 
 # 3. Add APT sources list entry
@@ -535,12 +535,12 @@ sudo apt update"""
                 },
                 {
                     "title": "🔍 Keyring & Repository Verification",
-                    "content": "Verify that the GPG key is installed with fingerprint `B95A 45C6 4757 7DEB CC87  7C49 AF61 90B0 C013 46DD` and packages are available:",
+                    "content": "Verify that the GPG key is installed with fingerprint `5F84 FE50 A401 11C9 8141 0E11 775A D147 3BF2 5102` and packages are available:",
                     "code": """# Inspect imported key fingerprint
 gpg --show-keys /etc/apt/keyrings/m3tal-archive-keyring.gpg
 
-# Query m3tal package policy
-apt-cache policy m3tal"""
+# Query published M3tal packages
+apt-cache policy m3tal m3tal-plugin-compose m3tal-plugin-docker-monitor m3tal-plugin-mesh m3tal-plugin-mesh-cluster m3tal-plugin-mesh-node"""
                 }
             ]
         }
@@ -562,6 +562,43 @@ apt-cache policy m3tal"""
                 }
             ]
         }
+    elif app.get("apt_package"):
+        apt_pkg = app["apt_package"]
+        is_plugin = apt_pkg.startswith("m3tal-plugin-")
+        guide["summary"] = (
+            f"`{apt_pkg}` is published in the official M3tal Debian/APT repository "
+            "(hosted by the m3tal-apt-key project). This Hub page is documentation "
+            "and discovery only — binaries are installed via APT."
+        )
+        guide["prerequisites"] = [
+            "🐧 Debian or Ubuntu Linux (amd64)",
+            "🔑 Administrative sudo privileges",
+            "📦 Official M3tal APT repository enabled (see M3tal APT Keyring page)"
+        ]
+        guide["steps"] = [
+            {
+                "title": "📦 1. Add M3tal APT Repository",
+                "content": "Configure the official M3tal repository and GPG signing key if not already installed:",
+                "code": "curl -fsSL https://jakej985-rgb.github.io/m3tal-apt-key/install.sh | sudo bash"
+            },
+            {
+                "title": "📥 2. Install via APT",
+                "content": "Update the package index and install the signed Debian package:",
+                "code": f"sudo apt update\nsudo apt install -y {apt_pkg}"
+            },
+            {
+                "title": "🧩 3. Plugin Discovery (M3tal Core)",
+                "content": (
+                    "After installation, M3tal Core (`m3tal-api.service`) automatically "
+                    "discovers the plugin — no manual registration or restart of plugin "
+                    "directories is required. Manage the runtime via `systemctl` and the "
+                    "Web GUI at `http://localhost:5050/gui/`."
+                    if is_plugin else
+                    "Manage the installed software via `systemctl` and standard APT tooling (`apt show`, `apt remove`)."
+                ),
+                "code": "systemctl status m3tal-api.service\n# Web GUI: http://localhost:5050/gui/"
+            }
+        ]
     elif app_type == "flutter-web":
         guide["summary"] = "This application can be accessed instantly in any modern web browser or installed locally as a Progressive Web App (PWA)."
         guide["prerequisites"] = [

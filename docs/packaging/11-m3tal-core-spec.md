@@ -4,7 +4,7 @@
 > **Package Name**: `m3tal` (Virtual: `m3tal-core`)  
 > **Reference Architecture**: `amd64`  
 > **Target Distribution**: `stable main` (`Debian 12/13`, `Ubuntu 22.04/24.04`, `Linux Mint 21/22`)  
-> **Current Version**: `1.1.62` (`pool/main/m3tal_v1.1.62_amd64.deb`)  
+> **Current Version**: `0.24.0` (`pool/main/m3tal/m3tal_0.24.0_amd64.deb`)  
 > **Maintainer**: `Jake Johnson <jake@m3tal.io>`  
 > **Status**: Completed & Validated
 
@@ -12,12 +12,15 @@
 
 ## 1. Executive Summary & Core Responsibilities
 
-`m3tal-core` (binary package `m3tal`) is the foundational system orchestration package for the M3tal Linux application ecosystem. It provides:
-1. **Core Orchestration CLI (`/usr/bin/m3tal`)**: Command dispatcher, environment initialization, interactive terminal Control Center, and runtime supervision.
-2. **Control-Plane API Daemon (`/usr/bin/m3tal-api`)**: Local REST API backend facilitating inter-process communication, metrics, and homelab routing integration.
-3. **Systemd Services**: Native background service units (`m3tal.service` and `m3tal-api.service`) with automated lifecycle management.
-4. **Shared Environment & Group Primitives**: Common system group `m3tal`, directory layout (`/etc/m3tal`, `/var/lib/m3tal`, `/var/log/m3tal`, `/opt/m3tal`), and permissions allowing secure sudo-less operation.
-5. **Docker Infrastructure Topology**: Standard compose stacks and Traefik reverse-proxy templates deployed to `/opt/m3tal/stack` (with convenience symlink `/docker`).
+`m3tal-core` (binary package `m3tal`) is the **Dashboard and System Monitor with extra plugins** for the M3tal Linux application ecosystem. It provides:
+1. **Core CLI & Desktop App (`/usr/bin/m3tal`)**: Embedded Web GUI on port `5050`, desktop window control center, terminal telemetry stats (`m3tal stats`, `m3tal sysmon`), and health diagnostics (`m3tal doctor`).
+2. **Control-Plane API Daemon (`/usr/bin/m3tal-api`)**: Bare-metal REST API backend facilitating hardware telemetry collection (CPU, RAM, GPU, thermals, mounts), WebSocket event streaming, and Host Supervisor for external plugins.
+3. **Systemd Services**: Native background service unit (`m3tal-api.service`) with automated lifecycle management.
+4. **Shared Environment & Group Primitives**: Common system group `m3tal`, directory layout (`/etc/m3tal`, `/var/lib/m3tal`, `/var/log/m3tal`), and permissions allowing secure sudo-less operation.
+5. **Extensible Plugin Host Supervisor**: Discovers, supervises, and dynamically mounts external plugins from `m3tal-plugins` over JSON-RPC 2.0 `stdio` with zero core footprint.
+
+> **Ecosystem Responsibility Boundary**:  
+> M3TAL Core contains zero container management, compose orchestration, proxy routing, or application database logic. External workloads—such as Docker container fleet monitoring (`m3tal-docker`), Compose editing (`m3tal-compose`), reverse proxies (`m3tal-traefik`), VPN tunnels (`m3tal-vpn`), and personal cloud clustering (`m3tal-mesh`)—are maintained as **extra plugins** in `m3tal-plugins` or cataloged in `M3tal-Hub`.
 
 ---
 
@@ -59,21 +62,21 @@ A critical requirement of the M3tal packaging architecture is **strict isolation
 
 ## 3. Package Architecture & Payload Manifest
 
-The reference Debian binary package `m3tal_v1.1.62_amd64.deb` contains:
+The reference Debian binary package `m3tal_0.24.0_amd64.deb` contains:
 
 ### 3.1 Control Metadata (`DEBIAN/control`)
 ```ini
 Package: m3tal
-Version: 1.1.62
+Version: 0.24.0
 Section: utils
 Priority: optional
 Architecture: amd64
 Maintainer: Jake Johnson <jake@m3tal.io>
 Installed-Size: 47987
 Recommends: xdotool
-Description: M3TAL Core — DEB-first infrastructure orchestration platform.
- Includes the m3tal CLI and control-plane API.
- Optimized for Traefik ecosystems and home lab automation.
+Description: M3TAL Core — Dashboard and system monitor with extra plugins.
+ Includes the m3tal CLI, system telemetry, and embedded Web GUI.
+ Hosts extensible plugins with zero core footprint.
 ```
 
 ### 3.2 Executable Binaries
@@ -83,8 +86,7 @@ Description: M3TAL Core — DEB-first infrastructure orchestration platform.
 ### 3.3 System Configuration & Templates
 - `/etc/m3tal/.env.example`: Default environment variable configuration template.
 - `/usr/share/m3tal/stack/`: Base compose topology templates:
-  - `ai-compose.yml`, `cloudflared-config.yml`, `m3tal-compose.local.yml`
-  - `m3tal-compose.traefik.yml`, `m3tal-compose.yml`, `routing-compose.yml`
+  - `ai-compose.yml`, `cloudflared-config.yml`, `routing-compose.yml`
   - `traefik.yml`, `users.example.json`, `dynamic/api.yml`
 - `/usr/share/m3tal/gui/`: Built-in web dashboard assets (`index.html`, JavaScript, CSS).
 
@@ -214,15 +216,15 @@ WantedBy=multi-user.target
 
 Applications in the M3tal ecosystem depend on `m3tal-core` according to three standard tiers:
 
-1. **Tight Orchestration Tier** (`m3tal-godash`, `m3tal-api`):
+1. **Tight Orchestration Tier** (`m3tal-api`, official plugins):
    ```ini
-   Depends: m3tal (>= 1.1.0), docker.io | docker-ce
+   Depends: m3tal (>= 0.24.0), docker.io | docker-ce
    ```
    Requires the core CLI, `/docker` stack tree, and systemd units for service discovery and Traefik reverse-proxy routing.
 
 2. **Modular Service Tier** (e.g. `infernal-web`, `jellyfin-ui`):
    ```ini
-   Recommends: m3tal (>= 1.1.0)
+   Recommends: m3tal (>= 0.24.0)
    ```
    Can run standalone in containers or web servers, but leverages `m3tal` when installed on the host for automated network routing and SSL termination.
 
@@ -238,8 +240,8 @@ Applications in the M3tal ecosystem depend on `m3tal-core` according to three st
 
 | Test Assertion | Method | Result | Notes |
 | :--- | :--- | :--- | :--- |
-| Package Archive Integrity | `dpkg-deb -I m3tal_v1.1.62_amd64.deb` | PASSED | Control archive checksums, md5sums, and conffiles valid |
-| File Payload Structure | `dpkg-deb -c m3tal_v1.1.62_amd64.deb` | PASSED | Correct directories under `/usr/bin`, `/lib/systemd`, `/etc/m3tal`, `/usr/share` |
+| Package Archive Integrity | `dpkg-deb -I m3tal_0.24.0_amd64.deb` | PASSED | Control archive checksums, md5sums, and conffiles valid |
+| File Payload Structure | `dpkg-deb -c m3tal_0.24.0_amd64.deb` | PASSED | Correct directories under `/usr/bin`, `/lib/systemd`, `/etc/m3tal`, `/usr/share` |
 | Idempotent Installation | Clean Debian 13 container test | PASSED | `apt-get install -y m3tal` successfully resolves and unpacks |
 | Non-Destructive Upgrades | `postinst` check on `.env` | PASSED | Pre-existing `.env` is preserved |
 | Symlink Safety | `postinst` check on `/docker` | PASSED | Existing non-symlink directories are never overwritten |
