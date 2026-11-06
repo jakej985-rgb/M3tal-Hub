@@ -523,13 +523,13 @@
                 <span class="badge badge-active">Active</span>
             </div>
         </div>
-        <p class="hero-desc">Foundation backend libraries, utilities, and common service primitives.</p>
+        <p class="hero-desc">M3tal Core runtime and plugin host. Ships the embedded Web GUI (/gui/), REST API (/api/v2) on port 5050 via m3tal-api.service, packaged as the m3tal .deb. All workload features are provided by external plugins installed as separate APT packages.</p>
         <div class="meta-pills">
             <span class="pill pill-accent">🐧 Linux</span>
             <span class="pill">library</span>
-            <span class="pill">v0.1.0</span>
+            <span class="pill">v0.24.6</span>
             <span class="pill">Infrastructure & Backend Services</span>
-            <span class="pill">pkg: library</span>
+            <span class="pill">pkg: deb</span>
             <span class="pill">ref: 2026-09-30</span>
         </div>
         <div class="actions-row">
@@ -542,11 +542,11 @@
         <div class="main-column">
             <section class="content-card">
                 <h2 class="card-heading">📖 Installation & Setup Documentation</h2>
-                <p class="guide-summary">Core infrastructure orchestration platform, CLI daemon, and REST control plane API packaged as a Debian (.deb) package.</p>
+                <p class="guide-summary">M3tal Core is the runtime and plugin host for the M3tal ecosystem, packaged as a Debian (.deb) package. It ships an embedded Web GUI dashboard, a REST API, and the m3tal-api.service systemd daemon. All workload features are provided by external plugins installed as separate APT packages.</p>
                 
         <div class="guide-prereqs">
             <h3>System Prerequisites</h3>
-            <ul><li>🐧 Linux: Debian 12/13 (trixie), Ubuntu 22.04/24.04 (noble), Linux Mint 21/22 (amd64)</li><li>🔑 Administrative sudo privileges for APT installation and systemd service management</li><li>📦 Official M3tal APT repository enabled (see M3tal APT Keyring)</li><li>🐳 Docker Engine (recommended for container orchestration)</li></ul>
+            <ul><li>🐧 Linux: Debian 12/13 (trixie), Ubuntu 22.04/24.04 (noble), Linux Mint 21/22 (amd64)</li><li>🔑 Administrative sudo privileges for APT installation and systemd service management</li><li>📦 Official M3tal APT repository enabled (see M3tal APT Keyring)</li><li>🐳 Docker Engine (recommended for container orchestration plugins)</li></ul>
         </div>
         
                 
@@ -566,25 +566,30 @@ sudo apt install -y m3tal</code></pre>
         
 
             <div class="guide-step">
-                <h4>🚀 3. Initialize Configuration & Services</h4>
-                <p>Initialize configuration and inspect active systemd daemon units:</p>
-                <pre><code># Initialize environment configuration
-sudo m3tal init
+                <h4>🚀 3. Service & Runtime Endpoints</h4>
+                <p>The package installs and enables `m3tal-api.service`, a headless daemon that serves the embedded Web GUI and REST API. There is no separate CLI orchestrator — manage the runtime via systemd and the web interface:</p>
+                <pre><code># Check daemon service status
+systemctl status m3tal-api.service
 
-# Check daemon services status
-systemctl status m3tal.service
-systemctl status m3tal-api.service</code></pre>
+# Web GUI (served by m3tal-api on port 5050)
+http://localhost:5050/gui/
+
+# REST API
+http://localhost:5050/api/v2
+
+# Change listening port via API_PORT in /etc/m3tal/.env</code></pre>
             </div>
         
 
             <div class="guide-step">
-                <h4>💻 4. CLI Usage & Control Center</h4>
-                <p>Run the interactive terminal Control Center or access CLI commands:</p>
-                <pre><code># Launch Control Center
-m3tal
-
-# View all commands
-m3tal help</code></pre>
+                <h4>🧩 4. Install Ecosystem Plugins</h4>
+                <p>Workload features ship as separate APT packages from the same repository. After `apt install`, M3tal Core automatically discovers installed plugins — no manual registration is required:</p>
+                <pre><code># Example plugin packages
+sudo apt install -y m3tal-plugin-compose
+sudo apt install -y m3tal-plugin-docker-monitor
+sudo apt install -y m3tal-plugin-mesh
+sudo apt install -y m3tal-plugin-mesh-cluster
+sudo apt install -y m3tal-plugin-mesh-node</code></pre>
             </div>
         
             </section>
@@ -592,6 +597,114 @@ m3tal help</code></pre>
             <section class="content-card">
                 <h2 class="card-heading">📜 Version History & Changelog</h2>
                 
+            <div class="changelog-entry">
+                <div class="changelog-header">
+                    <span class="changelog-version">v0.24.6</span>
+                    <span class="changelog-tag">Release</span>
+                    <span class="changelog-date">2026-11-06</span>
+                </div>
+                <ul class="changelog-list">
+                    <li>chore(release): auto-bump version to v0.24.6 [skip ci]</li><li>Debian package (.deb) binary distribution via m3tal-apt-key repository.</li>
+                </ul>
+            </div>
+        
+
+            <div class="changelog-entry">
+                <div class="changelog-header">
+                    <span class="changelog-version">v0.24.5</span>
+                    <span class="changelog-tag">Release</span>
+                    <span class="changelog-date">2026-11-05</span>
+                </div>
+                <ul class="changelog-list">
+                    <li>chore(release): auto-bump version to v0.24.5 [skip ci]</li><li>Debian package (.deb) binary distribution.</li>
+                </ul>
+            </div>
+        
+
+            <div class="changelog-entry">
+                <div class="changelog-header">
+                    <span class="changelog-version">v0.24.4</span>
+                    <span class="changelog-tag">Release</span>
+                    <span class="changelog-date">2026-11-05</span>
+                </div>
+                <ul class="changelog-list">
+                    <li>chore(release): auto-bump version to v0.24.4 [skip ci]</li><li>Debian package (.deb) binary distribution.</li>
+                </ul>
+            </div>
+        
+
+            <div class="changelog-entry">
+                <div class="changelog-header">
+                    <span class="changelog-version">v0.24.3</span>
+                    <span class="changelog-tag">Release</span>
+                    <span class="changelog-date">2026-11-05</span>
+                </div>
+                <ul class="changelog-list">
+                    <li>feat(api+gui): scoped API key permissions, key directions, plugin settings categories</li><li>Debian package (.deb) binary distribution.</li>
+                </ul>
+            </div>
+        
+
+            <div class="changelog-entry">
+                <div class="changelog-header">
+                    <span class="changelog-version">v0.24.2</span>
+                    <span class="changelog-tag">Release</span>
+                    <span class="changelog-date">2026-11-05</span>
+                </div>
+                <ul class="changelog-list">
+                    <li>chore(release): auto-bump version to v0.24.2 [skip ci]</li><li>Debian package (.deb) binary distribution.</li>
+                </ul>
+            </div>
+        
+
+            <div class="changelog-entry">
+                <div class="changelog-header">
+                    <span class="changelog-version">v0.24.1</span>
+                    <span class="changelog-tag">Release</span>
+                    <span class="changelog-date">2026-11-05</span>
+                </div>
+                <ul class="changelog-list">
+                    <li>chore(release): auto-bump version to v0.24.1 [skip ci]</li><li>Debian package (.deb) binary distribution.</li>
+                </ul>
+            </div>
+        
+
+            <div class="changelog-entry">
+                <div class="changelog-header">
+                    <span class="changelog-version">v0.24.0</span>
+                    <span class="changelog-tag">Release</span>
+                    <span class="changelog-date">2026-11-01</span>
+                </div>
+                <ul class="changelog-list">
+                    <li>chore(release): auto-bump version to v0.24.0 [skip ci]</li><li>Debian package (.deb) binary distribution.</li>
+                </ul>
+            </div>
+        
+
+            <div class="changelog-entry">
+                <div class="changelog-header">
+                    <span class="changelog-version">v0.23.0</span>
+                    <span class="changelog-tag">Release</span>
+                    <span class="changelog-date">2026-10-31</span>
+                </div>
+                <ul class="changelog-list">
+                    <li>chore(release): auto-bump version to v0.23.0 [skip ci]</li><li>Debian package (.deb) binary distribution.</li>
+                </ul>
+            </div>
+        
+
+            <div class="changelog-entry">
+                <div class="changelog-header">
+                    <span class="changelog-version">v0.22.0</span>
+                    <span class="changelog-tag">Release</span>
+                    <span class="changelog-date">2026-10-31</span>
+                </div>
+                <ul class="changelog-list">
+                    <li>chore(release): auto-bump version to v0.22.0 [skip ci]</li><li>Debian package (.deb) binary distribution.</li>
+                </ul>
+            </div>
+        
+
             <div class="changelog-entry">
                 <div class="changelog-header">
                     <span class="changelog-version">v0.21.0</span>
@@ -1268,11 +1381,11 @@ m3tal help</code></pre>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Current Release</span>
-                        <span class="spec-value">v0.1.0</span>
+                        <span class="spec-value">v0.24.6</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Package Format</span>
-                        <span class="spec-value">library</span>
+                        <span class="spec-value">deb</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Pipeline Status</span>
