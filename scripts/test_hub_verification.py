@@ -380,7 +380,7 @@ def test_plan_11_m3tal_plugin_page():
     assert entry.get("enabled") is True, "m3tal-plugin-page must have enabled: true"
     assert entry.get("status") == "ready", f"m3tal-plugin-page must have status: ready (got {entry.get('status')})"
     assert entry.get("type") == "static", f"m3tal-plugin-page must have type: static (got {entry.get('type')})"
-    assert entry.get("repo") == "m3tal-plugin-page", "m3tal-plugin-page repo must match m3tal-plugin-page"
+    assert entry.get("repo") == "m3tal-plugins", "m3tal-plugin-page repo must be m3tal-plugins (plugin page lives in the plugins monorepo)"
     assert entry.get("path") == "m3tal-plugin-page", "m3tal-plugin-page path must match m3tal-plugin-page"
     assert entry.get("base_href") in ["/m3tal-plugin-page/", "/M3tal-Hub/m3tal-plugin-page/"], "base_href must match /m3tal-plugin-page/ or /M3tal-Hub/m3tal-plugin-page/"
     print("  [OK Plan 11 Manifest] m3tal-plugin-page correctly registered as enabled: true, status: ready, type: static")
@@ -494,7 +494,7 @@ def test_plan_14_infrastructure_and_libraries():
     # 1. Exhaustive check of Plan 14 components
     infra_library_specs = {
         "m3tal-godash": {"category": "infrastructure", "type": "service", "version": "0.2.0", "package": "service"},
-        "m3tal-core": {"category": "infrastructure", "type": "library", "version": "0.1.0", "package": "library"},
+        "m3tal-core": {"category": "infrastructure", "type": "library", "version": "0.24.6", "package": "deb"},
         "m3tal-api": {"category": "infrastructure", "type": "service", "version": "0.1.0", "package": "service"},
         "m3tal-stack": {"category": "infrastructure", "type": "infrastructure", "version": "1.0.0", "package": "docker-compose"},
         "m3tal-apt-key": {"category": "infrastructure", "type": "package", "version": "1.0.0", "package": "gpg-keyring"},

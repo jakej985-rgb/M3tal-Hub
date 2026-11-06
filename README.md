@@ -4,6 +4,43 @@
 
 M3tal-Hub is the central GitHub Pages site that collects and serves deployable applications from independent repositories under unified subdirectories.
 
+Live site: <https://jakej985-rgb.github.io/M3tal-Hub/>
+
+## Ecosystem Repositories
+
+The M3tal ecosystem is split across focused repositories with strict boundaries:
+
+| Repository | Role |
+| :--- | :--- |
+| **M3tal-Hub** (this repo) | Public discovery & release front — GitHub Pages app catalog, per-app release/changelog/install pages. It does **not** store or sign `.deb` binaries. |
+| **[m3tal-apt-key](https://github.com/jakej985-rgb/m3tal-apt-key)** | Debian package authority — hosts the signed APT repository (`pool/`, `dists/`), GPG keyring, and `install.sh` bootstrap at <https://jakej985-rgb.github.io/m3tal-apt-key/>. All `.deb` binary distribution lives here. |
+| **[M3tal-core](https://github.com/jakej985-rgb/m3tal-core)** | Runtime & plugin host — ships the `m3tal` `.deb` with `m3tal-api.service` (Web GUI at `/gui/`, REST API at `/api/v2`, port 5050). |
+| **[m3tal-plugins](https://github.com/jakej985-rgb/m3tal-plugins)** | Plugin source — plugin packages (`m3tal-plugin-*`) are built here, published to the APT repo, and auto-discovered by M3tal Core after `apt install`. |
+| **[m3tal-llm](https://github.com/jakej985-rgb/m3tal-llm)** | AI research — scalar autograd, tensor ops, NN training, and an experimental language model (Go). |
+| **[m3tal-review](https://github.com/jakej985-rgb/m3tal-review)** | Review CLI — deterministic local code-review tool (slop detection, security heuristics) for the ecosystem. |
+
+### Installing M3tal Core & Plugins on Debian/Ubuntu
+
+```bash
+# 1. Bootstrap the signed APT repository (one time)
+curl -fsSL https://jakej985-rgb.github.io/m3tal-apt-key/install.sh | sudo bash
+
+# 2. Install the core runtime
+sudo apt update && sudo apt install -y m3tal
+
+# 3. Install plugins — Core discovers them automatically
+sudo apt install -y m3tal-plugin-compose m3tal-plugin-docker-monitor \
+  m3tal-plugin-mesh m3tal-plugin-mesh-cluster m3tal-plugin-mesh-node
+```
+
+Canonical GPG fingerprint: `5F84 FE50 A401 11C9 8141 0E11 775A D147 3BF2 5102`
+(current package candidate: `m3tal` **0.24.6**).
+
+> **Note:** the `m3tal-apt-key/` directory inside this repository is a stale
+> mirrored snapshot of the apt repository docs kept for reference. The
+> authoritative apt repository and its documentation live in the
+> [m3tal-apt-key](https://github.com/jakej985-rgb/m3tal-apt-key) repository.
+
 ## Architecture
 
 ```

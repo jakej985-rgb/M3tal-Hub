@@ -3,7 +3,13 @@
 > **Phase**: Phase 13 — M3tal Hub Integration  
 > **Hub URL**: `https://jakej985-rgb.github.io/M3tal-Hub/`  
 > **APT Repository URL**: `https://jakej985-rgb.github.io/m3tal-apt-key/`  
+> **Current package candidate**: `m3tal` **0.24.6**  
 > **Status**: Completed & Validated
+>
+> **Note**: the `m3tal-apt-key/` directory inside this repository is a stale
+> mirrored snapshot of the apt repository documentation kept for reference.
+> The authoritative repository lives at
+> [github.com/jakej985-rgb/m3tal-apt-key](https://github.com/jakej985-rgb/m3tal-apt-key).
 
 ---
 
@@ -58,7 +64,7 @@ The M3tal software distribution architecture maintains a strict separation betwe
     sudo install -m 0755 -d /etc/apt/keyrings
 
     # 2. Download and dearmor M3tal public key
-    curl -fsSL https://jakej985-rgb.github.io/m3tal-apt-key/KEY.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/m3tal-archive-keyring.gpg
+    curl -fsSL https://jakej985-rgb.github.io/m3tal-apt-key/public.key | sudo gpg --dearmor -o /etc/apt/keyrings/m3tal-archive-keyring.gpg
     sudo chmod a+r /etc/apt/keyrings/m3tal-archive-keyring.gpg
 
     # 3. Add APT sources list entry
@@ -68,7 +74,7 @@ The M3tal software distribution architecture maintains a strict separation betwe
     sudo apt update
     ```
   - **Cryptographic Trust Verification**:
-    Documents public key fingerprint `B95A 45C6 4757 7DEB CC87  7C49 AF61 90B0 C013 46DD` and verification commands via `gpg --show-keys` and `apt-cache policy`.
+    Documents public key fingerprint `5F84 FE50 A401 11C9 8141 0E11 775A D147 3BF2 5102` and verification commands via `gpg --show-keys` and `apt-cache policy`.
 
 ### 2.2 M3tal Core Page (`apps/m3tal-core.html`)
 - **Location**: `/apps/m3tal-core.html`
@@ -79,10 +85,11 @@ The M3tal software distribution architecture maintains a strict separation betwe
     ```bash
     sudo apt update && sudo apt install -y m3tal
     ```
-  - **Step 3**: Configuration initialization (`sudo m3tal init`) and service inspection (`systemctl status m3tal.service`, `systemctl status m3tal-api.service`).
-  - **Step 4**: CLI commands and interactive Control Center (`m3tal`, `m3tal help`).
+  - **Step 3**: Service inspection (`systemctl status m3tal-api.service`). The runtime is the `m3tal-api.service` daemon — there is no `/usr/bin/m3tal` CLI orchestrator.
+  - **Step 4**: Runtime endpoints — embedded Web GUI at `http://localhost:5050/gui/` and REST API at `http://localhost:5050/api/v2` (port configurable via `API_PORT` in `/etc/m3tal/.env`).
+  - **Plugins**: Ecosystem plugins (`m3tal-plugin-compose`, `m3tal-plugin-docker-monitor`, `m3tal-plugin-mesh`, `m3tal-plugin-mesh-cluster`, `m3tal-plugin-mesh-node`) install via the same APT repository and are auto-discovered by M3tal Core.
 - **Release Information**:
-  - Displays version `v1.1.62 Debian Release` with package format `.deb`.
+  - Displays version `v0.24.6 Debian Release` with package format `.deb`.
 
 ### 2.3 Hub Homepage Directory (`index.html`)
 - **Location**: `/index.html`

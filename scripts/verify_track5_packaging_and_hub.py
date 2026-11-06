@@ -13,7 +13,16 @@ import re
 
 HUB_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 APT_KEY_ROOT = "/home/m3tal/apps/m3tal-apt-key"
-DEB_PATH = os.path.join(APT_KEY_ROOT, "pool", "main", "m3tal_v1.1.62_amd64.deb")
+DEB_PATH = os.path.join(APT_KEY_ROOT, "pool", "main", "m3tal", "m3tal_0.24.6_amd64.deb")
+CURRENT_FINGERPRINT = "5F84 FE50 A401 11C9 8141 0E11 775A D147 3BF2 5102"
+PUBLISHED_APT_PACKAGES = [
+    "m3tal",
+    "m3tal-plugin-compose",
+    "m3tal-plugin-docker-monitor",
+    "m3tal-plugin-mesh",
+    "m3tal-plugin-mesh-cluster",
+    "m3tal-plugin-mesh-node",
+]
 
 def print_step(msg):
     print(f"--> {msg}")
@@ -26,16 +35,19 @@ def check_deb_packaging():
     res_control = subprocess.run(["dpkg-deb", "-I", DEB_PATH], capture_output=True, text=True, check=True)
     control_out = res_control.stdout
     assert "Package: m3tal" in control_out, "Package name is not 'm3tal'"
-    assert "Version: 1.1.62" in control_out, "Package version is not 1.1.62"
+    assert "Version: 0.24.6" in control_out, "Package version is not 0.24.6"
     assert "Architecture: amd64" in control_out, "Architecture is not amd64"
 
     res_contents = subprocess.run(["dpkg-deb", "-c", DEB_PATH], capture_output=True, text=True, check=True)
     contents = res_contents.stdout
-    assert "./usr/bin/m3tal" in contents, "Missing /usr/bin/m3tal binary"
-    assert "./usr/bin/m3tal-api" in contents, "Missing /usr/bin/m3tal-api binary"
-    assert "./lib/systemd/system/m3tal.service" in contents, "Missing m3tal.service"
-    assert "./lib/systemd/system/m3tal-api.service" in contents, "Missing m3tal-api.service"
+    # Core runtime ships only the m3tal-api daemon + embedded GUI; there is no /usr/bin/m3tal CLI orchestrator
+    # and no standalone m3tal.service unit (a legacy m3tal.service is explicitly disabled by postinst).
+    assert "./usr/bin/m3tal-api\n" in contents or contents.rstrip().endswith("./usr/bin/m3tal-api"), "Missing /usr/bin/m3tal-api binary"
+    assert "./usr/bin/m3tal\n" not in contents, "Unexpected legacy /usr/bin/m3tal CLI binary in package"
+    assert "./lib/systemd/system/m3tal-api.service\n" in contents or contents.rstrip().endswith("./lib/systemd/system/m3tal-api.service"), "Missing m3tal-api.service"
+    assert "./lib/systemd/system/m3tal.service\n" not in contents, "Unexpected legacy m3tal.service unit in package"
     assert "./etc/m3tal/.env.example" in contents, "Missing /etc/m3tal/.env.example"
+    assert "./usr/share/m3tal/gui/index.html" in contents, "Missing embedded Web GUI payload"
     assert "./usr/share/applications/m3tal.desktop" in contents, "Missing desktop entry"
     assert "./usr/share/icons/hicolor/scalable/apps/m3tal.svg" in contents, "Missing scalable SVG icon"
 
@@ -51,12 +63,12 @@ def check_deb_packaging():
         assert "systemctl daemon-reload" in postinst, "postinst missing systemctl daemon-reload"
         assert "m3tal-api.service" in postinst, "postinst missing m3tal-api.service enable/restart"
         assert "m3tal.service" in postinst, "postinst missing m3tal.service enable/restart"
-        assert "ln -s /opt/m3tal/stack /docker" in postinst, "postinst missing /docker symlink logic"
+        assert "systemctl disable m3tal.service" in postinst, "postinst missing legacy m3tal.service disable"
 
         # Check postrm hooks
         assert "systemctl stop" in postrm, "postrm missing service stop logic"
         assert 'if [ "$1" = "purge" ]' in postrm, "postrm missing purge handling"
-        assert "rm /docker" in postrm, "postrm missing /docker symlink removal"
+        assert "rm -f /docker" in postrm, "postrm missing legacy /docker symlink removal"
 
     print("    [OK] m3tal-core deb package, binaries, services, and hooks verified.")
 
@@ -121,15 +133,15 @@ def check_hub_integration_files():
     core_html = open(core_page, "r").read()
     assert "sudo apt install -y m3tal" in core_html, "m3tal-core.html missing apt install command"
     assert "curl -fsSL https://jakej985-rgb.github.io/m3tal-apt-key/install.sh" in core_html, "m3tal-core.html missing repo setup bootstrap"
-    assert "systemctl status m3tal.service" in core_html, "m3tal-core.html missing systemctl service status"
-    assert "m3tal help" in core_html, "m3tal-core.html missing m3tal help command"
-    assert "v1.1.62" in core_html, "m3tal-core.html missing v1.1.62 changelog entry"
+    assert "systemctl status m3tal-api.service" in core_html, "m3tal-core.html missing systemctl service status"
+    assert "http://localhost:5050/gui/" in core_html, "m3tal-core.html missing Web GUI URL"
+    assert "0.24.6" in core_html, "m3tal-core.html missing current version changelog entry"
 
     # Verify m3tal-apt-key.html
     key_html = open(apt_key_page, "r").read()
     assert "curl -fsSL https://jakej985-rgb.github.io/m3tal-apt-key/install.sh | sudo bash" in key_html, "m3tal-apt-key.html missing universal bootstrap command"
     assert "signed-by=/etc/apt/keyrings/m3tal-archive-keyring.gpg" in key_html, "m3tal-apt-key.html missing signed-by repository entry"
-    assert "B95A 45C6 4757 7DEB CC87  7C49 AF61 90B0 C013 46DD" in key_html, "m3tal-apt-key.html missing GPG fingerprint verification"
+    assert "5F84 FE50 A401 11C9 8141 0E11 775A D147 3BF2 5102" in key_html, "m3tal-apt-key.html missing GPG fingerprint verification"
 
     # Verify index.html
     index_html = open(index_page, "r").read()

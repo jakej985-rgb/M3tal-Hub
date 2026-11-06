@@ -743,16 +743,17 @@ apps:
     enabled: false
     status: active
     version: 0.24.6
-    package: library
-    description: Foundation backend libraries, utilities, and common service primitives.
+    package: deb
+    apt_package: m3tal
+    description: M3tal Core runtime and plugin host. Ships the embedded Web GUI (/gui/), REST API (/api/v2) on port 5050 via m3tal-api.service, packaged as the m3tal .deb. All workload features are provided by external plugins installed as separate APT packages.
     repo_url: https://github.com/jakej985-rgb/m3tal-core
     changelog:
     - version: 0.24.6
-      date: '2026-11-05'
+      date: '2026-11-06'
       tag: Release
       notes:
       - 'chore(release): auto-bump version to v0.24.6 [skip ci]'
-      - Debian package (.deb) binary distribution.
+      - Debian package (.deb) binary distribution via m3tal-apt-key repository.
     - version: 0.24.5
       date: '2026-11-05'
       tag: Release
@@ -1167,8 +1168,80 @@ apps:
     status: active
     version: 1.0.0
     package: gpg-keyring
-    description: Package signing key and Debian/Ubuntu distribution repository configuration.
+    description: Package signing key and Debian/Ubuntu distribution repository configuration. Hosts all signed .deb binaries for the M3tal ecosystem.
     repo_url: https://github.com/jakej985-rgb/m3tal-apt-key
+
+  # Published M3tal APT plugin packages (source: github.com/jakej985-rgb/m3tal-plugins)
+  # Installed via `apt install`; M3tal Core (m3tal-api.service) auto-discovers them.
+  - id: m3tal-plugin-compose
+    name: M3tal Plugin — Compose Editor
+    repo: m3tal-plugins
+    type: plugin
+    category: infrastructure
+    platforms: [linux]
+    enabled: false
+    status: active
+    version: 0.6.0
+    package: deb
+    apt_package: m3tal-plugin-compose
+    description: Docker Compose visual editor, syntax validator, and multi-container stack lifecycle manager.
+    repo_url: https://github.com/jakej985-rgb/m3tal-plugins
+
+  - id: m3tal-plugin-docker-monitor
+    name: M3tal Plugin — Containers
+    repo: m3tal-plugins
+    type: plugin
+    category: infrastructure
+    platforms: [linux]
+    enabled: false
+    status: active
+    version: 0.8.1
+    package: deb
+    apt_package: m3tal-plugin-docker-monitor
+    description: Docker container fleet monitor, log inspector, container lifecycle controls, and image pruning.
+    repo_url: https://github.com/jakej985-rgb/m3tal-plugins
+
+  - id: m3tal-plugin-mesh
+    name: M3tal Plugin — Mesh Fleet (Viewer)
+    repo: m3tal-plugins
+    type: plugin
+    category: infrastructure
+    platforms: [linux]
+    enabled: false
+    status: active
+    version: 0.5.0
+    package: deb
+    apt_package: m3tal-plugin-mesh
+    description: Local network discovery and telemetry federation viewer across M3TAL workstations, servers, and NAS nodes.
+    repo_url: https://github.com/jakej985-rgb/m3tal-plugins
+
+  - id: m3tal-plugin-mesh-cluster
+    name: M3tal Plugin — Mesh Fleet (Cluster)
+    repo: m3tal-plugins
+    type: plugin
+    category: infrastructure
+    platforms: [linux]
+    enabled: false
+    status: active
+    version: 0.4.1
+    package: deb
+    apt_package: m3tal-plugin-mesh-cluster
+    description: Full-peer M3tal Mesh mode — broadcasts local machine metrics and renders the multi-node fleet dashboard.
+    repo_url: https://github.com/jakej985-rgb/m3tal-plugins
+
+  - id: m3tal-plugin-mesh-node
+    name: M3tal Plugin — Mesh Node
+    repo: m3tal-plugins
+    type: plugin
+    category: infrastructure
+    platforms: [linux]
+    enabled: false
+    status: active
+    version: 0.4.1
+    package: deb
+    apt_package: m3tal-plugin-mesh-node
+    description: Headless telemetry broadcaster for servers, NAS devices, and secondary machines. Sends CPU, GPU, and disk metrics without a GUI.
+    repo_url: https://github.com/jakej985-rgb/m3tal-plugins
 
   # Shared Libraries, SDKs, and Templates
   - id: m3tal-ui-kit
@@ -1223,6 +1296,31 @@ apps:
     package: docs
     description: Architecture specifications, engineering guides, and ecosystem documentation.
     repo_url: https://github.com/jakej985-rgb/m3tal-docs
+
+  - id: m3tal-llm
+    name: M3tal LLM
+    repo: m3tal-llm
+    type: library
+    category: tooling
+    platforms: [go]
+    enabled: false
+    status: planned
+    package: source
+    description: From-scratch Go AI research repository — scalar automatic differentiation, tensor ops, neural-network layers, and a small experimental language model. The former M3tal assistant moved to m3tal-plugins/m3tal-ai.
+    repo_url: https://github.com/jakej985-rgb/m3tal-llm
+
+  - id: m3tal-review
+    name: M3tal Review
+    repo: m3tal-review
+    type: cli
+    category: tooling
+    platforms: [go, cli]
+    enabled: false
+    status: active
+    version: 0.1.0
+    package: cli-tool
+    description: Deterministic local code-review CLI for the M3tal ecosystem — slop detection, security heuristics, review history, and fix-and-re-review workflow. Built from source; not yet published to the APT repository.
+    repo_url: https://github.com/jakej985-rgb/m3tal-review
 
   - id: comicinfo-generator
     name: ComicInfo Generator

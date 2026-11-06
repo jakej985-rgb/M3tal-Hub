@@ -414,9 +414,9 @@
         <p class="tagline">Unified GitHub Pages release front & ecosystem directory for M3tal applications, services, and libraries.</p>
         <div class="stats-bar">
             <span class="stat-pill"><span class="stat-count">14</span> Applications</span>
-            <span class="stat-pill"><span class="stat-count">5</span> Infrastructure & Services</span>
+            <span class="stat-pill"><span class="stat-count">10</span> Infrastructure & Services</span>
             <span class="stat-pill"><span class="stat-count">3</span> Libraries & Templates</span>
-            <span class="stat-pill"><span class="stat-count">2</span> Tooling & Documentation</span>
+            <span class="stat-pill"><span class="stat-count">4</span> Tooling & Documentation</span>
         </div>
     </header>
 
@@ -665,8 +665,8 @@
                         <span class="badge badge-active">Active</span>
                     </div>
                 </div>
-                <p>Foundation backend libraries, utilities, and common service primitives.</p>
-                <div class="meta-row"><span class="app-type">🐧 library</span> <span class="app-version">v0.1.0</span> <span class="app-pkg">library</span></div>
+                <p>M3tal Core runtime and plugin host. Ships the embedded Web GUI (/gui/), REST API (/api/v2) on port 5050 via m3tal-api.service, packaged as the m3tal .deb. All workload features are provided by external plugins installed as separate APT packages.</p>
+                <div class="meta-row"><span class="app-type">🐧 library</span> <span class="app-version">v0.24.6</span> <span class="app-pkg">deb</span></div>
             </a>
             <div class="card-actions"><a class="card-btn" href="./apps/m3tal-core.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/m3tal-core" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
         </div>
@@ -707,10 +707,80 @@
                         <span class="badge badge-active">Active</span>
                     </div>
                 </div>
-                <p>Package signing key and Debian/Ubuntu distribution repository configuration.</p>
+                <p>Package signing key and Debian/Ubuntu distribution repository configuration. Hosts all signed .deb binaries for the M3tal ecosystem.</p>
                 <div class="meta-row"><span class="app-type">🐧 package</span> <span class="app-version">v1.0.0</span> <span class="app-pkg">gpg-keyring</span></div>
             </a>
             <div class="card-actions"><a class="card-btn" href="./apps/m3tal-apt-key.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/m3tal-apt-key" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card info-card">
+            <a class="card-main-link" href="./apps/m3tal-plugin-compose.html">
+                <div class="card-header">
+                    <h2>M3tal Plugin — Compose Editor</h2>
+                    <div class="badge-group">
+                        <span class="badge badge-os os-linux">🐧 Linux</span>
+                        <span class="badge badge-active">Active</span>
+                    </div>
+                </div>
+                <p>Docker Compose visual editor, syntax validator, and multi-container stack lifecycle manager.</p>
+                <div class="meta-row"><span class="app-type">🐧 plugin</span> <span class="app-version">v0.6.0</span> <span class="app-pkg">deb</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/m3tal-plugin-compose.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/m3tal-plugins" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card info-card">
+            <a class="card-main-link" href="./apps/m3tal-plugin-docker-monitor.html">
+                <div class="card-header">
+                    <h2>M3tal Plugin — Containers</h2>
+                    <div class="badge-group">
+                        <span class="badge badge-os os-linux">🐧 Linux</span>
+                        <span class="badge badge-active">Active</span>
+                    </div>
+                </div>
+                <p>Docker container fleet monitor, log inspector, container lifecycle controls, and image pruning.</p>
+                <div class="meta-row"><span class="app-type">🐧 plugin</span> <span class="app-version">v0.8.1</span> <span class="app-pkg">deb</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/m3tal-plugin-docker-monitor.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/m3tal-plugins" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card info-card">
+            <a class="card-main-link" href="./apps/m3tal-plugin-mesh.html">
+                <div class="card-header">
+                    <h2>M3tal Plugin — Mesh Fleet (Viewer)</h2>
+                    <div class="badge-group">
+                        <span class="badge badge-os os-linux">🐧 Linux</span>
+                        <span class="badge badge-active">Active</span>
+                    </div>
+                </div>
+                <p>Local network discovery and telemetry federation viewer across M3TAL workstations, servers, and NAS nodes.</p>
+                <div class="meta-row"><span class="app-type">🐧 plugin</span> <span class="app-version">v0.5.0</span> <span class="app-pkg">deb</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/m3tal-plugin-mesh.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/m3tal-plugins" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card info-card">
+            <a class="card-main-link" href="./apps/m3tal-plugin-mesh-cluster.html">
+                <div class="card-header">
+                    <h2>M3tal Plugin — Mesh Fleet (Cluster)</h2>
+                    <div class="badge-group">
+                        <span class="badge badge-os os-linux">🐧 Linux</span>
+                        <span class="badge badge-active">Active</span>
+                    </div>
+                </div>
+                <p>Full-peer M3tal Mesh mode — broadcasts local machine metrics and renders the multi-node fleet dashboard.</p>
+                <div class="meta-row"><span class="app-type">🐧 plugin</span> <span class="app-version">v0.4.1</span> <span class="app-pkg">deb</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/m3tal-plugin-mesh-cluster.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/m3tal-plugins" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card info-card">
+            <a class="card-main-link" href="./apps/m3tal-plugin-mesh-node.html">
+                <div class="card-header">
+                    <h2>M3tal Plugin — Mesh Node</h2>
+                    <div class="badge-group">
+                        <span class="badge badge-os os-linux">🐧 Linux</span>
+                        <span class="badge badge-active">Active</span>
+                    </div>
+                </div>
+                <p>Headless telemetry broadcaster for servers, NAS devices, and secondary machines. Sends CPU, GPU, and disk metrics without a GUI.</p>
+                <div class="meta-row"><span class="app-type">🐧 plugin</span> <span class="app-version">v0.4.1</span> <span class="app-pkg">deb</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/m3tal-plugin-mesh-node.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/m3tal-plugins" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
         </div>
         </div>
     </section>
@@ -787,6 +857,34 @@
             <div class="card-actions"><a class="card-btn" href="./apps/m3tal-docs.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/m3tal-docs" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
         </div>
         <div class="card info-card">
+            <a class="card-main-link" href="./apps/m3tal-llm.html">
+                <div class="card-header">
+                    <h2>M3tal LLM</h2>
+                    <div class="badge-group">
+                        <span class="badge badge-os os-go">⚡ Go</span>
+                        <span class="badge badge-planned">Release Planned</span>
+                    </div>
+                </div>
+                <p>From-scratch Go AI research repository — scalar automatic differentiation, tensor ops, neural-network layers, and a small experimental language model. The former M3tal assistant moved to m3tal-plugins/m3tal-ai.</p>
+                <div class="meta-row"><span class="app-type">⚡ library</span> <span class="app-pkg">source</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/m3tal-llm.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/m3tal-llm" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card info-card">
+            <a class="card-main-link" href="./apps/m3tal-review.html">
+                <div class="card-header">
+                    <h2>M3tal Review</h2>
+                    <div class="badge-group">
+                        <span class="badge badge-os os-go">⚡ Go</span> <span class="badge badge-os os-tool">🛠️ CLI</span>
+                        <span class="badge badge-active">Active</span>
+                    </div>
+                </div>
+                <p>Deterministic local code-review CLI for the M3tal ecosystem — slop detection, security heuristics, review history, and fix-and-re-review workflow. Built from source; not yet published to the APT repository.</p>
+                <div class="meta-row"><span class="app-type">⚡ cli</span> <span class="app-version">v0.1.0</span> <span class="app-pkg">cli-tool</span></div>
+            </a>
+            <div class="card-actions"><a class="card-btn" href="./apps/m3tal-review.html">Release & Docs →</a> <a class="card-btn" href="https://github.com/jakej985-rgb/m3tal-review" target="_blank" rel="noopener noreferrer">Repo ↗</a></div>
+        </div>
+        <div class="card info-card">
             <a class="card-main-link" href="./apps/comicinfo-generator.html">
                 <div class="card-header">
                     <h2>ComicInfo Generator</h2>
@@ -806,7 +904,7 @@
 
     <footer>
         <div>Centralized release front. Source repositories maintain independent releases.</div>
-        <div>Generated: 2026-10-24 05:31:59 UTC</div>
+        <div>Generated: 2026-11-06 19:12:13 UTC</div>
     </footer>
 </body>
 </html>
