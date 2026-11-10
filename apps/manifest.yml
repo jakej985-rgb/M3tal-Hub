@@ -742,7 +742,7 @@ apps:
     - linux
     enabled: false
     status: active
-    version: 0.24.7
+    version: 0.25.0
     package: deb
     apt_package: m3tal
     description: M3tal Core runtime and plugin host. Ships the embedded Web GUI (/gui/),
@@ -751,6 +751,12 @@ apps:
       packages.
     repo_url: https://github.com/jakej985-rgb/m3tal-core
     changelog:
+    - version: 0.25.0
+      date: '2026-11-10'
+      tag: Release
+      notes:
+      - 'chore(release): auto-bump version to v0.25.0 [skip ci]'
+      - Debian package (.deb) binary distribution.
     - version: 0.24.7
       date: '2026-11-06'
       tag: Release
